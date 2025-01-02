@@ -162,34 +162,38 @@ export default function Article() {
         console.log(data);
         
   
-    //   const { barcode, category, currency,  description, packaging, quantity, expirationDate, alert, purchase_price, selling_price  } = data
+      const { barcode, location, description, indication, molecule, packaging, category, supplier,alert, expirationDate, quantity, purchase_price, selling_price , currency  } = data
 
       
   
-    //   const articleData:IArticle = {
-    //     barcode: barcode,
-    //     description ,
-    //     quantity : quantity ,
-    //     expiration_date: expirationDate,
-    //     category_id: Number(category),
-    //     packaging_id: Number(packaging),
-    //     selling_price,
-    //     purchase_price,
-    //     alert : false,
-    //     currency_id: Number(currency) 
-    //   }
+      const articleData:IArticle = {
+        barcode: barcode,
+        placements : [Number(location?.value)],
+        description ,
+        indications : [Number(indication?.value)],
+        molecules : [Number(molecule?.value)],
+        quantity : quantity ,
+        expiration_date: expirationDate,
+        category_id: Number(category?.value),
+        suppliers : [Number(supplier?.value)],
+        packaging_id: Number(packaging?.value),
+        selling_price,
+        purchase_price,
+        alert : false,
+        currency_id: Number(currency) 
+      }
 
-    //   console.log(articleData);
+      console.log(articleData);
       
   
-    //     try {
-    //         await dispatch(createArticle(articleData));
+        try {
+            await dispatch(createArticle(articleData));
       
-    //     } catch (err) {
-    //         // Handle errors that happen outside the action (e.g., network failures)
-    //         // setOpenForm(false);
-    //         console.error(err);
-    //     }
+        } catch (err) {
+            // Handle errors that happen outside the action (e.g., network failures)
+            // setOpenForm(false);
+            console.error(err);
+        }
   
     };
 
@@ -748,7 +752,7 @@ export default function Article() {
                                             <button className=" w-full  border-[1px] hover:bg-[#FE6212] hover:text-white border-[#FE6212] text-center  text-[14px] p-2 transition duration-300 text-[#FE6212] rounded-lg " >Annuler</button>
                                         </div>
                                         <div className="" >
-                                            <button type="submit" className=" w-full text-center p-2 bg-[#28A745] text-white transition duration-300 hover:bg-[#1E7E34]  rounded-lg  text-[14px]  " >Enregistrer</button>
+                                            <button type="submit" className=" w-full text-center p-2 bg-[#4594ff] text-white transition duration-300 hover:bg-[#3386e0]  rounded-lg  text-[14px]  " >Enregistrer</button>
                                         </div>
                                     </div>
                                 </div>

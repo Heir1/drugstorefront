@@ -20,7 +20,10 @@ export default interface IArticle {
     currency_id?: number,
     category_id?: number,
     packaging_id?: number,
-
+    // placement?: Array
+    // indication?: Array,
+    // molecule?: Array,
+    // supplier?: Array,
     currency ? : {
         id: string,
         name: string,
@@ -53,7 +56,7 @@ export default interface IArticle {
         updated_by: string
     },
 
-    placements ? : [
+    placements ? : Array | [
         {
             id: string,
             name: string,
@@ -65,7 +68,7 @@ export default interface IArticle {
         }
     ],
 
-    molecules ? : [
+    molecules ? : Array | [
         {
             id: string,
             name: string,
@@ -77,7 +80,7 @@ export default interface IArticle {
         }
     ],
 
-    suppliers ? : [
+    suppliers ? : Array | [
         {
             id: string,
             name: string,
@@ -89,7 +92,7 @@ export default interface IArticle {
         }
     ],
 
-    indications ? : [
+    indications ? : Array | [
         {
             id: string,
             name: string,

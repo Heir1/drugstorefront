@@ -25,13 +25,22 @@ const CellComponent = ({ row }: { row: any }) => {
 }
 
 export const ArticleColumns: ColumnDef<IArticle>[] = [
-    // {
-    //     accessorKey: "placement",
-    //     header: "LOC",
-    //     cell: ({ row } : { row : any} ) => (
-    //         <div className="capitalize">{`${row.getValue("placement").name }` }</div>
-    //     ),
-    // },
+    {
+        accessorKey: "placements",
+        header: "LOC",
+        cell: ({ row } : { row : any} ) => {
+
+            const firstPlacement = row.getValue("placements")[0];  // Accéder au premier index
+            
+            // Vérifier si le premier placement existe et afficher son nom
+            return firstPlacement ? (
+            <div className="capitalize">{firstPlacement.name}</div>  // Exemple d'affichage du champ 'name'
+            ) : (
+            <div>Placement non disponible</div>  // Si placements est vide ou non défini
+            );
+        }
+        ,
+    },
     {
         accessorKey: "description",
         header: "Description",
@@ -84,6 +93,14 @@ export const ArticleColumns: ColumnDef<IArticle>[] = [
         header: "PEREMPETION",
         cell: ({ row }) => (
         <div className="capitalize">{row.getValue("expiration_date")}</div>
+        ),
+    },
+
+    {
+        accessorKey: "alert",
+        header: "ALERTE",
+        cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("alert")}</div>
         ),
     },
 

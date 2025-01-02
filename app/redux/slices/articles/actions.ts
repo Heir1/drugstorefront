@@ -14,6 +14,7 @@ export const fetchArticles = createAsyncThunk<IArticle[]>(
         if (response.error) {
           return rejectWithValue(response.error);
         }
+        console.log(response.data);
         return response.data as IArticle[] ;
         
       } catch (error: any) {
@@ -54,6 +55,7 @@ export const createArticle = createAsyncThunk<IArticle, IArticle>(
           return rejectWithValue(response.error);
         }
         alert("Insertion avec succès")
+        
         return response.data as IArticle;
       } catch (error: any) {
         return rejectWithValue(error.message);
