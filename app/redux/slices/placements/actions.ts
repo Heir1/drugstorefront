@@ -1,20 +1,20 @@
 // app/slices/actions.ts
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ApiErrorResponse, deleteRequest, getRequest, postRequest, putRequest } from '@/app/helpers/api/verbes';
-import ISupplier from '@/app/interfaces/supplier';
+import IPlacement from '@/app/interfaces/placement';
 
 
-// Action pour récupérer tous les suppliers
-export const fetchSuppliers= createAsyncThunk<ISupplier[]>(
-    'suppliers/fetchSuppliers',
+// Action pour récupérer tous les placements
+export const fetchPlacements= createAsyncThunk<IPlacement[]>(
+    'placements/fetchPlacements',
     async (_, { rejectWithValue }) => {
 
       try {
-        const response = await getRequest<ISupplier[]>('suppliers'); // Remplacez avec votre endpoint
+        const response = await getRequest<IPlacement[]>('placements'); // Remplacez avec votre endpoint
         if (response.error) {
           return rejectWithValue(response.error);
         }
-        return response.data as ISupplier[] ;
+        return response.data as IPlacement[] ;
         
       } catch (error: any) {
         return rejectWithValue(error.message);

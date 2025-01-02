@@ -1,39 +1,39 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { fetchPackagings } from './actions';
-import IPackaging from '@/app/interfaces/packaging';
+import { fetchMolecules } from './actions';
+import IMolecule from '@/app/interfaces/molecule';
 
 
-interface PackagingsState {
-    packagings: IPackaging[];
-    currentPackaging: IPackaging | null;
-    packagingStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
-    packagingError: string | null;
+interface MoleculesState {
+    molecules: IMolecule[];
+    currentMolecule: IMolecule | null;
+    moleculeStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
+    moleculeError: string | null;
 }
   
-const initialState: PackagingsState = {
-    packagings: [],
-    currentPackaging: null,
-    packagingStatus: 'idle',
-    packagingError: null,
+const initialState: MoleculesState = {
+    molecules: [],
+    currentMolecule: null,
+    moleculeStatus: 'idle',
+    moleculeError: null,
 };
 
-const packagingsSlice = createSlice({
-    name: 'packagings',
+const moleculesSlice = createSlice({
+    name: 'molecules',
     initialState,
     reducers: {},
     extraReducers: (builder) => {
       builder
-        // Récupérer tous les packagings
-        .addCase(fetchPackagings.pending, (state) => {
-          state.packagingStatus = 'loading';
+        // Récupérer tous les molecules
+        .addCase(fetchMolecules.pending, (state) => {
+          state.moleculeStatus = 'loading';
         })
-        .addCase(fetchPackagings.fulfilled, (state, action: PayloadAction<IPackaging[]>) => {
-          state.packagingStatus = 'succeeded';
-          state.packagings = action.payload;
+        .addCase(fetchMolecules.fulfilled, (state, action: PayloadAction<IMolecule[]>) => {
+          state.moleculeStatus = 'succeeded';
+          state.molecules = action.payload;
         })
-        .addCase(fetchPackagings.rejected, (state, action) => {
-          state.packagingStatus = 'failed';
-          state.packagingError = action.error.message || 'Erreur inconnue';
+        .addCase(fetchMolecules.rejected, (state, action) => {
+          state.moleculeStatus = 'failed';
+          state.moleculeError = action.error.message || 'Erreur inconnue';
         });
   
         // // Récupérer un packaging par ID
@@ -95,5 +95,5 @@ const packagingsSlice = createSlice({
     },
   });
   
-  export default packagingsSlice.reducer;
+  export default moleculesSlice.reducer;
   

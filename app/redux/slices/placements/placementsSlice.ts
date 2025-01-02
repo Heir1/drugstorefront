@@ -1,39 +1,40 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { fetchPackagings } from './actions';
-import IPackaging from '@/app/interfaces/packaging';
+import IMolecule from '@/app/interfaces/molecule';
+import IPlacement from '@/app/interfaces/placement';
+import { fetchPlacements } from './actions';
 
 
-interface PackagingsState {
-    packagings: IPackaging[];
-    currentPackaging: IPackaging | null;
-    packagingStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
-    packagingError: string | null;
+interface placementsState {
+    placements: IPlacement[];
+    currentPlacement: IPlacement | null;
+    placementStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
+    placementError: string | null;
 }
   
-const initialState: PackagingsState = {
-    packagings: [],
-    currentPackaging: null,
-    packagingStatus: 'idle',
-    packagingError: null,
+const initialState: placementsState = {
+    placements: [],
+    currentPlacement: null,
+    placementStatus: 'idle',
+    placementError: null,
 };
 
-const packagingsSlice = createSlice({
-    name: 'packagings',
+const placementsSlice = createSlice({
+    name: 'placements',
     initialState,
     reducers: {},
     extraReducers: (builder) => {
       builder
-        // Récupérer tous les packagings
-        .addCase(fetchPackagings.pending, (state) => {
-          state.packagingStatus = 'loading';
+        // Récupérer tous les placements
+        .addCase(fetchPlacements.pending, (state) => {
+          state.placementStatus = 'loading';
         })
-        .addCase(fetchPackagings.fulfilled, (state, action: PayloadAction<IPackaging[]>) => {
-          state.packagingStatus = 'succeeded';
-          state.packagings = action.payload;
+        .addCase(fetchPlacements.fulfilled, (state, action: PayloadAction<IPlacement[]>) => {
+          state.placementStatus = 'succeeded';
+          state.placements = action.payload;
         })
-        .addCase(fetchPackagings.rejected, (state, action) => {
-          state.packagingStatus = 'failed';
-          state.packagingError = action.error.message || 'Erreur inconnue';
+        .addCase(fetchPlacements.rejected, (state, action) => {
+          state.placementStatus = 'failed';
+          state.placementError = action.error.message || 'Erreur inconnue';
         });
   
         // // Récupérer un packaging par ID
@@ -95,5 +96,5 @@ const packagingsSlice = createSlice({
     },
   });
   
-  export default packagingsSlice.reducer;
+  export default placementsSlice.reducer;
   

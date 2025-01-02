@@ -1,20 +1,20 @@
 // app/slices/actions.ts
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ApiErrorResponse, deleteRequest, getRequest, postRequest, putRequest } from '@/app/helpers/api/verbes';
-import ISupplier from '@/app/interfaces/supplier';
+import IMolecule from '@/app/interfaces/molecule';
 
 
-// Action pour récupérer tous les suppliers
-export const fetchSuppliers= createAsyncThunk<ISupplier[]>(
-    'suppliers/fetchSuppliers',
+// Action pour récupérer tous les molecules
+export const fetchMolecules= createAsyncThunk<IMolecule[]>(
+    'molecules/fetchMolecules',
     async (_, { rejectWithValue }) => {
 
       try {
-        const response = await getRequest<ISupplier[]>('suppliers'); // Remplacez avec votre endpoint
+        const response = await getRequest<IMolecule[]>('molecules'); // Remplacez avec votre endpoint
         if (response.error) {
           return rejectWithValue(response.error);
         }
-        return response.data as ISupplier[] ;
+        return response.data as IMolecule[] ;
         
       } catch (error: any) {
         return rejectWithValue(error.message);

@@ -1,39 +1,39 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { fetchPackagings } from './actions';
-import IPackaging from '@/app/interfaces/packaging';
+import { fetchIndications } from './actions';
+import IIndication from '@/app/interfaces/indication';
 
 
-interface PackagingsState {
-    packagings: IPackaging[];
-    currentPackaging: IPackaging | null;
-    packagingStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
-    packagingError: string | null;
+interface IndicationsState {
+    indications: IIndication[];
+    currentIndication: IIndication | null;
+    indicationStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
+    indicationError: string | null;
 }
   
-const initialState: PackagingsState = {
-    packagings: [],
-    currentPackaging: null,
-    packagingStatus: 'idle',
-    packagingError: null,
+const initialState: IndicationsState = {
+    indications: [],
+    currentIndication: null,
+    indicationStatus: 'idle',
+    indicationError: null,
 };
 
-const packagingsSlice = createSlice({
-    name: 'packagings',
+const indicationsSlice = createSlice({
+    name: 'indications',
     initialState,
     reducers: {},
     extraReducers: (builder) => {
       builder
-        // Récupérer tous les packagings
-        .addCase(fetchPackagings.pending, (state) => {
-          state.packagingStatus = 'loading';
+        // Récupérer tous les indications
+        .addCase(fetchIndications.pending, (state) => {
+          state.indicationStatus = 'loading';
         })
-        .addCase(fetchPackagings.fulfilled, (state, action: PayloadAction<IPackaging[]>) => {
-          state.packagingStatus = 'succeeded';
-          state.packagings = action.payload;
+        .addCase(fetchIndications.fulfilled, (state, action: PayloadAction<IIndication[]>) => {
+          state.indicationStatus = 'succeeded';
+          state.indications = action.payload;
         })
-        .addCase(fetchPackagings.rejected, (state, action) => {
-          state.packagingStatus = 'failed';
-          state.packagingError = action.error.message || 'Erreur inconnue';
+        .addCase(fetchIndications.rejected, (state, action) => {
+          state.indicationStatus = 'failed';
+          state.indicationError = action.error.message || 'Erreur inconnue';
         });
   
         // // Récupérer un packaging par ID
@@ -95,5 +95,5 @@ const packagingsSlice = createSlice({
     },
   });
   
-  export default packagingsSlice.reducer;
+  export default indicationsSlice.reducer;
   
