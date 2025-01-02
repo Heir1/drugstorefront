@@ -131,7 +131,7 @@ export function DataTable<TData, TValue>({
                     {headerGroup.headers.map((header, index) => {
                     return (
                         
-                        <TableHead className={` ${index == 0 ? 'rounded-tl-lg rounded-bl-lg' : ''  } ${index == (headerGroup.headers.length-1) ? 'rounded-tr-lg rounded-br-lg' : ''  }   px-10  bg-secondary  font-light text-[12px] text-white`} key={header.id}>
+                        <TableHead className={` ${index == 0 ? 'rounded-tl-lg rounded-bl-lg' : ''  } ${index == (headerGroup.headers.length-1) ? 'rounded-tr-lg rounded-br-lg' : ''  }   px-10  bg-[#F2F7FC]  font-light text-[12px] text-black`} key={header.id}>
                             {header.isPlaceholder
                             ? null
                             : flexRender(
@@ -152,13 +152,13 @@ export function DataTable<TData, TValue>({
                     table.getRowModel().rows?.length ? (
                         table.getRowModel().rows.map((row) => (
                             <TableRow
-                                className=" hover:cursor-pointer text-xs  text-white"
+                                className=" hover:cursor-pointer text-xs  text-black "
                                 key={row.id}
                                 data-state={row.getIsSelected() && "selected"}
                                 // onClick={() => redirectionPage(row.original)}
                             >
                                 {row.getVisibleCells().map((cell) => (
-                                    <TableCell key={cell.id}>
+                                    <TableCell className="px-10"  key={cell.id}>
                                     {flexRender(
                                         cell.column.columnDef.cell,
                                         cell.getContext()

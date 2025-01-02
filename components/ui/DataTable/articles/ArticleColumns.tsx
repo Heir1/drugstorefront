@@ -16,9 +16,9 @@ const CellComponent = ({ row }: { row: any }) => {
 
 
     return (
-        <div className="flex justify-around " >
-            <div className="text-blue-800 py-1 px-4 rounded-lg bg-white " >Activer</div>
-            <div className="bg-red-800 py-1 px-4 rounded-lg text-white ">Desactiver</div>
+        <div className="flex justify-start " >
+            <div className="text-white py-1 px-4 rounded-lg bg-[#4594ff] mr-3 " >Activer</div>
+            <div className="bg-[#ff604e] py-1 px-4 rounded-lg text-white ">Desactiver</div>
         </div>
     );
 
