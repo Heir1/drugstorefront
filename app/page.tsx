@@ -1,8 +1,8 @@
 import Image from "next/image";
-import Dashboard from "./pages/admin/dashboard/Dashboard";
+import App from "./App";
 
 export default function Home() {
   return (
-    <Dashboard/>
+    <App/>
   );
 }

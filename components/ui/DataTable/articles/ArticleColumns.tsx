@@ -7,10 +7,12 @@ import {
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Icon } from '@iconify/react';
-import { IArticle } from "@/app/interfaces/article";
+import IArticle from "@/app/interfaces/article";
 
 
 const CellComponent = ({ row }: { row: any }) => {
+
+    
 
 
     return (
@@ -23,13 +25,13 @@ const CellComponent = ({ row }: { row: any }) => {
 }
 
 export const ArticleColumns: ColumnDef<IArticle>[] = [
-    {
-        accessorKey: "placement",
-        header: "LOC",
-        cell: ({ row } : { row : any} ) => (
-            <div className="capitalize">{`${row.getValue("placement").name }` }</div>
-        ),
-    },
+    // {
+    //     accessorKey: "placement",
+    //     header: "LOC",
+    //     cell: ({ row } : { row : any} ) => (
+    //         <div className="capitalize">{`${row.getValue("placement").name }` }</div>
+    //     ),
+    // },
     {
         accessorKey: "description",
         header: "Description",

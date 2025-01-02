@@ -97,9 +97,9 @@ export function DataTable<TData, TValue>({
     },
   });
 
-  React.useEffect(() => {
-    setSorting([{ id: 'date', desc: true }]);
-  }, []);
+  // React.useEffect(() => {
+  //   setSorting([{ id: 'date', desc: true }]);
+  // }, []);
 
   const redirectionPage = (row:any) => {
     setRedirection(true);
@@ -107,13 +107,7 @@ export function DataTable<TData, TValue>({
     
   }
 
-  const token = sessionStorage.getItem("accessToken");
 
-  const config = {
-    headers: {
-      Authorization: "Token " + token,
-    },
-  };
 
   const numberOfPage = table.getPageCount().toLocaleString();
   const numberOfPageTable = Array.from({ length: Number(numberOfPage) }, (_, index) => index + 1);
@@ -129,6 +123,7 @@ export function DataTable<TData, TValue>({
 
     <div className="rounded-md ">
         <Table>
+          
             <TableHeader>
 
                 {table.getHeaderGroups().map((headerGroup) => (
@@ -214,10 +209,8 @@ export function DataTable<TData, TValue>({
                 }}
               >
                 {[10, 20, 30, 40, 50].map(pageSize => (
-                  <option key={pageSize} value={pageSize}>
-                    <span className="text-[0.7em]">
+                  <option className="text-[0.7em]" key={pageSize} value={pageSize}>
                     {pageSize} {"ere"}
-                    </span>
                   </option>
                 ))}
               </select>
