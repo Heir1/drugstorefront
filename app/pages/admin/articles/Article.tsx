@@ -190,109 +190,116 @@ export default function Article() {
             {
                 isNewArticle ? (
                     <div>
+                        <form onSubmit={handleSubmit(onSubmit)}>
+                            <div className="grid grid-cols-11 mx-2  gap-x-5 p-5 -mt-5  " >
+                                <div className="col-span-6 bg-white p-10  rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
+                                    <div className="grid grid-cols-2 gap-5">
+                                        <div className="space-y-2" >
+                                            <label className=" font-semibold text-sm " htmlFor="">Code barre</label>
+                                            <Controller
+                                                name="barcode"
+                                                control={control}
+                                                defaultValue=""
+                                                render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg " type="text" />}
+                                            />
+                                        </div>
+                                        <div className="space-y-2" >
+                                            <label className=" font-semibold text-sm" htmlFor="">Localisation</label>
+                                            <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg " type="text" name="" id="" />
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-1 gap-5">
+                                        <div className="space-y-2" >
+                                            <label className=" font-semibold text-sm" htmlFor="">Description</label>
+                                            <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg " type="text" name="" id="" />
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-1 gap-5">
+                                        <div className="space-y-2" >
+                                            <label className=" font-semibold text-sm" htmlFor="">Indication</label>
+                                            <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg " type="text" name="" id="" />
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-1 gap-5">
+                                        <div className="space-y-2" >
+                                            <label className=" font-semibold text-sm" htmlFor="">Molécule</label>
+                                            <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg " type="text" name="" id="" />
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-5">
+                                        <div className="space-y-2" >
+                                            <label className=" font-semibold text-sm" htmlFor="">Emballage</label>
+                                            <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg " type="text" name="" id="" />
+                                        </div>
+                                        <div className="space-y-2" >
+                                            <label className=" font-semibold text-sm" htmlFor="">Catégorie</label>
+                                            <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg " type="text" name="" id="" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-span-5 bg-white rounded-xl p-10 space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
+                                    <div className="grid grid-cols-1 gap-5">
+                                        <div className="space-y-2" >
+                                            <label className=" font-semibold text-sm" htmlFor="">Fournisseur</label>
+                                            <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg " type="text" name="" id="" />
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-5">
+                                        <div className="space-y-2" >
+                                            <label className=" font-semibold text-sm" htmlFor="">Alerte</label>
+                                            <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4" type="number" name="" id="" />
+                                        </div>
+                                        <div className="space-y-2" >
+                                            <label className=" font-semibold text-sm" htmlFor="">Péremption</label>
+                                            <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 pr-4 uppercase rounded-lg " type="date" name="" id="" />
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-3 gap-5">
+                                        <div className="space-y-2" >
+                                            <label className=" font-semibold text-sm" htmlFor="">Quantité</label>
+                                            <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4" type="number" name="" id="" />
+                                        </div>
+                                        <div className="space-y-2" >
+                                            <label className=" font-semibold text-sm" htmlFor="">P.A</label>
+                                            <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4" type="number" name="" id="" />
+                                        </div>
+                                        <div className="space-y-2" >
+                                            <label className=" font-semibold text-sm" htmlFor="">P.V</label>
+                                            <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4" type="number" name="" id="" />
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-3 gap-5 ">
+                                        <div className=" flex justify-between items-end pb-3 " >
+                                            <div className=" w-1/3 flex justify-between items-center" >
+                                                <input
+                                                    type="radio"
+                                                />
+                                                <label className=' text-[12px]  text-sm font-semibold ' htmlFor="">USD</label>
+                                            </div>
+                                            <div className=" w-1/3 flex justify-between items-center">
+                                                <input
+                                                    type="radio"
+                                                />
+                                                <label className=' text-[12px]  text-sm font-semibold ' htmlFor="">CDF</label>
+                                            </div>
+                                        </div>
+                                        <div className=" col-span-2  space-y-2" >
+                                            <label className=" font-semibold text-sm" htmlFor="">TAUX MB</label>
+                                            <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4" value={1.25} type="number" name="" id="" readOnly/>
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-5 pt-8 ">
+                                        <div className=" " >
+                                            <button className=" w-full  border-[1px] hover:bg-[#FE6212] hover:text-white border-[#FE6212] text-center  text-[14px] p-2 transition duration-300 text-[#FE6212] rounded-lg " >Annuler</button>
+                                        </div>
+                                        <div className="" >
+                                            <button className=" w-full text-center p-2 bg-[#28A745] text-white transition duration-300 hover:bg-[#1E7E34]  rounded-lg  text-[14px]  " >Enregistrer</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                        
+                        </form>
 
-                        <div className="grid grid-cols-11 mx-2  gap-x-5 p-5 -mt-5  " >
-                            <div className="col-span-6 bg-white p-10  rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
-                                <div className="grid grid-cols-2 gap-5">
-                                    <div className="space-y-2" >
-                                        <label className=" font-semibold text-sm " htmlFor="">Code barre</label>
-                                        <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg " type="text" name="" id="" />
-                                    </div>
-                                    <div className="space-y-2" >
-                                        <label className=" font-semibold text-sm" htmlFor="">Localisation</label>
-                                        <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg " type="text" name="" id="" />
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-1 gap-5">
-                                    <div className="space-y-2" >
-                                        <label className=" font-semibold text-sm" htmlFor="">Description</label>
-                                        <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg " type="text" name="" id="" />
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-1 gap-5">
-                                    <div className="space-y-2" >
-                                        <label className=" font-semibold text-sm" htmlFor="">Indication</label>
-                                        <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg " type="text" name="" id="" />
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-1 gap-5">
-                                    <div className="space-y-2" >
-                                        <label className=" font-semibold text-sm" htmlFor="">Molécule</label>
-                                        <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg " type="text" name="" id="" />
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-2 gap-5">
-                                    <div className="space-y-2" >
-                                        <label className=" font-semibold text-sm" htmlFor="">Emballage</label>
-                                        <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg " type="text" name="" id="" />
-                                    </div>
-                                    <div className="space-y-2" >
-                                        <label className=" font-semibold text-sm" htmlFor="">Catégorie</label>
-                                        <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg " type="text" name="" id="" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-span-5 bg-white rounded-xl p-10 space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
-                                <div className="grid grid-cols-1 gap-5">
-                                    <div className="space-y-2" >
-                                        <label className=" font-semibold text-sm" htmlFor="">Fournisseur</label>
-                                        <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg " type="text" name="" id="" />
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-2 gap-5">
-                                    <div className="space-y-2" >
-                                        <label className=" font-semibold text-sm" htmlFor="">Alerte</label>
-                                        <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4" type="number" name="" id="" />
-                                    </div>
-                                    <div className="space-y-2" >
-                                        <label className=" font-semibold text-sm" htmlFor="">Péremption</label>
-                                        <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 pr-4 uppercase rounded-lg " type="date" name="" id="" />
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-3 gap-5">
-                                    <div className="space-y-2" >
-                                        <label className=" font-semibold text-sm" htmlFor="">Quantité</label>
-                                        <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4" type="number" name="" id="" />
-                                    </div>
-                                    <div className="space-y-2" >
-                                        <label className=" font-semibold text-sm" htmlFor="">P.A</label>
-                                        <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4" type="number" name="" id="" />
-                                    </div>
-                                    <div className="space-y-2" >
-                                        <label className=" font-semibold text-sm" htmlFor="">P.V</label>
-                                        <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4" type="number" name="" id="" />
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-3 gap-5 ">
-                                    <div className=" flex justify-between items-end pb-3 " >
-                                        <div className=" w-1/3 flex justify-between items-center" >
-                                            <input
-                                                type="radio"
-                                            />
-                                            <label className=' text-[12px]  text-sm font-semibold ' htmlFor="">USD</label>
-                                        </div>
-                                        <div className=" w-1/3 flex justify-between items-center">
-                                            <input
-                                                type="radio"
-                                            />
-                                            <label className=' text-[12px]  text-sm font-semibold ' htmlFor="">CDF</label>
-                                        </div>
-                                    </div>
-                                    <div className=" col-span-2  space-y-2" >
-                                        <label className=" font-semibold text-sm" htmlFor="">MBA</label>
-                                        <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4" value={1.25} type="number" name="" id="" readOnly/>
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-2 gap-5 pt-8 ">
-                                    <div className=" " >
-                                        <button className=" w-full  border-[1px] hover:bg-[#FE6212] hover:text-white border-[#FE6212] text-center  text-[14px] p-2 transition duration-300 text-[#FE6212] rounded-lg " >Annuler</button>
-                                    </div>
-                                    <div className="" >
-                                        <button className=" w-full text-center p-2 bg-[#28A745] text-white transition duration-300 hover:bg-[#1E7E34]  rounded-lg  text-[14px]  " >Enregistrer</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>                        
                         {
                             articleStatus == "loading" ? 
                                 <div className="w-full flex justify-center mt-8">

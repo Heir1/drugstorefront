@@ -16,6 +16,8 @@ import { createArticle } from '@/app/redux/slices/articles/actions';
 import IPackaging from '@/app/interfaces/packaging';
 import { Icon } from '@iconify/react'; // Import Iconify's Icon component
 import { useCurrencyService } from '@/app/redux/slices/currencies/useCurrencyService';
+import Select from 'react-select'
+import { NextPage } from 'next'
 
 
 interface IFormInputs {
@@ -78,7 +80,11 @@ export default function Old() {
     //   });
 
 
-
+    const colorOptions = [
+        { label: 'Red', value: 'red' },
+        { label: 'Green', value: 'green' },
+        { label: 'Blue', value: 'blue' },
+    ]
   
     const dispatch = useDispatch<AppDispatch>();
   
@@ -102,8 +108,7 @@ export default function Old() {
         currency_id: Number(currency) 
       }
 
-      console.log(articleData);
-      
+      console.log(articleData);      
   
     //     try {
     //         await dispatch(createArticle(articleData));
@@ -176,7 +181,7 @@ export default function Old() {
                             <label className='text-white' htmlFor="">Localisation</label>
                             </div>
                             <div className="col-span-4">
-                            <Controller
+                            {/* <Controller
                                 name="location"
                                 control={control}
                                 defaultValue=""
@@ -188,6 +193,21 @@ export default function Old() {
                                 </select>
                                 )}
                                 // rules={{ required: 'La localisation est requise' }}
+                            /> */}
+
+                            <Controller
+                                name="location"
+                                control={control}
+                                rules={{ required: 'Location is required' }}
+                                render={({ field }) => (
+                                    <Select
+                                    {...field}
+                                    id="color"
+                                    options={colorOptions}
+                                    getOptionValue={(e) => e.value}
+                                    getOptionLabel={(e) => e.label}
+                                    />
+                                )}
                             />
 
                             {/* <input className='border-0 w-full rounded-lg py-1 px-3' type="text" /> */}
@@ -442,17 +462,17 @@ export default function Old() {
                 </div>
 
                     {
-                    articleStatus == "loading" ? 
-                        <div className="w-full flex justify-center mt-8">
-                        <div className="w-[8em] h-[8em] px-auto">
-                            <Icon icon="svg-spinners:90-ring-with-bg" className="text-[#597EEE] text-[3em]"/>
-                        </div>
-                        </div>
-                    :
+                        articleStatus == "loading" ? 
+                            <div className="w-full flex justify-center mt-8">
+                            <div className="w-[8em] h-[8em] px-auto">
+                                <Icon icon="svg-spinners:90-ring-with-bg" className="text-[#597EEE] text-[3em]"/>
+                            </div>
+                            </div>
+                        :
 
-                        <div className=' text-white ' >
-                        <DataTable columns={ArticleColumns} data={articles} needFilter={false} paginate={true} title=""/>
-                        </div>
+                            <div className=' text-white ' >
+                            <DataTable columns={ArticleColumns} data={articles} needFilter={false} paginate={true} title=""/>
+                            </div>
                     }
 
 
