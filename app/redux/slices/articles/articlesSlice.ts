@@ -95,6 +95,11 @@ const articlesSlice = createSlice({
         });
     },
   });
+
+  // Ajouter un sélecteur pour filtrer par ID
+  export const selectArticleById = (state: { articles: ArticlesState }, articleId: string) => {
+    return state.articles.articles.find((article) => article.id === articleId) || null;
+  };
   
   export default articlesSlice.reducer;
   

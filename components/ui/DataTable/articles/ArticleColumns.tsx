@@ -8,18 +8,29 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Icon } from '@iconify/react';
 import IArticle from "@/app/interfaces/article";
+import FormArticleUpdate from "@/app/components/form/FormArticleUpdate";
 
 
 const CellComponent = ({ row }: { row: any }) => {
 
+    const articleRow = row.original
     
+    const [article, setArticle] = useState<IArticle[]>([]);
 
+    const setUnActivation = (article:any) => {
+        setArticle(article)
+    }
 
     return (
-        <div className="flex justify-start " >
-            <div className="text-white py-1 px-4 rounded-lg bg-[#4594ff] mr-3 " >Activer</div>
-            <div className="bg-[#ff604e] py-1 px-4 rounded-lg text-white ">Desactiver</div>
-        </div>
+        <>
+            {
+                article &&  <div className=" hidden " ><FormArticleUpdate content={article} /></div>
+            }
+            <div className="flex justify-start " >
+                <div className="text-white py-1 px-4 rounded-lg bg-[#4594ff] mr-3 "  >Activer</div>
+                <div className="bg-[#ff604e] py-1 px-4 rounded-lg text-white " onClick={()=> setUnActivation(articleRow) }>Desactiver</div>
+            </div>
+        </>
     );
 
 }
