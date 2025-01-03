@@ -142,7 +142,7 @@ export default function FormArticleCreation() {
         packaging_id: Number(packaging?.value),
         selling_price,
         purchase_price,
-        alert : false,
+        alert : Number(alert),
         currency_id: Number(currency) 
       }
 

@@ -23,12 +23,17 @@ const CellComponent = ({ row }: { row: any }) => {
 
     return (
         <>
-            {
-                article &&  <div className=" hidden " ><FormArticleUpdate content={article} /></div>
-            }
             <div className="flex justify-start " >
-                <div className="text-white py-1 px-4 rounded-lg bg-[#4594ff] mr-3 "  >Activer</div>
-                <div className="bg-[#ff604e] py-1 px-4 rounded-lg text-white " onClick={()=> setUnActivation(articleRow) }>Desactiver</div>
+                {/* <div className="text-white py-1 px-4 rounded-lg bg-[#4594ff] mr-3 "  >Activer</div> */}
+                {
+                    articleRow.is_active ? (
+                        <div className="bg-[#ff604e] py-1 px-4 rounded-lg text-center text-white w-24" onClick={()=> setUnActivation(articleRow) }>Desactiver</div>
+                    )
+                    :
+                    (
+                        <div className="bg-[#4594ff] py-1 px-4 rounded-lg text-center text-white w-24 " onClick={()=> setUnActivation(articleRow) }>Activer</div>
+                    )
+                }
             </div>
         </>
     );

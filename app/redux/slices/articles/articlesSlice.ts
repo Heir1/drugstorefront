@@ -2,6 +2,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { createArticle, deleteArticle, fetchArticles, getArticleById, updateArticle } from './actions';
 import IArticle from '@/app/interfaces/article';
+import { RootState } from '../../store/store'; // Importez le type RootState
 
 
 interface ArticlesState {
@@ -57,6 +58,7 @@ const articlesSlice = createSlice({
         })
         .addCase(createArticle.fulfilled, (state, action: PayloadAction<IArticle>) => {
           state.articleStatus = 'succeeded';
+          console.log(action.payload);
           state.articles.push(action.payload);
         })
         .addCase(createArticle.rejected, (state, action) => {
@@ -96,10 +98,13 @@ const articlesSlice = createSlice({
     },
   });
 
-  // Ajouter un sélecteur pour filtrer par ID
-  export const selectArticleById = (state: { articles: ArticlesState }, articleId: string) => {
+
+  export const selectArticleById = (
+    state: { articles: ArticlesState },
+    articleId: string
+  ) => {
     return state.articles.articles.find((article) => article.id === articleId) || null;
   };
-  
+
   export default articlesSlice.reducer;
   

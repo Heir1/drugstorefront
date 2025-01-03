@@ -77,6 +77,7 @@ export const updateArticle = createAsyncThunk<IArticle, { id: string; data: IArt
 
             // return rejectWithValue(response.error);
         }
+        alert("Modification avec succès")
         return response.data as IArticle;
       } catch (error: any) {
         return rejectWithValue(error.message);

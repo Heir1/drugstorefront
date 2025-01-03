@@ -28,6 +28,7 @@ import dynamic from 'next/dynamic';
 import { log } from 'console';
 import FormArticleCreation from '@/app/components/form/FormArticleCreation';
 import FormArticleUpdate from '@/app/components/form/FormArticleUpdate';
+import { DataTableState } from '@/components/ui/DataTable/DataTableState';
 // Dynamically import React Select without SSR
 const Select = dynamic(() => import('react-select'), { ssr: false });
 
@@ -160,21 +161,21 @@ export default function Article() {
         packaging_id: Number(packaging?.value),
         selling_price,
         purchase_price,
-        alert : false,
+        alert : Number(alert),
         currency_id: Number(currency) 
       }
 
       console.log(articleData);
       
   
-        try {
-            await dispatch(createArticle(articleData));
+        // try {
+        //     await dispatch(createArticle(articleData));
       
-        } catch (err) {
-            // Handle errors that happen outside the action (e.g., network failures)
-            // setOpenForm(false);
-            console.error(err);
-        }
+        // } catch (err) {
+        //     // Handle errors that happen outside the action (e.g., network failures)
+        //     // setOpenForm(false);
+        //     console.error(err);
+        // }
   
     };
 
@@ -193,13 +194,22 @@ export default function Article() {
             setIsNewArticle(true) 
             setIsUpdateArticle(false)
             setIsExportArticle(false)
-            setIsReportArticle(false) 
+            setIsReportArticle(false)
+            setIsStateArticle(false) 
         }
         else if(tab == "update"){
             setIsNewArticle(false) 
             setIsUpdateArticle(true)
             setIsExportArticle(false)
+            setIsReportArticle(false)
+            setIsStateArticle(false) 
+        }
+        else if(tab == "state"){
+            setIsNewArticle(false) 
+            setIsUpdateArticle(false)
+            setIsExportArticle(false)
             setIsReportArticle(false) 
+            setIsStateArticle(true)
         }
     }
 
@@ -227,7 +237,7 @@ export default function Article() {
                                 </div>
                             </Link>
                             <Link href={``}>
-                                <div className={`flex justify-center items-center py-2 rounded-lg ${ isStateArticle && "bg-[#262B62] text-white" } `}>
+                                <div className={`flex justify-center items-center py-2 rounded-lg ${ isStateArticle && "bg-[#262B62] text-white" } `} onClick={ ()=> setActivation("state") }>
                                     <h1>Etat produit</h1>
                                 </div>
                             </Link>
@@ -252,9 +262,9 @@ export default function Article() {
                     <div>
                         <FormArticleCreation/>
 
-                        <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white rounded-xl" >
+                        {/* <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white rounded-xl" >
                             <DataTable columns={ArticleColumns} data={articles} needFilter={false} paginate={false} title=""/>
-                        </div>
+                        </div> */}
                     </div>
                 )
                 :
@@ -276,13 +286,22 @@ export default function Article() {
                                     </div>
                             }
 
-                                    <FormArticleUpdate/>
 
                         </div>
                     )
                     :
                     (
-                        ""
+                        isStateArticle ? (
+                            <div>
+                                <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white rounded-xl" >
+                                    <DataTableState columns={ArticleColumns} data={articles} needFilter={false} paginate={false} title=""/>
+                                </div>
+                            </div>
+                        )
+                        :
+                        (
+                            ""
+                        )
                     )
                 )
 

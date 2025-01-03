@@ -39,10 +39,11 @@ import {
 import { Icon } from '@iconify/react';
 import IArticle from "@/app/interfaces/article";
 import FormArticleUpdate from "@/app/components/form/FormArticleUpdate";
+import ArticleActivationForm from "@/app/components/form/ArticleActivationForm";
 
 
 
-interface DataTableProps<TData, TValue> {
+interface DataTableStateProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   needFilter: boolean;
@@ -50,13 +51,13 @@ interface DataTableProps<TData, TValue> {
   paginate: boolean;
 }
 
-export function DataTable<TData, TValue>({
+export function DataTableState<TData, TValue>({
   columns,
   data,
   needFilter,
   title,
   paginate,
-}: DataTableProps<TData, TValue>) {
+}: DataTableStateProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -74,7 +75,7 @@ export function DataTable<TData, TValue>({
   const [globalFilter, setGlobalFilter] = React.useState('');
   const [selected, setSelected] = React.useState('plusRecent');
   const [redirection, setRedirection] = React.useState(false);
-  const [ isUpdateFormOpen, setIsUpdateFormOpen ] = React.useState(false);
+  const [ activationFormOpen, setActivationFormOpen ] = React.useState(false);
   const [article, setArticle] = React.useState<IArticle[]>([]);
 
   const table = useReactTable({
@@ -113,7 +114,7 @@ export function DataTable<TData, TValue>({
   }
 
   const getArticleInfo = (articleInfo:any) => {
-    setIsUpdateFormOpen(true)
+    setActivationFormOpen(true)
     setArticle(articleInfo)
   }
 
@@ -126,7 +127,7 @@ export function DataTable<TData, TValue>({
   return (
     <>
       {
-        isUpdateFormOpen &&  <FormArticleUpdate content={article} setIsUpdateFormOpen={setIsUpdateFormOpen}  />
+        activationFormOpen &&  <ArticleActivationForm content={article} setActivationFormOpen={setActivationFormOpen}  />
       }
       <div className="bg-transparent   rounded-2xl">
         <div className="flex items-center justify-between " >
