@@ -8,6 +8,7 @@ import suppliersReducer from '../slices/suppliers/suppliersSlice'
 import moleculesReducer from '../slices/molecules/moleculesSlice'
 import indicationsReducer from '../slices/indications/indicationsSlice'
 import placementsReducer from '../slices/placements/placementsSlice'
+import movementsReducer from '../slices/movements/movementsSlice'
 
 const store = configureStore({
   reducer: {
@@ -18,7 +19,8 @@ const store = configureStore({
     suppliers: suppliersReducer,
     molecules: moleculesReducer,
     indications: indicationsReducer,
-    placements: placementsReducer
+    placements: placementsReducer,
+    movements: movementsReducer,
   },
 });
 

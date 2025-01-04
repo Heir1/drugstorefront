@@ -29,6 +29,10 @@ import { log } from 'console';
 import FormArticleCreation from '@/app/components/form/FormArticleCreation';
 import FormArticleUpdate from '@/app/components/form/FormArticleUpdate';
 import { DataTableState } from '@/components/ui/DataTable/DataTableState';
+import { DataTableSupply } from '@/components/ui/DataTable/DataTableSupply';
+import FormArticleAppro from '@/app/components/form/FormArticleAppro';
+import { ArticleApproColumns } from '@/components/ui/DataTable/articles/ArticleApproColumns';
+import { useMovementService } from '@/app/redux/slices/movements/useMovementService';
 
 
 interface IFormInputs {
@@ -48,8 +52,7 @@ interface IFormInputs {
     selling_price: number;
 }
 
-
-export default function Article() {
+export default function Supply() {
 
     const { articles, articleStatus, error } = useArticleService()  
     const { packagings, packagingStatus, packagingError } = usePackagingService()
@@ -59,6 +62,7 @@ export default function Article() {
     const { indications, indicationStatus, indicationError } = useIndicationService();
     const { placements, placementStatus, placementError } = usePlacementService();
     const { currencies, currencyStatus, currencyError } = useCurrencyService();
+    const { movements, movementStatus, movementError } = useMovementService();
 
     const [isNewArticle, setIsNewArticle] = useState(true);
     const [isUpdateArticle, setIsUpdateArticle] = useState(false);
@@ -147,7 +151,7 @@ export default function Article() {
         <>
 
             {
-                (articleStatus == "loading" ||  packagingStatus == "loading" || categoryStatus == "loading" || supplierStatus == "loading" || moleculeStatus == "loading" || indicationStatus == "loading" || placementStatus == "loading" || currencyStatus == "loading" ) && <Loading/>
+                (articleStatus == "loading" ||  packagingStatus == "loading" || categoryStatus == "loading" || supplierStatus == "loading" || moleculeStatus == "loading" || indicationStatus == "loading" || placementStatus == "loading" || currencyStatus == "loading" || movementStatus == "loading" ) && <Loading/>
             }
 
             <div className="mx-2 p-5 " >
@@ -156,22 +160,17 @@ export default function Article() {
                         <div className="grid grid-cols-5 place-content-center">
                             <Link href={``}>
                                 <div className={`flex justify-center items-center py-2 rounded-lg ${ isNewArticle && "bg-[#262B62] text-white" } `} onClick={ ()=> setActivation("new") } >
-                                    <h1>Nouveau</h1>
+                                    <h1>Appro</h1>
                                 </div>
                             </Link>
                             <Link href={``}>
                                 <div className={`flex justify-center items-center py-2 rounded-lg ${ isUpdateArticle && "bg-[#262B62] text-white" } `} onClick={ ()=> setActivation("update") }>
-                                    <h1>Mise à jour</h1>
+                                    <h1>Liste Produits</h1>
                                 </div>
                             </Link>
                             <Link href={``}>
                                 <div className={`flex justify-center items-center py-2 rounded-lg ${ isStateArticle && "bg-[#262B62] text-white" } `} onClick={ ()=> setActivation("state") }>
-                                    <h1>Etat produit</h1>
-                                </div>
-                            </Link>
-                            <Link href={``}>
-                                <div className={`flex justify-center items-center py-2 rounded-lg ${ isExportArticle && "bg-[#262B62] text-white" } `}>
-                                    <h1>Import / Export</h1>
+                                    <h1>Liste Appro</h1>
                                 </div>
                             </Link>
                             <Link href={``}>
@@ -184,15 +183,13 @@ export default function Article() {
                 </div>
             </div>
 
-
             {
                 isNewArticle ? (
                     <div>
-                        <FormArticleCreation/>
-
-                        {/* <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white rounded-xl" >
-                            <DataTable columns={ArticleColumns} data={articles} needFilter={false} paginate={false} title=""/>
-                        </div> */}
+                         <FormArticleAppro/>
+                        <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white rounded-xl" >
+                            <DataTableSupply columns={ArticleApproColumns} data={movements} needFilter={false} paginate={true} title=""/>
+                        </div>
                     </div>
                 )
                 :
@@ -214,7 +211,7 @@ export default function Article() {
                         isStateArticle ? (
                             <div>
                                 <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white rounded-xl" >
-                                    <DataTableState columns={ArticleColumns} data={articles} needFilter={false} paginate={true} title=""/>
+                                    <DataTableSupply columns={ArticleApproColumns} data={movements} needFilter={false} paginate={true} title=""/>
                                 </div>
                             </div>
                         )
@@ -229,14 +226,6 @@ export default function Article() {
 
 
         </>
-
     )
 
 }
-
-{/* <input
-type="radio"
-id={`${currency.name}`}
-value={currency.id}
-{...register('currency', { required: 'Vous devez choisir une devise' })}
-/> */}
