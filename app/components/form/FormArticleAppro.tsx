@@ -319,32 +319,46 @@ export default function FormArticleAppro() {
                 {/* </form> */}
                 <form onSubmit={handleSubmit(onSubmit)}>
 
-                <div className="flex justify-center bg-white rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] p-5 mx-5 " >
-                        <div className=" w-1/2 space-y-2 ">
-                            <label className=" font-semibold text-sm " htmlFor="">Recherche d'article</label>
-                            <Controller
-                                name="description1"
-                                control={control}
-                                render={({ field }) => (
-                                    <Select
-                                        {...field}
-                                        value={article}
-                                        options={articlesFormated}
-                                        onChange={handleChange}
-                                        placeholder="Sélectionnez un article"
-                                        // isClearable
-                                    />
-                                )}
-                                // rules={{ required: 'L indication est requise' }}
-                            />
-                        </div>
+                <div className="flex justify-center bg-gray-600 rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] p-5 mx-5 " >
+                        
+
+                <div className="flex justify-start bg-gray-50 rounded-xl shadow-lg p-5 mx-5 gap-8 items-center">
+                    {/* Label Section */}
+                    <div className="w-1/3 flex flex-col items-start pl-10">
+                        <label className="font-semibold text-sm text-gray-700">
+                            Recherche d'article
+                        </label>
+                    </div>
+
+                    {/* Input Section */}
+                    <div className="w-2/3">
+                        <Controller
+                            name="description1"
+                            control={control}
+                            render={({ field }) => (
+                                <Select
+                                    {...field}
+                                    value={article}
+                                    options={articlesFormated}
+                                    onChange={handleChange}
+                                    placeholder="Sélectionnez un article"
+                                    // isClearable
+                                />
+                            )}
+                            // rules={{ required: 'L indication est requise' }}
+                        />
+                    </div>
+                </div>
+
+
+
                     </div>
 
                     <div className="grid grid-cols-11  gap-x-5 p-5 " >
-                        <div className="col-span-6 bg-white p-10  rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
+                        <div className="col-span-6 bg-gray-600 p-10  rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
                             <div className="grid grid-cols-2 gap-5">
                                 <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm " htmlFor="">Code barre</label>
+                                    <label className=" font-semibold text-sm text-white " htmlFor="">Code barre</label>
                                     <Controller
                                         name="barcode"
                                         control={control}
@@ -354,7 +368,7 @@ export default function FormArticleAppro() {
                                     />
                                 </div>
                                 <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm" htmlFor="">Localisation</label>
+                                    <label className=" font-semibold text-sm text-white" htmlFor="">Localisation</label>
                                     <Controller
                                         name="location"
                                         control={control}
@@ -375,7 +389,7 @@ export default function FormArticleAppro() {
                             </div>
                             <div className="grid grid-cols-1 gap-5">
                                 <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm" htmlFor="">Description</label>
+                                    <label className=" font-semibold text-sm text-white" htmlFor="">Description</label>
                                     <Controller
                                         name="description"
                                         control={control}
@@ -386,7 +400,7 @@ export default function FormArticleAppro() {
                             </div>
                             <div className="grid grid-cols-1 gap-5">
                                 <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm" htmlFor="">Indication</label>
+                                    <label className=" font-semibold text-sm text-white" htmlFor="">Indication</label>
                                     <Controller
                                         name="indication"
                                         control={control}
@@ -405,7 +419,7 @@ export default function FormArticleAppro() {
                             </div>
                             <div className="grid grid-cols-1 gap-5">
                                 <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm" htmlFor="">Molécule</label>
+                                    <label className=" font-semibold text-sm text-white" htmlFor="">Molécule</label>
                                     <Controller
                                         name="molecule"
                                         control={control}
@@ -424,7 +438,7 @@ export default function FormArticleAppro() {
                             </div>
                             <div className="grid grid-cols-2 gap-5">
                                 <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm" htmlFor="">Emballage</label>
+                                    <label className=" font-semibold text-sm text-white" htmlFor="">Emballage</label>
                                     <Controller
                                         name="packaging"
                                         control={control}
@@ -441,7 +455,7 @@ export default function FormArticleAppro() {
                                     />
                                 </div>
                                 <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm" htmlFor="">Catégorie</label>
+                                    <label className=" font-semibold text-sm text-white" htmlFor="">Catégorie</label>
                                     <Controller
                                         name="category"
                                         control={control}
@@ -459,10 +473,10 @@ export default function FormArticleAppro() {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-span-5 bg-white rounded-xl p-10 space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
+                        <div className="col-span-5 bg-gray-600 rounded-xl p-10 space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
                             <div className="grid grid-cols-1 gap-5">
                                 <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm" htmlFor="">Fournisseur</label>
+                                    <label className=" font-semibold text-sm text-white" htmlFor="">Fournisseur</label>
                                     <Controller
                                         name="supplier"
                                         control={control}
@@ -482,7 +496,7 @@ export default function FormArticleAppro() {
                             </div>
                             <div className="grid grid-cols-2 gap-5">
                                 <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm" htmlFor="">Alerte</label>
+                                    <label className=" font-semibold text-sm text-white" htmlFor="">Alerte</label>
                                     <Controller
                                         name="alert"
                                         control={control}
@@ -491,7 +505,7 @@ export default function FormArticleAppro() {
                                     />
                                 </div>
                                 <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm" htmlFor="">Péremption</label>
+                                    <label className=" font-semibold text-sm text-white" htmlFor="">Péremption</label>
                                     <Controller
                                         name="expirationDate"
                                         control={control}
@@ -504,7 +518,7 @@ export default function FormArticleAppro() {
                                 <div>
                                     <div className="grid grid-cols-2 gap-2 " >
                                         <div className="space-y-2" >
-                                            <label className=" font-semibold text-sm" htmlFor="">Qté Stock</label>
+                                            <label className=" font-semibold text-sm text-white" htmlFor="">Qté Stock</label>
                                             <Controller
                                                 name="quantity"
                                                 control={control}
@@ -513,7 +527,7 @@ export default function FormArticleAppro() {
                                             />
                                         </div> 
                                             <div className="space-y-2" >
-                                            <label className=" font-semibold text-sm" htmlFor="">Qté Appro</label>
+                                            <label className=" font-semibold text-sm text-white" htmlFor="">Qté Appro</label>
                                             <Controller
                                                 name="quantityappro"
                                                 control={control}
@@ -526,7 +540,7 @@ export default function FormArticleAppro() {
                                 
 
                                 <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm" htmlFor="">P.A</label>
+                                    <label className=" font-semibold text-sm text-white" htmlFor="">P.A</label>
                                     <Controller
                                         name="purchase_price"
                                         control={control}
@@ -535,7 +549,7 @@ export default function FormArticleAppro() {
                                     />
                                 </div>
                                 <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm" htmlFor="">P.V</label>
+                                    <label className=" font-semibold text-sm text-white" htmlFor="">P.V</label>
                                     <Controller
                                         name="selling_price"
                                         control={control}
@@ -559,7 +573,7 @@ export default function FormArticleAppro() {
                                                             value={2}
                                                             {...register('currency', { required: 'Vous devez choisir une devise' })}
                                                             />
-                                                        <label className=' text-[12px]  text-sm font-semibold ' htmlFor="">USD</label>
+                                                        <label className=' text-[12px]  text-sm font-semibold text-white' htmlFor="">USD</label>
                                                     </div>
                                                     <div className=" w-1/3 flex justify-between items-center">
                                                         <input
@@ -568,7 +582,7 @@ export default function FormArticleAppro() {
                                                             value={1}
                                                             {...register('currency', { required: 'Vous devez choisir une devise' })}
                                                             />
-                                                        <label className=' text-[12px]  text-sm font-semibold ' htmlFor="">CDF</label>
+                                                        <label className=' text-[12px]  text-sm font-semibold text-white' htmlFor="">CDF</label>
                                                     </div>
                                                 </>
                                             )}
@@ -576,7 +590,7 @@ export default function FormArticleAppro() {
                                         />
                                 </div>
                                 <div className=" col-span-2  space-y-2" >
-                                    <label className=" font-semibold text-sm" htmlFor="">TAUX MB</label>
+                                    <label className=" font-semibold text-sm text-white" htmlFor="">TAUX MB</label>
                                     <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4" value={1.25} type="number" name="" id="" readOnly/>
                                 </div>
                             </div>

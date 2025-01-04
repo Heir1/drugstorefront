@@ -178,7 +178,7 @@ export default function StockRegulForm({content, setisStockRegulFormOpen}:Articl
             <div className=" fixed z-50 top-[15%] left-[30%] mx-5 "  >
                 <Toaster />
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className=" w-[150%]   bg-white p-10  rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
+                    <div className=" w-[150%]   bg-gray-600 p-10  rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
                         <div className="space-y-2" >
                             <label className=" font-semibold text-sm" htmlFor="">Description</label>
                             <Controller

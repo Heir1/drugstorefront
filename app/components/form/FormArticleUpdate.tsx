@@ -353,10 +353,10 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                 <Toaster />
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="grid grid-cols-11  gap-x-5 p-5 " >
-                        <div className="col-span-6 bg-white p-10  rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
+                        <div className="col-span-6 bg-gray-600 p-10  rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
                             <div className="grid grid-cols-2 gap-5">
                                 <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm " htmlFor="">Code barre</label>
+                                    <label className=" font-semibold text-sm text-white" htmlFor="">Code barre</label>
                                     <Controller
                                         name="barcode"
                                         control={control}
@@ -366,7 +366,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                     />
                                 </div>
                                 <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm" htmlFor="">Localisation</label>
+                                    <label className=" font-semibold text-sm text-white" htmlFor="">Localisation</label>
                                     <Controller
                                         name="location"
                                         control={control}
@@ -387,7 +387,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                             </div>
                             <div className="grid grid-cols-1 gap-5">
                                 <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm" htmlFor="">Description</label>
+                                    <label className=" font-semibold text-sm text-white" htmlFor="">Description</label>
                                     <Controller
                                         name="description"
                                         control={control}
@@ -398,7 +398,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                             </div>
                             <div className="grid grid-cols-1 gap-5">
                                 <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm" htmlFor="">Indication</label>
+                                    <label className=" font-semibold text-sm text-white" htmlFor="">Indication</label>
                                     <Controller
                                         name="indication"
                                         control={control}
@@ -417,7 +417,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                             </div>
                             <div className="grid grid-cols-1 gap-5">
                                 <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm" htmlFor="">Molécule</label>
+                                    <label className=" font-semibold text-sm text-white" htmlFor="">Molécule</label>
                                     <Controller
                                         name="molecule"
                                         control={control}
@@ -436,7 +436,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                             </div>
                             <div className="grid grid-cols-2 gap-5">
                                 <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm" htmlFor="">Emballage</label>
+                                    <label className=" font-semibold text-sm text-white" htmlFor="">Emballage</label>
                                     <Controller
                                         name="packaging"
                                         control={control}
@@ -453,7 +453,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                     />
                                 </div>
                                 <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm" htmlFor="">Catégorie</label>
+                                    <label className=" font-semibold text-sm text-white" htmlFor="">Catégorie</label>
                                     <Controller
                                         name="category"
                                         control={control}
@@ -471,10 +471,10 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                 </div>
                             </div>
                         </div>
-                        <div className="col-span-5 bg-white rounded-xl p-10 space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
+                        <div className="col-span-5 bg-gray-600 rounded-xl p-10 space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
                             <div className="grid grid-cols-1 gap-5">
                                 <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm" htmlFor="">Fournisseur</label>
+                                    <label className=" font-semibold text-sm text-white " htmlFor="">Fournisseur</label>
                                     <Controller
                                         name="supplier"
                                         control={control}
@@ -494,7 +494,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                             </div>
                             <div className="grid grid-cols-2 gap-5">
                                 <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm" htmlFor="">Alerte</label>
+                                    <label className=" font-semibold text-sm text-white" htmlFor="">Alerte</label>
                                     <Controller
                                         name="alert"
                                         control={control}
@@ -503,7 +503,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                     />
                                 </div>
                                 <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm" htmlFor="">Péremption</label>
+                                    <label className=" font-semibold text-sm text-white" htmlFor="">Péremption</label>
                                     <Controller
                                         name="expirationDate"
                                         control={control}
@@ -514,7 +514,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                             </div>
                             <div className="grid grid-cols-3 gap-5">
                                 <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm" htmlFor="">Quantité</label>
+                                    <label className=" font-semibold text-sm text-white" htmlFor="">Quantité</label>
                                     <Controller
                                         name="quantity"
                                         control={control}
@@ -523,7 +523,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                     />
                                 </div>
                                 <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm" htmlFor="">P.A</label>
+                                    <label className=" font-semibold text-sm text-white" htmlFor="">P.A</label>
                                     <Controller
                                         name="purchase_price"
                                         control={control}
@@ -532,7 +532,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                     />
                                 </div>
                                 <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm" htmlFor="">P.V</label>
+                                    <label className=" font-semibold text-sm text-white" htmlFor="">P.V</label>
                                     <Controller
                                         name="selling_price"
                                         control={control}
@@ -573,7 +573,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                         />
                                 </div>
                                 <div className=" col-span-2  space-y-2" >
-                                    <label className=" font-semibold text-sm" htmlFor="">TAUX MB</label>
+                                    <label className=" font-semibold text-sm text-white" htmlFor="">TAUX MB</label>
                                     <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4 border-2 border-black" value={1.25} type="number" name="" id="" readOnly/>
                                 </div>
                             </div>

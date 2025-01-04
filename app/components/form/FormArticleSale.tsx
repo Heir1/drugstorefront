@@ -423,40 +423,39 @@ export default function FormArticleSale() {
                         {/* </form> */}
                         <form onSubmit={handleSubmit(onSubmit1)}>
 
-                            <div className="flex justify-start bg-gray-50 rounded-xl shadow-lg p-5 mx-5 gap-8 items-center">
-                                {/* Label Section */}
+                            {/* <div className="flex justify-start bg-gray-600 rounded-xl shadow-lg p-5 mx-5 gap-8 items-center">
+                               
                                 <div className="w-1/3 flex flex-col items-start pl-10">
-                                    <label className="font-semibold text-sm text-gray-700">
-                                        Recherche d'article
+                                    <label className="font-semibold text-sm text-white">
+                                        RECHERCHE D'ARTICLE
                                     </label>
                                 </div>
 
-                                {/* Input Section */}
                                 <div className="w-2/3">
                                     <Controller
                                         name="description1"
                                         control={control}
                                         render={({ field }) => (
                                             <Select
-                                            {...field}
-                                            value={article}
-                                            options={articlesFormated}
-                                            onChange={handleChange}
-                                            placeholder="Sélectionnez un article"
-                                            className="text-sm rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                {...field}
+                                                value={article}
+                                                options={articlesFormated}
+                                                onChange={handleChange}
+                                                placeholder="Sélectionnez un article pour vendre"
+                                                className="text-sm rounded-lg shadow-md uppercase font-bold focus:outline-none focus:ring-2 focus:ring-blue-500"
                                             />
                                         )}
                                     />
                                 </div>
-                            </div>
+                            </div> */}
 
 
-                            <div className="grid grid-cols-11  gap-x-5 p-5 bg-white mx-5 my-2  rounded-xl space-y-2 shadow-[0px_4px_8px_0px_#00000026]" >
+                            <div className="grid grid-cols-11  gap-x-5 px-5 bg-gray-600 mx-5 my-2  rounded-xl space-y-2 shadow-[0px_4px_8px_0px_#00000026]" >
                                 <div className="col-span-8 ">
                                     <div className="grid grid-cols-4 gap-5">
 
                                         <div className="space-y-1" >
-                                            <label className=" font-semibold text-sm " htmlFor="">Code barre</label>
+                                            <label className=" font-semibold text-sm  text-white" htmlFor="">Code barre</label>
                                             <Controller
                                                 name="barcode"
                                                 control={control}
@@ -467,7 +466,7 @@ export default function FormArticleSale() {
                                         </div>
 
                                         <div className="space-y-1" >
-                                            <label className=" font-semibold text-sm" htmlFor="">Localisation</label>
+                                            <label className=" font-semibold text-sm text-white" htmlFor="">Localisation</label>
                                             <Controller
                                                 name="location"
                                                 control={control}
@@ -487,7 +486,7 @@ export default function FormArticleSale() {
                                         </div>
 
                                         <div className="space-y-1" >
-                                            <label className=" font-semibold text-sm" htmlFor="">Indication</label>
+                                            <label className=" font-semibold text-sm text-white" htmlFor="">Indication</label>
                                             <Controller
                                                 name="indication"
                                                 control={control}
@@ -505,7 +504,7 @@ export default function FormArticleSale() {
                                         </div>
 
                                         <div className="space-y-1" >
-                                            <label className=" font-semibold text-sm" htmlFor="">Emballage</label>
+                                            <label className=" font-semibold text-sm text-white" htmlFor="">Emballage</label>
                                             <Controller
                                                 name="packaging"
                                                 control={control}
@@ -523,7 +522,7 @@ export default function FormArticleSale() {
                                         </div>
                                         
                                         <div className="space-y-1" >
-                                            <label className=" font-semibold text-sm" htmlFor="">Catégorie</label>
+                                            <label className=" font-semibold text-sm text-white" htmlFor="">Catégorie</label>
                                             <Controller
                                                 name="category"
                                                 control={control}
@@ -544,7 +543,7 @@ export default function FormArticleSale() {
                                         <div className="space-y-1" >
                                             <div className="grid grid-cols-2 gap-2 ">
                                                 <div>
-                                                    <label className=" font-semibold text-sm" htmlFor="">PU USD</label>
+                                                    <label className=" font-semibold text-sm text-white" htmlFor="">PU USD</label>
                                                     <Controller
                                                         name="selling_price"
                                                         control={control}
@@ -553,7 +552,7 @@ export default function FormArticleSale() {
                                                     />
                                                 </div>
                                                 <div>
-                                                    <label className=" font-semibold text-sm" htmlFor="">PU CDF</label>
+                                                    <label className=" font-semibold text-sm text-white" htmlFor="">PU CDF</label>
                                                     <Controller
                                                         name="selling_price"
                                                         control={control}
@@ -567,7 +566,7 @@ export default function FormArticleSale() {
                                         <div className="space-y-1" >
                                             <div className="grid grid-cols-2 gap-2 ">
                                                 <div>
-                                                    <label className=" font-semibold text-sm" htmlFor="">STOCK</label>
+                                                    <label className=" font-semibold text-sm text-white" htmlFor="">STOCK</label>
                                                     <Controller
                                                         name="quantity"
                                                         control={control}
@@ -576,7 +575,7 @@ export default function FormArticleSale() {
                                                     />
                                                 </div>
                                                 <div>
-                                                    <label className=" font-semibold text-sm" htmlFor="">VENTE</label>
+                                                    <label className=" font-semibold text-sm text-white" htmlFor="">VENTE</label>
                                                     <Controller
                                                         name="quantity1"
                                                         control={control}
@@ -590,7 +589,7 @@ export default function FormArticleSale() {
                                         <div className="space-y-1" >
                                             <div className="grid grid-cols-3 gap-2 ">
                                                 <div className="col-span-2" >
-                                                    <label className=" font-semibold text-sm " htmlFor="">Péremption</label>
+                                                    <label className=" font-semibold text-sm text-white" htmlFor="">Péremption</label>
                                                     <Controller
                                                         name="expirationDate"
                                                         control={control}
@@ -612,69 +611,18 @@ export default function FormArticleSale() {
 
                                 </div>
 
-                                <div className=" col-span-3 space-y-4 " >
+                                <div className=" col-span-3 space-y-2 " >
                                     
                                     <div className=" w-full  flex " >
                                         <div className=" w-1/2 flex items-center gap-2 " >
-                                            <label htmlFor="" className=" font-bold " >Client</label>
+                                            <label htmlFor="" className=" font-bold text-white" >Client</label>
                                             <input className=" rounded-sm border-[1px] border-gray-700 py-[2px] px-[2px] text-sm "  type="text" onChange={ (e) => setClientName(e.target.value) } />
                                         </div>
                                         <div className=" w-1/2 flex items-center gap-2 " >
-                                            <label htmlFor="" className=" font-bold " >Num : {invoiceNumber.data} </label>
+                                            <label htmlFor="" className=" font-bold text-white" >Num : {invoiceNumber.data} </label>
                                         </div>
                                         {/* invoiceNumber */}
                                     </div>
-
-                                    {/* <div className=" w-full flex" >
-
-                                        <div className="w-1/3 flex justify-center items-center">
-                                            <label className="text-[12px] text-sm font-semibold" htmlFor="USD">
-                                                MODE
-                                            </label>
-                                        </div>
-
-                                        <Controller
-                                            name="currency"
-                                            control={control}
-                                            render={({ field }) => (
-                                                <>
-                                                    <div className="w-1/3 flex  items-center">
-
-                                                        <input
-                                                            type="radio"
-                                                            id="CDF"
-                                                            value={2}
-                                                            checked={field.value === 2} // Check if the value matches 2
-                                                            onChange={(e) => field.onChange(Number(e.target.value))} // Update the value
-                                                        />
-
-                                                        <label className="text-[12px] text-sm font-semibold mx-2 " htmlFor="USD">
-                                                            PRO FORMA
-                                                        </label>
-
-                                                    </div>
-
-                                                    <div className="w-1/3 flex items-center">
-
-                                                        <input
-                                                            type="radio"
-                                                            id="USD"
-                                                            value={1}
-                                                            checked={field.value === 1} // Check if the value matches 1
-                                                            onChange={(e) => field.onChange(Number(e.target.value))} // Update the value
-                                                        />
-
-                                                        <label className="text-[12px] text-sm font-semibold mx-2" htmlFor="CDF">
-                                                            FACTURE
-                                                        </label>
-
-                                                    </div>
-                                                </>
-                                            )}
-                                            rules={{ required: 'La monnaie est requise' }} // Validation rule
-                                        />
-
-                                    </div> */}
 
                                     <div className=" w-full  pl-[58px] " >
                                         <div className=" w-1/2 flex items-center gap-2 " >
@@ -693,50 +641,52 @@ export default function FormArticleSale() {
                     </div>
 
 
-                    <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white  rounded-xl" >
-                        <table className="table-auto w-full bg-white shadow-md rounded">
-                            <thead>
-                            <tr className="bg-gray-200">
-                                <th className="px-4 py-2 text-left">LOC</th>
-                                <th className="px-4 py-2 text-left">Description</th>
-                                <th className="px-4 py-2 text-left">Quantité</th>
-                                <th className="px-4 py-2 text-left">Prix Unitaire</th>
-                                <th className="px-4 py-2 text-left">Prix Total</th>
-                                <th className="px-4 py-2 text-left">Emballage</th>
-                                <th className="px-4 py-2 text-left">Molécule</th>
-                                <th className="px-4 py-2 text-left">Action</th>
-                            </tr>
-                            </thead>
-                            {cart.length === 0 ? (
-                                <tbody>
-                                    <tr className="text-gray-600 p-3 ">
-                                        <td>Aucun article dans le panier.</td> 
-                                    </tr>
-                                </tbody>
-                            ) : (
-                            <tbody>
-                            {cart.map((item, index) => (
-                                <tr key={index} className="border-t">
-                                <td className="px-4 py-2">{item.location?.label}</td>
-                                <td className="px-4 py-2">{item.description}</td>
-                                <td className="px-4 py-2">{item.quantity1}</td>
-                                <td className="px-4 py-2">{item.selling_price.toFixed(2)}</td>
-                                <td className="px-4 py-2">{item.prix_total.toFixed(2)}</td>
-                                <td className="px-4 py-2">{item.packaging?.label}</td>
-                                <td className="px-4 py-2">{item.molecule?.label}</td>
-                                <td className="px-4 py-2">
-                                    <button
-                                    onClick={() => removeItem(index)}
-                                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                                    >
-                                    Supprimer
-                                    </button>
-                                </td>
+                    <div className="mx-7 p-2 shadow-[0px_4px_8px_0px_#00000026] bg-white  rounded-xl " >
+                        <div className="h-[150px] overflow-y-auto " >
+                            <table className="table-auto w-full bg-white shadow-md rounded ">
+                                <thead>
+                                <tr className="bg-gray-200">
+                                    <th className="px-4 py-2 text-left">LOC</th>
+                                    <th className="px-4 py-2 text-left">Description</th>
+                                    <th className="px-4 py-2 text-left">Quantité</th>
+                                    <th className="px-4 py-2 text-left">Prix Unitaire</th>
+                                    <th className="px-4 py-2 text-left">Prix Total</th>
+                                    <th className="px-4 py-2 text-left">Emballage</th>
+                                    <th className="px-4 py-2 text-left">Molécule</th>
+                                    <th className="px-4 py-2 text-left">Action</th>
                                 </tr>
-                            ))}
-                            </tbody>
-                            )}
-                        </table>
+                                </thead>
+                                {cart.length === 0 ? (
+                                    <tbody>
+                                        <tr className="text-gray-600 p-3 ">
+                                            <td>Aucun article dans le panier.</td> 
+                                        </tr>
+                                    </tbody>
+                                ) : (
+                                <tbody>
+                                {cart.map((item, index) => (
+                                    <tr key={index} className="border-t">
+                                    <td className="px-4 py-2">{item.location?.label}</td>
+                                    <td className="px-4 py-2">{item.description}</td>
+                                    <td className="px-4 py-2">{item.quantity1}</td>
+                                    <td className="px-4 py-2">{item.selling_price.toFixed(2)}</td>
+                                    <td className="px-4 py-2">{item.prix_total.toFixed(2)}</td>
+                                    <td className="px-4 py-2">{item.packaging?.label}</td>
+                                    <td className="px-4 py-2">{item.molecule?.label}</td>
+                                    <td className="px-4 py-2">
+                                        <button
+                                        onClick={() => removeItem(index)}
+                                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                                        >
+                                        Supprimer
+                                        </button>
+                                    </td>
+                                    </tr>
+                                ))}
+                                </tbody>
+                                )}
+                            </table>
+                        </div>
 
                         <div className="mt-4 p-4 bg-gray-50 rounded-lg shadow-lg">
                         {/* Header Section */}

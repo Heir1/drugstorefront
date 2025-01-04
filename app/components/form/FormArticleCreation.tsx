@@ -308,10 +308,10 @@ export default function FormArticleCreation() {
         <form onSubmit={handleSubmit(onSubmit)}>
             <Toaster />
             <div className="grid grid-cols-11 mx-2  gap-x-5 p-5 -mt-5  " >
-                <div className="col-span-6  p-10 bg-white  rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
+                <div className="col-span-6  p-10 bg-gray-600   rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
                     <div className="grid grid-cols-2 gap-5">
                         <div className="space-y-2" >
-                            <label className=" font-semibold text-sm  " htmlFor="">Code barre</label>
+                            <label className=" font-semibold text-sm text-white  " htmlFor="">Code barre</label>
                             <Controller
                                 name="barcode"
                                 control={control}
@@ -321,7 +321,7 @@ export default function FormArticleCreation() {
                             />
                         </div>
                         <div className="space-y-2" >
-                            <label className=" font-semibold text-sm " htmlFor="">Localisation</label>
+                            <label className=" font-semibold text-sm text-white" htmlFor="">Localisation</label>
                             <Controller
                                 name="location"
                                 control={control}
@@ -342,7 +342,7 @@ export default function FormArticleCreation() {
                     </div>
                     <div className="grid grid-cols-1 gap-5">
                         <div className="space-y-2" >
-                            <label className=" font-semibold text-sm " htmlFor="">Description</label>
+                            <label className=" font-semibold text-sm text-white" htmlFor="">Description</label>
 
                             <Controller
                                 name="description"
@@ -368,7 +368,7 @@ export default function FormArticleCreation() {
                     </div>
                     <div className="grid grid-cols-1 gap-5">
                         <div className="space-y-2" >
-                            <label className=" font-semibold text-sm " htmlFor="">Indication</label>
+                            <label className=" font-semibold text-sm text-white" htmlFor="">Indication</label>
                             <Controller
                                 name="indication"
                                 control={control}
@@ -387,7 +387,7 @@ export default function FormArticleCreation() {
                     </div>
                     <div className="grid grid-cols-1 gap-5">
                         <div className="space-y-2" >
-                            <label className=" font-semibold text-sm " htmlFor="">Molécule</label>
+                            <label className=" font-semibold text-sm text-white" htmlFor="">Molécule</label>
                             <Controller
                                 name="molecule"
                                 control={control}
@@ -406,7 +406,7 @@ export default function FormArticleCreation() {
                     </div>
                     <div className="grid grid-cols-2 gap-5">
                         <div className="space-y-2" >
-                            <label className=" font-semibold text-sm " htmlFor="">Emballage</label>
+                            <label className=" font-semibold text-sm text-white" htmlFor="">Emballage</label>
                             <Controller
                                 name="packaging"
                                 control={control}
@@ -423,7 +423,7 @@ export default function FormArticleCreation() {
                             />
                         </div>
                         <div className="space-y-2" >
-                            <label className=" font-semibold text-sm " htmlFor="">Catégorie</label>
+                            <label className=" font-semibold text-sm text-white" htmlFor="">Catégorie</label>
                             <Controller
                                 name="category"
                                 control={control}
@@ -441,10 +441,10 @@ export default function FormArticleCreation() {
                         </div>
                     </div>
                 </div>
-                <div className="col-span-5 bg-white rounded-xl p-10 space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
+                <div className="col-span-5 bg-gray-600 rounded-xl p-10 space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
                     <div className="grid grid-cols-1 gap-5">
                         <div className="space-y-2" >
-                            <label className=" font-semibold text-sm   " htmlFor="">Fournisseur</label>
+                            <label className=" font-semibold text-sm  text-white " htmlFor="">Fournisseur</label>
                             <Controller
                                 name="supplier"
                                 control={control}
@@ -464,7 +464,7 @@ export default function FormArticleCreation() {
                     </div>
                     <div className="grid grid-cols-2 gap-5">
                         <div className="space-y-2" >
-                            <label className=" font-semibold text-sm " htmlFor="">Alerte</label>
+                            <label className=" font-semibold text-sm text-white" htmlFor="">Alerte</label>
                             <Controller
                                 name="alert"
                                 control={control}
@@ -473,7 +473,7 @@ export default function FormArticleCreation() {
                             />
                         </div>
                         <div className="space-y-2" >
-                            <label className=" font-semibold text-sm " htmlFor="">Péremption</label>
+                            <label className=" font-semibold text-sm text-white" htmlFor="">Péremption</label>
                             <Controller
                                 name="expirationDate"
                                 control={control}
@@ -484,7 +484,7 @@ export default function FormArticleCreation() {
                     </div>
                     <div className="grid grid-cols-3 gap-5">
                         <div className="space-y-2" >
-                            <label className=" font-semibold text-sm " htmlFor="">Quantité</label>
+                            <label className=" font-semibold text-sm text-white" htmlFor="">Quantité</label>
                             <Controller
                                 name="quantity"
                                 control={control}
@@ -493,7 +493,7 @@ export default function FormArticleCreation() {
                             />
                         </div>
                         <div className="space-y-2" >
-                            <label className=" font-semibold text-sm " htmlFor="">P.A</label>
+                            <label className=" font-semibold text-sm text-white" htmlFor="">P.A</label>
                             <Controller
                                 name="purchase_price"
                                 control={control}
@@ -502,7 +502,7 @@ export default function FormArticleCreation() {
                             />
                         </div>
                         <div className="space-y-2" >
-                            <label className=" font-semibold text-sm " htmlFor="">P.V</label>
+                            <label className=" font-semibold text-sm text-white" htmlFor="">P.V</label>
                             <Controller
                                 name="selling_price"
                                 control={control}
@@ -527,7 +527,7 @@ export default function FormArticleCreation() {
                                         checked={field.value === 2} // Check if the value matches 1
                                         onChange={(e) => field.onChange(Number(e.target.value))} // Update the value
                                         />
-                                        <label className="text-[12px] text-sm font-semibold" htmlFor="USD">
+                                        <label className="text-[12px] text-sm font-semibold text-white" htmlFor="USD">
                                         USD
                                         </label>
                                     </div>
@@ -540,7 +540,7 @@ export default function FormArticleCreation() {
                                         checked={field.value === 1} // Check if the value matches 2
                                         onChange={(e) => field.onChange(Number(e.target.value))} // Update the value
                                         />
-                                        <label className="text-[12px] text-sm font-semibold" htmlFor="CDF">
+                                        <label className="text-[12px] text-sm font-semibold text-white" htmlFor="CDF">
                                         CDF
                                         </label>
                                     </div>
@@ -551,7 +551,7 @@ export default function FormArticleCreation() {
 
                         </div>
                         <div className=" col-span-2  space-y-2" >
-                            <label className=" font-semibold text-sm  " htmlFor="">TAUX MB</label>
+                            <label className=" font-semibold text-sm  text-white" htmlFor="">TAUX MB</label>
                             <input className="w-full font-bold text-[14px] border-2 border-black bg-white h-10 pl-4 uppercase rounded-lg pr-4" value={1.25} type="number" name="" id="" readOnly/>
                         </div>
                     </div>

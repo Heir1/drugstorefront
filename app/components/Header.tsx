@@ -48,18 +48,18 @@ export default function Header() {
                     loading && <Loading/>
                 }
                 
-                <div className="print:hidden grid grid-cols-12  mt-8 mx-2 h-20 my-2 gap-5 px-5 " >
-                    <div className=" col-span-2 flex justify-center h-16  items-center shadow-[0px_4px_8px_0px_#00000026] bg-[#F6F7F9]  rounded-xl py-2  hover:cursor-pointer">
+                <div className="print:hidden grid grid-cols-12  mt-2 mx-2 h-10 my-2 gap-5 px-5 " >
+                    <div className=" col-span-2 flex justify-center h-10  items-center shadow-[0px_4px_8px_0px_#00000026] bg-[#F6F7F9]  rounded-xl py-2  hover:cursor-pointer">
                         <Link href={`/pages/admin/dashboard`} >
                             <h1 className=" leading-[36px]  font-[700]  text-[18px] text-[#262B62]   " >Arsue Pharma </h1>
                         </Link>
                     </div>
     
-                    <div className="col-span-10  h-16  shadow-[0px_4px_8px_0px_#00000026] bg-[#F6F7F9]  rounded-xl py-2 place-content-center ">
+                    <div className="col-span-10  h-10  shadow-[0px_4px_8px_0px_#00000026] bg-[#F6F7F9]  rounded-xl py-2 place-content-center ">
     
                         <div className="grid grid-cols-12" >
                             <div className=" col-span-8 " >
-                                <div className="grid grid-cols-12 pt-2 ">
+                                <div className="grid grid-cols-12  ">
                                     <div className=" flex justify-center items-center hover:cursor-pointer  col-span-2  space-x-2 " >
                                         <Icon icon="mynaui:file-solid" width="18" height="18" style={{color: '#000000'}} />
                                         <h1>Fichier</h1>
