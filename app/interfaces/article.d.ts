@@ -3,6 +3,8 @@
 export default interface IArticle {
 
     id?: string,
+    value?: string,
+    label?: string,
     barcode?: string,
     description: string,
     alert: Number,

@@ -88,21 +88,21 @@ export const ArticleColumns: ColumnDef<IArticle>[] = [
         ),
     },
 
-    {
-        // accessorKey: "purchase_price",
-        header: "PA/CDF",
-        cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("purchase_price")}</div>
-        ),
-    },
+    // {
+    //     // accessorKey: "purchase_price",
+    //     header: "PA/CDF",
+    //     cell: ({ row }) => (
+    //     <div className="capitalize">{row.getValue("purchase_price")}</div>
+    //     ),
+    // },
 
-    {
-        // accessorKey: "selling_price",
-        header: "PV/CDF",
-        cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("selling_price")}</div>
-        ),
-    },
+    // {
+    //     // accessorKey: "selling_price",
+    //     header: "PV/CDF",
+    //     cell: ({ row }) => (
+    //     <div className="capitalize">{row.getValue("selling_price")}</div>
+    //     ),
+    // },
 
     {
         accessorKey: "expiration_date",

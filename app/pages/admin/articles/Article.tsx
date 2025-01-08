@@ -201,7 +201,7 @@ export default function Article() {
                         <div>
 
                             {
-                                <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white rounded-xl" >
+                                <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white h-[500px] rounded-xl" >
                                     <DataTable columns={ArticleColumns} data={articles} needFilter={false} paginate={true} title=""/>
                                 </div>
                             }
@@ -213,7 +213,7 @@ export default function Article() {
                     (
                         isStateArticle ? (
                             <div>
-                                <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white rounded-xl" >
+                                <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white h-[500px] rounded-xl" >
                                     <DataTableState columns={ArticleColumns} data={articles} needFilter={false} paginate={true} title=""/>
                                 </div>
                             </div>

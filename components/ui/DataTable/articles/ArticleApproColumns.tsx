@@ -15,6 +15,8 @@ import IMovement from "@/app/interfaces/movement";
 const CellComponent = ({ row }: { row: any }) => {
 
     const articleRow = row.original
+
+    const oldStock =  row.original.article?.quantity - row.original?.quantity;
     
   
 
@@ -41,8 +43,15 @@ export const ArticleApproColumns: ColumnDef<IMovement>[] = [
     {
         accessorKey: "article.description",
         header: "Description",
+        id: "article.description", // Explicitly set the ID
         cell: ({ row } : { row : any} ) => row.original.article?.description || "No Description",
     },
+    // {
+    //     accessorKey: "",
+    //     header: "ANCIEN STOCK",
+    //     cell: ({ row } : { row : any} ) => row.original.article?.quantity - row.original?.quantity || "No Quantity",
+    // },
+
     {
         accessorKey: "article.quantity",
         header: "STOCK",
@@ -54,7 +63,6 @@ export const ArticleApproColumns: ColumnDef<IMovement>[] = [
         header: "APPRO",
         cell: ({ row } : { row : any} ) => row.original?.quantity || "No Quantity",
     },
-
     {
         accessorKey: "article.purchase_price",
         header: "PA/USD",

@@ -21,11 +21,34 @@ export default function Header() {
                             <Icon icon="mynaui:file-solid" width="18" height="18" style={{color: '#000000'}} />
                             <h1>Fichier</h1>
                         </div>
-                        <div className=" flex justify-center items-center hover:cursor-pointer  col-span-2 " >
-                            <Link className="flex items-center space-x-2" href={`/pages/admin/Supplies`}>
-                                <Icon icon="material-symbols:database" width="18" height="18" style={{color: '#000000'}} />
-                                <h1>Données</h1>
-                            </Link>
+                        <div className=" relative flex justify-center items-center hover:cursor-pointer  col-span-2 " >
+                            <Icon icon="material-symbols:database" width="18" height="18" style={{color: '#000000'}} />
+                            <h1>Données</h1>
+                            <div className=" absolute top-6 left-10  w-[150px] bg-[#262B62] text-white  " >
+                                <div className=" pl-6 py-2  " >
+                                    <Link href={`/pages/admin/articles`} >
+                                        <span className=" text-sm " > Aricles</span>
+                                    </Link>
+                                </div>
+                                <hr />
+                                <div className="  pl-6 py-2 ">
+                                    <Link className="flex items-center space-x-2" href={`/pages/admin/Supplies`}>
+                                        <span className=" text-sm "> Approv </span>
+                                    </Link>
+                                </div>
+                                <hr />
+                                <div className="  pl-6 py-2">
+                                    <Link className="flex items-center space-x-2" href={`/pages/admin/regulations`}>
+                                        <span className=" text-sm "> Régulation </span> 
+                                    </Link>
+                                </div>
+                                <hr />
+                                <div className="  pl-6 py-2 ">
+                                    <Link className="flex items-center space-x-2" href={`/pages/admin/sales`}>
+                                        <span className=" text-sm "> Ventes </span>
+                                    </Link>
+                                </div>
+                            </div>
                         </div>
                         <div className=" flex justify-center items-center  hover:cursor-pointer col-span-2 space-x-2" >
                             <Icon icon="material-symbols:settings-rounded" width="18" height="18" style={{color: '#000000'}} />

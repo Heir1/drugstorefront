@@ -66,7 +66,7 @@ export function DataTableState<TData, TValue>({
 
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 10,
+    pageSize: 5,
   })
 
   const [columnVisibility, setColumnVisibility] =
@@ -131,8 +131,8 @@ export function DataTableState<TData, TValue>({
       }
       <div className="bg-transparent   rounded-2xl">
         <div className="flex items-center justify-between " >
-            <div>
-                <h1 className="" >{title}</h1>
+          <div className="flex justify-end">
+              <input className=' w-[700px] px-6 py-2 my-3 border-[1px] border-black text-black rounded-3xl text-[14px] uppercase ' placeholder='Rechercher le produit pharmaceutique par sa description' type="text"value={(table.getColumn("description")?.getFilterValue() as string) ?? "" } onChange={(event) => table.getColumn("description")?.setFilterValue(event.target.value)} />
             </div>
         </div>
 
@@ -167,7 +167,7 @@ export function DataTableState<TData, TValue>({
                         table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
-                                    className=" hover:cursor-pointer text-xs  text-black "
+                                    className=" hover:cursor-pointer text-xs  text-black  border-b-[1px] border-black"
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
                                     // onClick={() => redirectionPage(row.original)}
@@ -205,41 +205,15 @@ export function DataTableState<TData, TValue>({
                       {table.getPageCount().toLocaleString()}
                     </strong>
                   </span>
-                  <span className="flex items-center gap-1 text-[0.7em]">
-                    | "rere" :
-                    <input
-                      type="number"
-                      min="1"
-                      defaultValue={table.getState().pagination.pageIndex + 1}
-                      onChange={e => {
-                        const page = e.target.value ? Number(e.target.value) - 1 : 0
-                        table.setPageIndex(page)
-                      }}
-                      className="border px-2 py-1 rounded-[15px] w-16"
-                    />
-                  </span>
-                  <select
-                    value={table.getState().pagination.pageSize}
-                    onChange={e => {
-                      table.setPageSize(Number(e.target.value))
-                    }}
-                  >
-                    {[10, 20, 30, 40, 50].map(pageSize => (
-                      <option className="text-[0.7em]" key={pageSize} value={pageSize}>
-                        {pageSize} {"ere"}
-                      </option>
-                    ))}
-                  </select>
                 </div>
 
                 <div className="flex items-center gap-[0.5em]">
                   <button
-                    className=" flex items-center cursor-pointer justify-center border border-[#B5B5B5] rounded w-[100px] p-1 "
+                    className=" flex items-center cursor-pointer justify-center border border-[#B5B5B5] rounded p-1 "
                     onClick={() => table.firstPage()}
                     disabled={!table.getCanPreviousPage()}
                   >
                     <Icon icon="material-symbols-light:keyboard-arrow-left" width="16" height="16"  style={{color: '#666666'}} />
-                    <span className="text-[12px] text-[#585757] " >Précedent</span>
                   </button>
 
                   {
@@ -253,11 +227,10 @@ export function DataTableState<TData, TValue>({
                   }
 
                   <button
-                    className="flex items-center cursor-pointer justify-center border border-[#B5B5B5] rounded w-[100px] p-1 "
+                    className="flex items-center cursor-pointer justify-center border border-[#B5B5B5] rounded p-1 "
                     onClick={() => table.lastPage()}
                     disabled={!table.getCanNextPage()}
                   >
-                    <span className="text-[12px] text-[#585757] " >Suivant</span>
                     <Icon icon="material-symbols-light:keyboard-arrow-right" width="16" height="16"  style={{color: '#666666'}} />
                   </button>
 

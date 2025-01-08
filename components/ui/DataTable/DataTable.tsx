@@ -65,7 +65,7 @@ export function DataTable<TData, TValue>({
 
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 10,
+    pageSize: 5,
   })
 
   const [columnVisibility, setColumnVisibility] =
@@ -129,10 +129,12 @@ export function DataTable<TData, TValue>({
         isUpdateFormOpen &&  <FormArticleUpdate content={article} setIsUpdateFormOpen={setIsUpdateFormOpen}  />
       }
       <div className="bg-transparent   rounded-2xl">
-        <div className="flex items-center justify-between " >
-            <div>
-                <h1 className="" >{title}</h1>
-            </div>
+        <div className="flex items-center justify-between  " >
+
+          <div className="flex justify-end">
+            <input className=' w-[700px] px-6 py-2 my-3 border-[1px] border-black text-black rounded-3xl text-[14px] uppercase ' placeholder='Rechercher le produit pharmaceutique par sa description' type="text"value={(table.getColumn("description")?.getFilterValue() as string) ?? "" } onChange={(event) => table.getColumn("description")?.setFilterValue(event.target.value)} />
+          </div>
+
         </div>
 
         <div className="rounded-md ">
@@ -166,7 +168,7 @@ export function DataTable<TData, TValue>({
                         table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
-                                    className=" hover:cursor-pointer text-xs  text-black "
+                                    className=" hover:cursor-pointer text-xs  border-b-[1px] border-black text-black "
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
                                     // onClick={() => redirectionPage(row.original)}

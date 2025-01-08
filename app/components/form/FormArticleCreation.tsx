@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import { DataTable } from '@/components/ui/DataTable/DataTable';
@@ -18,13 +18,15 @@ import { Icon } from '@iconify/react'; // Import Iconify's Icon component
 import { useCurrencyService } from '@/app/redux/slices/currencies/useCurrencyService';
 import Link from 'next/link';
 import MenuTab from '@/app/components/MenuTab';
-import { OptionsOrGroups, GroupBase } from "react-select";
+// import { OptionsOrGroups, GroupBase } from "react-select";
 import { useSupplierService } from '@/app/redux/slices/suppliers/useSuppliseService';
 import { useMoleculeService } from '@/app/redux/slices/molecules/useMoleculeService';
 import { useIndicationService } from '@/app/redux/slices/indications/useIndicationService';
 import { usePlacementService } from '@/app/redux/slices/placements/usePlacementService';
 import Loading from '@/app/components/loading';
 import dynamic from 'next/dynamic';
+import { SingleValue, ActionMeta } from "react-select";
+import makeAnimated from "react-select/animated";
 import { log } from 'console';
 // Dynamically import React Select without SSR
 const Select = dynamic(() => import('react-select'), { ssr: false });
@@ -47,6 +49,14 @@ interface IFormInputs {
     selling_price: number;
   }
 
+  // Définition du type pour un article
+interface ArticleOption {
+    label: string;
+    value: string;
+}
+
+const animatedComponents = makeAnimated();
+
 export default function FormArticleCreation() {
 
     const { articles, articleStatus, error } = useArticleService()  
@@ -63,8 +73,20 @@ export default function FormArticleCreation() {
     const [isStateArticle, setIsStateArticle] = useState(false);
     const [isExportArticle, setIsExportArticle] = useState(false);
     const [isReportArticle, setIsReportArticle] = useState(false);
+
+    const [articlesFormatted, setArticlesFormatted] = useState<any[]>([]);
+      // État pour la sélection de l'option
+    const [selectedArticle, setSelectedArticle] = useState<any | null>(null);
+
+    // État pour gérer la saisie utilisateur et l'option sélectionnée
+    const [inputValue, setInputValue] = useState<string>("");
+
+    const [number, setNumber] = useState<number | ''>(''); // Utiliser une chaîne vide au départ
+    const [result, setResult] = useState<number | ''>(''); // Même chose pour le résultat
+
+    const [selectedOption, setSelectedOption] = useState<ArticleOption | null>(null);
   
-    const { control, register, handleSubmit, formState: { errors } } = useForm<IFormInputs>({
+    const { control, register, reset, handleSubmit, formState: { errors } } = useForm<IFormInputs>({
         defaultValues: {
             barcode : "",
             location : null,
@@ -82,6 +104,16 @@ export default function FormArticleCreation() {
             selling_price : 0,
         }
     });
+
+ 
+    const articlesFormated = useMemo(() => 
+        articles.map((article) => ({ 
+            value: article.id , // Convertir id en string
+            label: article.description ,
+        })), 
+        [articles]
+    );
+
 
     const placementsFormated = placements.map((location) => ({
         value: location.id.toString(), // Convertir id en string
@@ -115,24 +147,71 @@ export default function FormArticleCreation() {
         value: molecule.id.toString(), // Convertir id en string
         label: molecule.name,
     }));
+    
+
+    useEffect(() => {
+
+        if (inputValue && !articlesFormatted.some((option) => option.label.toLowerCase() === inputValue.toLowerCase())) {
+          // Si la valeur saisie n'existe pas, ajoutez-la à la liste
+          const newArticle = {
+            value: inputValue.toLowerCase().replace(/\s+/g, '-'), // Générer un id unique
+            label: inputValue,
+          };
+    
+          // Ajouter la nouvelle option
+          setArticlesFormatted((prevArticles) => [...prevArticles, newArticle]);
+    
+          // Sélectionner automatiquement la nouvelle valeur
+          setSelectedArticle(newArticle);
+        }
+      }, [inputValue, articlesFormatted]);  // Recalculer lorsque l'entrée change
 
     
     const dispatch = useDispatch<AppDispatch>();
-  
-  
-    const onSubmit = async (data: IFormInputs) => {
 
-        console.log(data);
+
+    // Gérer la saisie dans le champ de recherche
+    const handleInputChange = (value: string) => {
+        setInputValue(value);
+    };
+
+
+    const handleNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value;
+
+        // Si le champ est vide, réinitialiser le nombre et le résultat
+        if (value === '') {
+          setNumber('');
+          setResult('');
+          return;
+        }
+    
+        // Convertir la valeur en nombre
+        const parsedValue = parseFloat(value);
+    
+        // Mettre à jour l'état uniquement si la valeur est un nombre valide
+        if (!isNaN(parsedValue)) {
+          setNumber(parsedValue);
+          setResult(parsedValue * 1.25); // Calculer le double
+        }
         
+    }
+
+  
+  
+    const onSubmit = async ( data: IFormInputs) => {
   
       const { barcode, location, description, indication, molecule, packaging, category, supplier,alert, expirationDate, quantity, purchase_price, selling_price , currency  } = data
 
       
+      console.log(selectedArticle.value)
+      
   
       const articleData:IArticle = {
+
         barcode: barcode,
         placements : [Number(location?.value)],
-        description ,
+        description : selectedArticle.value ,
         indications : [Number(indication?.value)],
         molecules : [Number(molecule?.value)],
         quantity : quantity ,
@@ -140,19 +219,28 @@ export default function FormArticleCreation() {
         category_id: Number(category?.value),
         suppliers : [Number(supplier?.value)],
         packaging_id: Number(packaging?.value),
-        selling_price,
-        purchase_price,
+        purchase_price : Number(number),
+        selling_price : Number(result),
         alert : Number(alert),
         currency_id: Number(currency) 
       }
 
-      console.log(articleData);
-      
+    //   console.log(articleData);
+    
   
         try {
             await dispatch(createArticle(articleData));
-      
+            reset()
+            setInputValue("")
+            setSelectedArticle("")
+            setNumber('')
+            setResult('')
         } catch (err) {
+            reset()
+            setInputValue("")
+            setSelectedArticle("")
+            setNumber('')
+            setResult('')
             // Handle errors that happen outside the action (e.g., network failures)
             // setOpenForm(false);
             console.error(err);
@@ -164,20 +252,20 @@ export default function FormArticleCreation() {
     <>
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="grid grid-cols-11 mx-2  gap-x-5 p-5 -mt-5  " >
-                <div className="col-span-6 bg-white p-10  rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
+                <div className="col-span-6  p-10 bg-white  rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
                     <div className="grid grid-cols-2 gap-5">
                         <div className="space-y-2" >
-                            <label className=" font-semibold text-sm " htmlFor="">Code barre</label>
+                            <label className=" font-semibold text-sm  " htmlFor="">Code barre</label>
                             <Controller
                                 name="barcode"
                                 control={control}
                                 defaultValue=""
-                                render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg " type="text" />}
+                                render={({ field }) => <input {...field} className="w-full font-bold text-[14px] bg-white h-10 pl-4 uppercase rounded-lg border-2 border-black " type="text" />}
                                 rules={{ required: 'Le code barre est requis' }}
                             />
                         </div>
                         <div className="space-y-2" >
-                            <label className=" font-semibold text-sm" htmlFor="">Localisation</label>
+                            <label className=" font-semibold text-sm " htmlFor="">Localisation</label>
                             <Controller
                                 name="location"
                                 control={control}
@@ -187,9 +275,10 @@ export default function FormArticleCreation() {
                                     id="location"
                                     {...field}
                                     options={placementsFormated}
-                                    placeholder="Sélectionnez la localisation du produit"
+                                    placeholder="Sélectionnez la localisation"
                                     isClearable
-                                />
+                                    className=' font-bold border-[1px] border-black'
+                                /> 
                                 )}
                                 rules={{ required: 'La localisation est requise' }}
                             />
@@ -197,18 +286,33 @@ export default function FormArticleCreation() {
                     </div>
                     <div className="grid grid-cols-1 gap-5">
                         <div className="space-y-2" >
-                            <label className=" font-semibold text-sm" htmlFor="">Description</label>
+                            <label className=" font-semibold text-sm " htmlFor="">Description</label>
+
                             <Controller
                                 name="description"
                                 control={control}
-                                render={({ field }) => <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg " {...field} type="text" />}
-                                rules={{ required: 'La description est requise' }}
+                                render={({ field }) => (
+                                    <Select
+                                        {...field}
+                                        components={animatedComponents}
+                                        options={articlesFormated}
+                                        inputValue={inputValue}
+                                        value={selectedArticle}
+                                        onInputChange={(value) => handleInputChange(value)}
+                                        onChange={(selectedOption) => field.onChange(selectedOption)}
+                                        placeholder="Ajouter un article"
+                                        className=' font-bold uppercase border-[1px] border-black'
+                                        isClearable
+                                        
+                                    />
+                                )}
+                                // rules={{ required: 'La description est requise' }}
                             />
                         </div>
                     </div>
                     <div className="grid grid-cols-1 gap-5">
                         <div className="space-y-2" >
-                            <label className=" font-semibold text-sm" htmlFor="">Indication</label>
+                            <label className=" font-semibold text-sm " htmlFor="">Indication</label>
                             <Controller
                                 name="indication"
                                 control={control}
@@ -218,6 +322,7 @@ export default function FormArticleCreation() {
                                         options={indicationsFormated}
                                         placeholder="Sélectionnez une indication"
                                         isClearable
+                                        className=' font-bold border-[1px] border-black'
                                     />
                                 )}
                                 rules={{ required: 'L indication est requise' }}
@@ -226,7 +331,7 @@ export default function FormArticleCreation() {
                     </div>
                     <div className="grid grid-cols-1 gap-5">
                         <div className="space-y-2" >
-                            <label className=" font-semibold text-sm" htmlFor="">Molécule</label>
+                            <label className=" font-semibold text-sm " htmlFor="">Molécule</label>
                             <Controller
                                 name="molecule"
                                 control={control}
@@ -236,6 +341,7 @@ export default function FormArticleCreation() {
                                         options={moleculeFormated}
                                         placeholder="Sélectionnez un molécule"
                                         isClearable
+                                        className=' font-bold border-[1px] border-black'
                                     />
                                 )}
                                 rules={{ required: 'Le molécule est requis' }}
@@ -244,7 +350,7 @@ export default function FormArticleCreation() {
                     </div>
                     <div className="grid grid-cols-2 gap-5">
                         <div className="space-y-2" >
-                            <label className=" font-semibold text-sm" htmlFor="">Emballage</label>
+                            <label className=" font-semibold text-sm " htmlFor="">Emballage</label>
                             <Controller
                                 name="packaging"
                                 control={control}
@@ -254,13 +360,14 @@ export default function FormArticleCreation() {
                                         options={packagingsFormated}
                                         placeholder="Sélectionnez le type d'emballage "
                                         isClearable
+                                        className=' font-bold border-[1px] border-black'
                                     />
                                 )}
                                 rules={{ required: 'L emballage est requis' }}
                             />
                         </div>
                         <div className="space-y-2" >
-                            <label className=" font-semibold text-sm" htmlFor="">Catégorie</label>
+                            <label className=" font-semibold text-sm " htmlFor="">Catégorie</label>
                             <Controller
                                 name="category"
                                 control={control}
@@ -270,6 +377,7 @@ export default function FormArticleCreation() {
                                         options={categoriesFormated}
                                         placeholder="Sélectionnez une categprie"
                                         isClearable
+                                        className=' font-bold border-[1px] border-black'
                                     />
                                 )}
                                 rules={{ required: 'La catégorie est requise' }}
@@ -280,7 +388,7 @@ export default function FormArticleCreation() {
                 <div className="col-span-5 bg-white rounded-xl p-10 space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
                     <div className="grid grid-cols-1 gap-5">
                         <div className="space-y-2" >
-                            <label className=" font-semibold text-sm" htmlFor="">Fournisseur</label>
+                            <label className=" font-semibold text-sm   " htmlFor="">Fournisseur</label>
                             <Controller
                                 name="supplier"
                                 control={control}
@@ -291,6 +399,7 @@ export default function FormArticleCreation() {
                                         options={suppliersFormated}
                                         placeholder="Sélectionnez un fournisseur"
                                         isClearable
+                                        className=' font-bold border-[1px] border-black'
                                     />
                                 )}
                                 rules={{ required: 'Le fournisseur est requis' }}
@@ -299,49 +408,49 @@ export default function FormArticleCreation() {
                     </div>
                     <div className="grid grid-cols-2 gap-5">
                         <div className="space-y-2" >
-                            <label className=" font-semibold text-sm" htmlFor="">Alerte</label>
+                            <label className=" font-semibold text-sm " htmlFor="">Alerte</label>
                             <Controller
                                 name="alert"
                                 control={control}
-                                render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4" {...field} type="number" />}
+                                render={({ field }) => <input  className="w-full font-bold text-[14px] h-10 pl-4 uppercase rounded-lg pr-4 border-[1px] border-black" {...field} type="number" />}
                                 rules={{ required: 'L alerte est requise' }}
                             />
                         </div>
                         <div className="space-y-2" >
-                            <label className=" font-semibold text-sm" htmlFor="">Péremption</label>
+                            <label className=" font-semibold text-sm " htmlFor="">Péremption</label>
                             <Controller
                                 name="expirationDate"
                                 control={control}
-                                render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 pr-4 uppercase rounded-lg " {...field} type="date" />}
+                                render={({ field }) => <input  className="w-full text-[14px] h-10 pl-4 pr-4 uppercase rounded-lg font-bold border-[1px] border-black" {...field} type="date" />}
                                 rules={{ required: 'La date est requise' }}
                             />
                         </div>
                     </div>
                     <div className="grid grid-cols-3 gap-5">
                         <div className="space-y-2" >
-                            <label className=" font-semibold text-sm" htmlFor="">Quantité</label>
+                            <label className=" font-semibold text-sm " htmlFor="">Quantité</label>
                             <Controller
                                 name="quantity"
                                 control={control}
-                                render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4" {...field} type="number" />}
+                                render={({ field }) => <input  className="w-full text-[14px] h-10 pl-4 uppercase rounded-lg pr-4 font-bold border-[1px] border-black" {...field} type="number" />}
                                 rules={{ required: 'La quantité est requise' }}
                             />
                         </div>
                         <div className="space-y-2" >
-                            <label className=" font-semibold text-sm" htmlFor="">P.A</label>
+                            <label className=" font-semibold text-sm " htmlFor="">P.A</label>
                             <Controller
                                 name="purchase_price"
                                 control={control}
-                                render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4" {...field} type="number" />}
+                                render={({ field }) => <input  className="w-full font-bold text-[14px] h-10 pl-4 uppercase rounded-lg pr-4 border-[1px] border-black" {...field} type="number" onChange={handleNumberChange} value={number}  />}
                                 rules={{ required: 'Le prix dachat est requis' }}
                             />
                         </div>
                         <div className="space-y-2" >
-                            <label className=" font-semibold text-sm" htmlFor="">P.V</label>
+                            <label className=" font-semibold text-sm " htmlFor="">P.V</label>
                             <Controller
                                 name="selling_price"
                                 control={control}
-                                render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4" {...field} type="number" />}
+                                render={({ field }) => <input  className="w-full font-bold text-[14px] h-10 pl-4 uppercase rounded-lg pr-4 border-[1px] border-black" {...field} type="number" value={result} readOnly />}
                                 rules={{ required: 'Le prix de vente est requis' }}
                             />
                         </div>
@@ -349,45 +458,53 @@ export default function FormArticleCreation() {
                     <div className="grid grid-cols-3 gap-5 ">
                         <div className=" flex justify-between items-end pb-3 " >
 
-                                <Controller
-                                    name="currency"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <>
-                                            <div className=" w-1/3 flex justify-between items-center">
-                                                <input
-                                                    type="radio"
-                                                    id="USD"
-                                                    value={1}
-                                                    {...register('currency', { required: 'Vous devez choisir une devise' })}
-                                                />
-                                                <label className=' text-[12px]  text-sm font-semibold ' htmlFor="">USD</label>
-                                            </div>
-                                            <div className=" w-1/3 flex justify-between items-center">
-                                                <input
-                                                    type="radio"
-                                                    id="CDF"
-                                                    value={2}
-                                                    {...register('currency', { required: 'Vous devez choisir une devise' })}
-                                                />
-                                                <label className=' text-[12px]  text-sm font-semibold ' htmlFor="">CDF</label>
-                                            </div>
-                                        </>
-                                    )}
-                                    rules={{ required: 'La monnaie est requise' }}
-                                />
+                            <Controller
+                            name="currency"
+                            control={control}
+                            render={({ field }) => (
+                                <>
+                                    <div className="w-1/3 flex justify-between items-center">
+                                        <input
+                                        type="radio"
+                                        id="USD"
+                                        value={1}
+                                        checked={field.value === 1} // Check if the value matches 1
+                                        onChange={(e) => field.onChange(Number(e.target.value))} // Update the value
+                                        />
+                                        <label className="text-[12px] text-sm font-semibold" htmlFor="USD">
+                                        USD
+                                        </label>
+                                    </div>
+
+                                    <div className="w-1/3 flex justify-between items-center">
+                                        <input
+                                        type="radio"
+                                        id="CDF"
+                                        value={2}
+                                        checked={field.value === 2} // Check if the value matches 2
+                                        onChange={(e) => field.onChange(Number(e.target.value))} // Update the value
+                                        />
+                                        <label className="text-[12px] text-sm font-semibold" htmlFor="CDF">
+                                        CDF
+                                        </label>
+                                    </div>
+                                </>
+                            )}
+                            rules={{ required: 'La monnaie est requise' }} // Validation rule
+                            />
+
                         </div>
                         <div className=" col-span-2  space-y-2" >
-                            <label className=" font-semibold text-sm" htmlFor="">TAUX MB</label>
-                            <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4" value={1.25} type="number" name="" id="" readOnly/>
+                            <label className=" font-semibold text-sm  " htmlFor="">TAUX MB</label>
+                            <input className="w-full font-bold text-[14px] border-2 border-black bg-white h-10 pl-4 uppercase rounded-lg pr-4" value={1.25} type="number" name="" id="" readOnly/>
                         </div>
                     </div>
                     <div className="grid grid-cols-2 gap-5 pt-8 ">
                         <div className=" " >
-                            <button className=" w-full  border-[1px] hover:bg-[#FE6212] hover:text-white border-[#FE6212] text-center  text-[14px] p-2 transition duration-300 text-[#FE6212] rounded-lg " >Annuler</button>
+                            <button className="  w-full  border-[1px] hover:bg-[#FE6212] hover: border-[#FE6212] text-center  text-[14px] p-2 transition duration-300 text-[#FE6212] rounded-lg hover:text-white " >Annuler</button>
                         </div>
                         <div className="" >
-                            <button type="submit" className=" w-full text-center p-2 bg-[#28A745] text-white transition duration-300 hover:bg-[#1E7E34]  rounded-lg  text-[14px]  " >Enregistrer</button>
+                            <button type="submit" className=" text-white w-full text-center p-2 bg-[#28A745]  transition duration-300 hover:bg-[#1E7E34]  rounded-lg  text-[14px]  " >Enregistrer</button>
                         </div>
                     </div>
                 </div>
