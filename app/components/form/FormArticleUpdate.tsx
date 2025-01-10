@@ -240,22 +240,22 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
         
     
         const articleData:IArticle = {
-        barcode: barcode,
-        placements : [Number(location?.value)],
-        description ,
-        comment: "",
-        is_active: true,
-        indications : [Number(indication?.value)],
-        molecules : [Number(molecule?.value)],
-        quantity : quantity ,
-        expiration_date: expirationDate,
-        category_id: Number(category?.value),
-        suppliers : [Number(supplier?.value)],
-        packaging_id: Number(packaging?.value),
-        purchase_price : Number(number),
-        selling_price : Number(result),
-        alert : Number(alert),
-        currency_id: Number(currency) 
+            barcode: barcode,
+            placements : [Number(location?.value)],
+            description ,
+            comment: content.comment ,
+            is_active: content.is_active ,
+            indications : [Number(indication?.value)],
+            molecules : [Number(molecule?.value)],
+            quantity : quantity ,
+            expiration_date: expirationDate,
+            category_id: Number(category?.value),
+            suppliers : [Number(supplier?.value)],
+            packaging_id: Number(packaging?.value),
+            purchase_price : Number(number),
+            selling_price : Number(result),
+            alert : Number(alert),
+            currency_id: Number(currency) 
         }
     
         try {
@@ -305,7 +305,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                         name="barcode"
                                         control={control}
                                         // defaultValue=""
-                                        render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg " type="text" />}
+                                        render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg border-2 border-black" type="text" />}
                                         rules={{ required: 'Le code barre est requis' }}
                                     />
                                 </div>
@@ -322,6 +322,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                             options={placementsFormated}
                                             placeholder="Sélectionnez la localisation du produit"
                                             isClearable
+                                            className="border-2 border-black"
                                         />
                                         )}
                                         rules={{ required: 'La localisation est requise' }}
@@ -334,7 +335,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                     <Controller
                                         name="description"
                                         control={control}
-                                        render={({ field }) => <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg " {...field} type="text" />}
+                                        render={({ field }) => <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg border-2 border-black" {...field} type="text" />}
                                         rules={{ required: 'La description est requise' }}
                                     />
                                 </div>
@@ -351,6 +352,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                                 options={indicationsFormated}
                                                 placeholder="Sélectionnez une indication"
                                                 isClearable
+                                                className="border-2 border-black"
                                             />
                                         )}
                                         rules={{ required: 'L indication est requise' }}
@@ -369,6 +371,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                                 options={moleculeFormated}
                                                 placeholder="Sélectionnez un molécule"
                                                 isClearable
+                                                className="border-2 border-black"
                                             />
                                         )}
                                         rules={{ required: 'Le molécule est requis' }}
@@ -387,6 +390,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                                 options={packagingsFormated}
                                                 placeholder="Sélectionnez le type d'emballage "
                                                 isClearable
+                                                className="border-2 border-black"
                                             />
                                         )}
                                         rules={{ required: 'L emballage est requis' }}
@@ -403,6 +407,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                                 options={categoriesFormated}
                                                 placeholder="Sélectionnez une categprie"
                                                 isClearable
+                                                className="border-2 border-black"
                                             />
                                         )}
                                         rules={{ required: 'La catégorie est requise' }}
@@ -424,6 +429,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                                 options={suppliersFormated}
                                                 placeholder="Sélectionnez un fournisseur"
                                                 isClearable
+                                                className="border-2 border-black"
                                             />
                                         )}
                                         rules={{ required: 'Le fournisseur est requis' }}
@@ -436,7 +442,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                     <Controller
                                         name="alert"
                                         control={control}
-                                        render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4" {...field} type="number" />}
+                                        render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4 border-2 border-black" {...field} type="number" />}
                                         rules={{ required: 'L alerte est requise' }}
                                     />
                                 </div>
@@ -445,7 +451,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                     <Controller
                                         name="expirationDate"
                                         control={control}
-                                        render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 pr-4 uppercase rounded-lg " {...field} type="date" />}
+                                        render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 pr-4 uppercase rounded-lg border-2 border-black" {...field} type="date" />}
                                         rules={{ required: 'La date est requise' }}
                                     />
                                 </div>
@@ -456,7 +462,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                     <Controller
                                         name="quantity"
                                         control={control}
-                                        render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4" {...field} type="number" readOnly />}
+                                        render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4 border-2 border-black" {...field} type="number" readOnly />}
                                         rules={{ required: 'La quantité est requise' }}
                                     />
                                 </div>
@@ -465,7 +471,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                     <Controller
                                         name="purchase_price"
                                         control={control}
-                                        render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4" {...field} type="number" onChange={handleNumberChange} value={number} />}
+                                        render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4 border-2 border-black" {...field} type="number" onChange={handleNumberChange} value={number} />}
                                         rules={{ required: 'Le prix dachat est requis' }}
                                     />
                                 </div>
@@ -474,7 +480,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                     <Controller
                                         name="selling_price"
                                         control={control}
-                                        render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4" {...field} type="number" value={result} readOnly />}
+                                        render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4 border-2 border-black" {...field} type="number" value={result} readOnly />}
                                         rules={{ required: 'Le prix de vente est requis' }}
                                     />
                                 </div>
@@ -491,7 +497,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                                         <input
                                                             type="radio"
                                                             id="USD"
-                                                            value={1}
+                                                            value={2}
                                                             {...register('currency', { required: 'Vous devez choisir une devise' })}
                                                         />
                                                         <label className=' text-[12px]  text-sm font-semibold ' htmlFor="">USD</label>
@@ -500,7 +506,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                                         <input
                                                             type="radio"
                                                             id="CDF"
-                                                            value={2}
+                                                            value={1}
                                                             {...register('currency', { required: 'Vous devez choisir une devise' })}
                                                         />
                                                         <label className=' text-[12px]  text-sm font-semibold ' htmlFor="">CDF</label>
@@ -512,7 +518,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                 </div>
                                 <div className=" col-span-2  space-y-2" >
                                     <label className=" font-semibold text-sm" htmlFor="">TAUX MB</label>
-                                    <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4" value={1.25} type="number" name="" id="" readOnly/>
+                                    <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4 border-2 border-black" value={1.25} type="number" name="" id="" readOnly/>
                                 </div>
                             </div>
                             <div className="grid grid-cols-2 gap-5 pt-8 ">

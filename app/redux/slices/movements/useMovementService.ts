@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../store/store"
 import { useEffect } from "react";
-import { fetchMovements } from "./actions";
+import { fetchMovements, getMovementById, getMovementByType } from "./actions";
 
 
 export const useMovementService = () => {
@@ -12,6 +12,21 @@ export const useMovementService = () => {
 
     useEffect(() => {
         movementStatus !== "succeeded" && dispatch(fetchMovements())
+    }, [dispatch])
+
+    return { movements, movementStatus , movementError }
+
+}
+
+export const useMovementType = (type:string) => {
+    
+
+    const dispatch = useDispatch<AppDispatch>();
+
+    const { movements, movementStatus , movementError } = useSelector((state: RootState) => state.movements )
+
+    useEffect(() => {
+        movementStatus !== "succeeded" && dispatch(getMovementByType(type))
     }, [dispatch])
 
     return { movements, movementStatus , movementError }

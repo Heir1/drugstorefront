@@ -42,6 +42,24 @@ export const getMovementById = createAsyncThunk<IMovement, string, { rejectValue
 );
 
 
+// Action pour récupérer un movement par ID movements/type/
+export const getMovementByType = createAsyncThunk<IMovement, string, { rejectValue: string }>(
+  'movements/type',
+  async (type: string, { rejectWithValue }) => {
+    try {
+      const response = await getRequest<IMovement>(`movements/type/${type}`); // Remplacez avec votre endpoint
+      if (response.error) {
+        const errorMessage = (response.error as ApiErrorResponse).message || 'Unknown error';
+        return rejectWithValue(errorMessage);
+      }
+      return response.data  as IMovement;
+    } catch (error: any) {
+      return rejectWithValue(error.message || 'Unknown error');
+    }
+  }
+);
+
+// Entée
 // Action pour créer un nouvel movement
 export const createMovement = createAsyncThunk<IMovement, IMovement>(
     'movements/createMovement',

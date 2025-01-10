@@ -16,7 +16,7 @@ import Loading from '@/app/components/loading';
 import { DataTableSupply } from '@/components/ui/DataTable/DataTableSupply';
 import FormArticleAppro from '@/app/components/form/FormArticleAppro';
 import { ArticleApproColumns } from '@/components/ui/DataTable/articles/ArticleApproColumns';
-import { useMovementService } from '@/app/redux/slices/movements/useMovementService';
+import { useMovementService, useMovementType } from '@/app/redux/slices/movements/useMovementService';
 
 
 interface IFormInputs {
@@ -46,7 +46,9 @@ export default function Supply() {
     const { indications, indicationStatus, indicationError } = useIndicationService();
     const { placements, placementStatus, placementError } = usePlacementService();
     const { currencies, currencyStatus, currencyError } = useCurrencyService();
+    // const { movements, movementStatus, movementError } = useMovementType("2");
     const { movements, movementStatus, movementError } = useMovementService();
+
 
     const [isNewArticle, setIsNewArticle] = useState(true);
     const [isUpdateArticle, setIsUpdateArticle] = useState(false);

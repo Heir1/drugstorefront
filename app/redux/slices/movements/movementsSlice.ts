@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import IArticle from '@/app/interfaces/article';
 import { RootState } from '../../store/store'; // Importez le type RootState
 import IMovement from '@/app/interfaces/movement';
-import { createMovement, deleteMovement, fetchMovements, getMovementById, updateMovement } from './actions';
+import { createMovement, deleteMovement, fetchMovements, getMovementById, getMovementByType, updateMovement } from './actions';
 
 
 interface MovementsState {
@@ -48,6 +48,20 @@ const movementsSlice = createSlice({
           state.currentMovement = action.payload;
         })
         .addCase(getMovementById.rejected, (state, action) => {
+          state.movementStatus = 'failed';
+          state.movementError = action.payload || 'Erreur inconnue';
+        })
+
+
+        // Récupérer un mouvement par type getMovementByType
+        .addCase(getMovementByType.pending, (state) => {
+          state.movementStatus = 'loading';
+        })
+        .addCase(getMovementByType.fulfilled, (state, action: PayloadAction<IMovement>) => {
+          state.movementStatus = 'succeeded';
+          state.currentMovement = action.payload;
+        })
+        .addCase(getMovementByType.rejected, (state, action) => {
           state.movementStatus = 'failed';
           state.movementError = action.payload || 'Erreur inconnue';
         })

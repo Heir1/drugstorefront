@@ -7,6 +7,10 @@ export default interface IMovement {
     reference?: string,
     created_at?: string,
     updated_at?: string,
+    purchase_price?: number;
+    selling_price?: number;
+    number?: number;
+    old_article_stock?; number;
     movement_type? : string | {
         id: string,
         name: string,

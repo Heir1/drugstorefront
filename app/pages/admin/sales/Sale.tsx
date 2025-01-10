@@ -17,6 +17,7 @@ import { DataTableSupply } from '@/components/ui/DataTable/DataTableSupply';
 import FormArticleAppro from '@/app/components/form/FormArticleAppro';
 import { ArticleApproColumns } from '@/components/ui/DataTable/articles/ArticleApproColumns';
 import { useMovementService } from '@/app/redux/slices/movements/useMovementService';
+import FormArticleSale from '@/app/components/form/FormArticleSale';
 
 interface IFormInputs {
     barcode: string;
@@ -174,10 +175,7 @@ export default function Sale() {
             {
                 isNewArticle ? (
                     <div>
-                         <FormArticleAppro/>
-                        <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white h-[650px] rounded-xl" >
-                            <DataTableSupply columns={ArticleApproColumns} data={movements} needFilter={false} paginate={true} title=""/>
-                        </div>
+                         <FormArticleSale/>
                     </div>
                 )
                 :

@@ -1,3 +1,4 @@
+"use client"
 import React from 'react'
 import { Icon } from '@iconify/react'; // Import Iconify's Icon component
 import Link from 'next/link';
@@ -23,8 +24,8 @@ export default function Header() {
                         </div>
                         <div className=" relative flex justify-center items-center hover:cursor-pointer  col-span-2 " >
                             <Icon icon="material-symbols:database" width="18" height="18" style={{color: '#000000'}} />
-                            <h1>Données</h1>
-                            <div className=" absolute top-6 left-10  w-[150px] bg-[#262B62] text-white  " >
+                            <h1 className=" ml-2 " >Données</h1>
+                            <div className=" absolute top-6 left-10  w-[150px] bg-[#262B62] text-white z-50 " >
                                 <div className=" pl-6 py-2  " >
                                     <Link href={`/pages/admin/articles`} >
                                         <span className=" text-sm " > Aricles</span>

@@ -222,7 +222,10 @@ export default function FormArticleCreation() {
         purchase_price : Number(number),
         selling_price : Number(result),
         alert : Number(alert),
-        currency_id: Number(currency) 
+        currency_id: Number(currency) ,
+        comment : "Pas encore disponible",
+        is_active : true,
+
       }
 
     //   console.log(articleData);
@@ -467,8 +470,8 @@ export default function FormArticleCreation() {
                                         <input
                                         type="radio"
                                         id="USD"
-                                        value={1}
-                                        checked={field.value === 1} // Check if the value matches 1
+                                        value={2}
+                                        checked={field.value === 2} // Check if the value matches 1
                                         onChange={(e) => field.onChange(Number(e.target.value))} // Update the value
                                         />
                                         <label className="text-[12px] text-sm font-semibold" htmlFor="USD">
@@ -480,8 +483,8 @@ export default function FormArticleCreation() {
                                         <input
                                         type="radio"
                                         id="CDF"
-                                        value={2}
-                                        checked={field.value === 2} // Check if the value matches 2
+                                        value={1}
+                                        checked={field.value === 1} // Check if the value matches 2
                                         onChange={(e) => field.onChange(Number(e.target.value))} // Update the value
                                         />
                                         <label className="text-[12px] text-sm font-semibold" htmlFor="CDF">
