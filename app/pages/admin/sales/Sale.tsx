@@ -18,6 +18,8 @@ import FormArticleAppro from '@/app/components/form/FormArticleAppro';
 import { ArticleApproColumns } from '@/components/ui/DataTable/articles/ArticleApproColumns';
 import { useMovementService } from '@/app/redux/slices/movements/useMovementService';
 import FormArticleSale from '@/app/components/form/FormArticleSale';
+import { useInvoiceService } from '@/app/redux/slices/invoices/useInvoiceService';
+import { InvoiceColumns } from '@/components/ui/DataTable/invoices/InvoiceColumns';
 
 interface IFormInputs {
     barcode: string;
@@ -47,6 +49,7 @@ export default function Sale() {
         const { placements, placementStatus, placementError } = usePlacementService();
         const { currencies, currencyStatus, currencyError } = useCurrencyService();
         const { movements, movementStatus, movementError } = useMovementService();
+        const { invoices, invoiceStatus, invoiceError } = useInvoiceService();
     
         const [isNewArticle, setIsNewArticle] = useState(true);
         const [isUpdateArticle, setIsUpdateArticle] = useState(false);
@@ -55,8 +58,7 @@ export default function Sale() {
         const [isReportArticle, setIsReportArticle] = useState(false);
     
     
-    
-        console.log("APPRO ",movements);
+        const total = invoices.reduce((acc:any, invoice:any) => acc + invoice.subtotal, 0);
         
       
         const { control, register, handleSubmit, formState: { errors } } = useForm<IFormInputs>({
@@ -159,7 +161,7 @@ export default function Sale() {
                             </Link>
                             <Link href={``}>
                                 <div className={`flex justify-center items-center py-2 rounded-lg ${ isStateArticle && "bg-[#262B62] text-white" } `} onClick={ ()=> setActivation("state") }>
-                                    <h1>Liste Appro</h1>
+                                    <h1>Liste Factures</h1>
                                 </div>
                             </Link>
                             <Link href={``}>
@@ -197,7 +199,48 @@ export default function Sale() {
                         isStateArticle ? (
                             <div>
                                 <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white h-[650px] rounded-xl" >
-                                    <DataTableSupply columns={ArticleApproColumns} data={movements} needFilter={false} paginate={true} title=""/>
+                                    <DataTableSupply columns={InvoiceColumns} data={invoices} needFilter={false} paginate={true} title="Invoice"/>
+                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-gray-50 p-6 rounded-lg shadow-lg">
+                                    {/* Title Section */}
+                                    <div className="col-span-3 text-center">
+                                        <h1 className="text-lg font-bold text-gray-800">
+                                        VENTE DU 19/12/2024 AU 19/12/2024
+                                        </h1>
+                                    </div>
+
+                                    {/* Vente Details in CDF */}
+                                    <div className="col-span-1 flex flex-col items-center bg-white p-4 rounded-lg shadow-md">
+                                        <h2 className="text-sm text-gray-500">VENTE</h2>
+                                        <h1 className="text-lg font-bold text-green-600">{total} CDF</h1>
+                                    </div>
+
+                                    <div className="col-span-1 flex flex-col items-center bg-white p-4 rounded-lg shadow-md">
+                                        <h2 className="text-sm text-gray-500">REMISE</h2>
+                                        <h1 className="text-lg font-bold text-yellow-500">{0} CDF</h1>
+                                    </div>
+
+                                    <div className="col-span-1 flex flex-col items-center bg-white p-4 rounded-lg shadow-md">
+                                        <h2 className="text-sm text-gray-500">SOLDE</h2>
+                                        <h1 className="text-lg font-bold text-blue-600">{total} CDF</h1>
+                                    </div>
+
+                                    {/* Vente Details in USD */}
+                                    <div className="col-span-1 flex flex-col items-center bg-white p-4 rounded-lg shadow-md">
+                                        <h2 className="text-sm text-gray-500">VENTE</h2>
+                                        <h1 className="text-lg font-bold text-green-600">{total} USD</h1>
+                                    </div>
+
+                                    <div className="col-span-1 flex flex-col items-center bg-white p-4 rounded-lg shadow-md">
+                                        <h2 className="text-sm text-gray-500">REMISE</h2>
+                                        <h1 className="text-lg font-bold text-yellow-500">{0} USD</h1>
+                                    </div>
+
+                                    <div className="col-span-1 flex flex-col items-center bg-white p-4 rounded-lg shadow-md">
+                                        <h2 className="text-sm text-gray-500">SOLDE</h2>
+                                        <h1 className="text-lg font-bold text-blue-600">{total} USD</h1>
+                                    </div>
+                                    </div>
+
                                 </div>
                             </div>
                         )

@@ -9,6 +9,7 @@ import moleculesReducer from '../slices/molecules/moleculesSlice'
 import indicationsReducer from '../slices/indications/indicationsSlice'
 import placementsReducer from '../slices/placements/placementsSlice'
 import movementsReducer from '../slices/movements/movementsSlice'
+import invoicesReducer from '../slices/invoices/invoicesSlice'
 
 const store = configureStore({
   reducer: {
@@ -21,6 +22,7 @@ const store = configureStore({
     indications: indicationsReducer,
     placements: placementsReducer,
     movements: movementsReducer,
+    invoices: invoicesReducer,
   },
 });
 

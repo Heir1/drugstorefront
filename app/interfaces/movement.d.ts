@@ -9,6 +9,7 @@ export default interface IMovement {
     updated_at?: string,
     purchase_price?: number;
     selling_price?: number;
+    expiration_date?: string;
     number?: number;
     old_article_stock?; number;
     movement_type? : string | {

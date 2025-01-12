@@ -162,7 +162,7 @@ export default function FormArticleAppro() {
 
         console.log(data);
 
-        const { quantityappro, purchase_price, selling_price } = data
+        const { quantityappro, purchase_price, selling_price, expirationDate } = data
         
         
         const movementData:IMovement = {
@@ -172,6 +172,7 @@ export default function FormArticleAppro() {
             reference: `{REF-${newUuid}}`,
             purchase_price : Number(number),
             selling_price : Number(result),
+            expiration_date : expirationDate
         }
 
         // console.log();
@@ -463,7 +464,7 @@ export default function FormArticleAppro() {
                                     <Controller
                                         name="expirationDate"
                                         control={control}
-                                        render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 pr-4 uppercase rounded-lg " {...field} type="date" readOnly/>}
+                                        render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 pr-4 uppercase rounded-lg " {...field} type="date"/>}
                                         rules={{ required: 'La date est requise' }}
                                     />
                                 </div>
