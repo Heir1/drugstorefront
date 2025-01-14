@@ -10,11 +10,14 @@ import { Icon } from '@iconify/react';
 import IArticle from "@/app/interfaces/article";
 import FormArticleUpdate from "@/app/components/form/FormArticleUpdate";
 import IMovement from "@/app/interfaces/movement";
+import { useRateService } from "@/app/redux/slices/rates/useRateService";
 
 
 const CellComponent = ({ row }: { row: any }) => {
 
     const articleRow = row.original
+
+    const { rates , rateStatus, rateError } = useRateService();
 
     const oldStock =  row.original.article?.quantity - row.original?.quantity;
     
@@ -73,14 +76,36 @@ export const ArticleApproColumns: ColumnDef<IMovement>[] = [
 
     {
         accessorKey: "article.purchase_price",
-        header: "PA/USD",
+        header: "PA/CDF",
         cell: ({ row } : { row : any} ) => row.original.article?.purchase_price || "No purchase_price",
     },
 
     {
         accessorKey: "article.selling_price",
-        header: "PV/USD",
+        header: "PV/CDF",
         cell: ({ row } : { row : any} ) => row.original.article?.selling_price || "No selling_price",
+    },
+
+    {
+        header: "PA/USD",
+        cell: ({ row }: { row: any }) => {
+            const { rates } = useRateService();
+            const rate = rates?.[0]?.value ?? 1; // Fallback to 1 if rates are unavailable
+            return (
+                <div className="capitalize">{(row.original.article?.purchase_price / rate).toFixed(2)}</div>
+            );
+        },
+    },
+
+    {
+        header: "PV/USD",
+        cell: ({ row }: { row: any }) => {
+            const { rates } = useRateService();
+            const rate = rates?.[0]?.value ?? 1; // Fallback to 1 if rates are unavailable
+            return (
+                <div className="capitalize">{(row.original.article?.selling_price / rate).toFixed(2)}</div>
+            );
+        },
     },
 
     // {

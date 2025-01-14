@@ -29,6 +29,7 @@ import { log } from 'console';
 import IMovement from '@/app/interfaces/movement';
 import { v4 as uuidv4 } from 'uuid';
 import { createMovement } from '@/app/redux/slices/movements/actions';
+import { useRateService } from '@/app/redux/slices/rates/useRateService';
 // Dynamically import React Select without SSR
 const Select = dynamic(() => import('react-select'), { ssr: false });
 
@@ -88,6 +89,14 @@ export default function FormArticleSale() {
     const [isStateArticle, setIsStateArticle] = useState(false);
     const [isExportArticle, setIsExportArticle] = useState(false);
     const [isReportArticle, setIsReportArticle] = useState(false);
+
+    const [ cdfPaidAmount, setCdfPaidAmount ] = useState(0)
+    const [ usdPaidAmount, setUsdPaidAmount ] = useState(0)
+    const [ currency, setCurrency ] = useState(false);
+
+    const { rates } = useRateService()
+
+    const rate = rates[0]?.value
       
     const { control, reset, register, handleSubmit, formState: { errors }, setValue } = useForm<IFormInputs>({
         defaultValues: {
@@ -116,7 +125,7 @@ export default function FormArticleSale() {
 
 
         const articlesFormated = useMemo(() => 
-            articles.map((article) => ({ 
+            articles.map((article:any) => ({ 
                 value: article , // Convertir id en string
                 label: article.description ,
             })), 
@@ -177,12 +186,28 @@ export default function FormArticleSale() {
 
         const onSubmit = () => {
 
-
             console.log("PANIER1",cart1);
             // articles
 
+            const cartDate = {
+                "articles" : cart1 
+            }
+
 
         }
+
+        // [
+        //     {
+        //         "id": "5",
+        //         "quantity1": 2,
+        //         "prix_total": 5000
+        //     },
+        //     {
+        //         "id": "3",
+        //         "quantity1": 2,
+        //         "prix_total": 7500
+        //     }
+        // ]
 
       
         const onSubmit1: SubmitHandler<IFormInputs> = (data) => {
@@ -312,6 +337,17 @@ export default function FormArticleSale() {
         const getTotalPrice = (): number => {
             return cart.reduce((total, item) => total + item.prix_total, 0);
         };
+
+
+        const changeDollarHandler = (event:any) => {
+            setCurrency(true)
+            setUsdPaidAmount(Number(event.target.value));
+        }
+
+        const changeCdfHandler = (event:any) => {
+            setCurrency(false)
+            setCdfPaidAmount(Number(event.target.value))
+        }
         
 
         return (
@@ -321,29 +357,6 @@ export default function FormArticleSale() {
 
                     {/* </form> */}
                     <form onSubmit={handleSubmit(onSubmit1)}>
-
-                        {/* <div className=" flex justify-start bg-white rounded-xl shadow-[0px_4px_8px_0px_#00000026] p-3 mx-5 gap-10 " >
-                            <div className=" flex justify-end items-center w-1/3 space-y-1 pl-10 ">
-                                <label className=" font-semibold text-sm " htmlFor="">Recherche d'article</label>
-                            </div>
-                            <div className=" w-1/3 space-y-1 ">
-                                <Controller
-                                    name="description1"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <Select
-                                            {...field}
-                                            value={article}
-                                            options={articlesFormated}
-                                            onChange={handleChange}
-                                            placeholder="Sélectionnez un article"
-                                            // isClearable
-                                        />
-                                    )}
-                                    // rules={{ required: 'L indication est requise' }}
-                                />
-                            </div>
-                        </div> */}
 
                         <div className="flex justify-start bg-gray-50 rounded-xl shadow-lg p-5 mx-5 gap-8 items-center">
                         {/* Label Section */}
@@ -630,178 +643,20 @@ export default function FormArticleSale() {
                         )}
                     </table>
 
-                    <div className="mt-4 p-4 bg-gray-100 text-right rounded shadow">
-                        <span className="text-lg font-bold">Prix Total Global : </span>
-                        <span className="text-lg font-bold text-green-600">
-                        {getTotalPrice().toFixed(2)} CDF
-                        </span>
-                    </div>
-
-                    {/* <div className="mt-4 p-4 bg-gray-100 rounded shadow">
-                        <div className="grid grid-cols-12">
-                            <div className="col-span-9" >
-                                <h1>Total</h1>
-                            </div>
-                            <div className=" ml-4 ">
-                                <h1>Différence</h1>
-                            </div>
-                        </div>
-                        <div className="grid grid-cols-8 gap-2">
-                            <div className=" w-full flex gap-2 " >
-                                <div className="grid grid-cols-2 w-full border-2 border-red-700">
-                                    <div className=" " >
-                                        <h1>Facture</h1>
-                                    </div>
-                                    <div className="  text-right ">
-                                        <h1>57650</h1>
-                                    </div>
-                                    <div className=" " >
-                                        <h1>Remise</h1>
-                                    </div>
-                                    <div className="  text-right ">
-                                        <h1>0</h1>
-                                    </div>
-                                    <div className=" " >
-                                        <h1>A payer</h1>
-                                    </div>
-                                    <div className="  text-right ">
-                                        <h1>57650</h1>
-                                    </div>
-                                </div>
-                                <div className="border-2 border-red-700 flex items-center " >
-                                    <h1>CDF</h1>
-                                </div>
-                            </div>
-                            <div className=" w-full flex gap-2 border-2 border-red-700 " >
-                                <div className="grid grid-cols-1 w-full border-2 border-red-700">
-                                    <div className="  text-right ">
-                                        <h1>57650</h1>
-                                    </div>
-                                    <div className="  text-right ">
-                                        <h1>0</h1>
-                                    </div>
-                                    <div className="  text-right ">
-                                        <h1>57650</h1>
-                                    </div>
-                                </div>
-                                <div className="border-2 border-red-700 flex items-center " >
-                                    <h1>USD</h1>
-                                </div>
-                            </div>
-                            <div className=" w-full flex gap-2 col-span-2 " >
-                                <div className="grid grid-cols-2 w-full border-2 border-red-700">
-                                    <div className=" " >
-                                        <h1>Montant payé</h1>
-                                    </div>
-                                    <div className="  text-right ">
-                                        <input className=" text-center "  type="number" value={57650} />
-                                    </div>
-                                    <div className=" " >
-                                        <h1>Remise</h1>
-                                    </div>
-                                    <div className="  text-center ">
-                                        <h1>0</h1>
-                                    </div>
-                                </div>
-                                <div className="border-2 border-red-700 flex items-center " >
-                                    <h1>CDF</h1>
-                                </div>
-                            </div>
-                            <div className=" w-full flex gap-2 col-span-2 " >
-                                <div className="grid grid-cols-1 w-full border-2 border-red-700">
-                                    <div className="  text-right ">
-                                        <input className=" text-center "  type="number" value={57650} />
-                                    </div>
-                                    <div className=" flex justify-end ">
-                                        <div className=" w-1/2 border-2 border-red-500" >
-                                            <h1 className=" text-center " >0</h1>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="border-2 border-red-700 flex items-center " >
-                                    <h1>CDF</h1>
-                                </div>
-                            </div>
-                            <div className=" w-full flex gap-2 border-2 border-red-700 " >
-                                <div className="grid grid-cols-1 w-full border-2 border-red-700">
-                                    <div className="  text-right ">
-                                        <h1>57650</h1>
-                                    </div>
-                                    <div className="  text-right ">
-                                        <h1>0</h1>
-                                    </div>
-                                    <div className="  text-right ">
-                                        <h1>57650</h1>
-                                    </div>
-                                </div>
-                                <div className="border-2 border-red-700 " >
-                                    <div>
-                                        <h1>CDF</h1>
-                                    </div>
-                                    <div>
-                                    <h1>USD</h1>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="grid grid-cols-9 gap-2">
-                            <div className=" col-span-2 flex items-center border-2 border-red-800 gap-3 " >
-                                <h1>Type vente</h1>
-                                <input type="text" />
-                                <span>CASH</span>
-                            </div>
-                            <div className=" col-start-6 col-span-4 flex border-2 border-red-800 gap-3 " >
-                                <div className=" grid grid-cols-5 gap-2 " >
-                                    <div  className="border-2 border-red-800 gap-3" >
-                                        <button 
-                                        onClick={handleSubmit(onSubmit)} 
-                                        type='submit'
-                                        className=" w-full text-center p-[10px] bg-[#4594ff] text-white transition duration-300 hover:bg-[#3386e0]  rounded-lg  text-[14px]  " >Enregistrer</button>
-                                    </div>
-                                    <div  className="border-2 border-red-800 gap-3" >
-                                        <button 
-                                        onClick={handleSubmit(onSubmit)} 
-                                        type='submit'
-                                        className=" w-full text-center p-[10px] bg-[#4594ff] text-white transition duration-300 hover:bg-[#3386e0]  rounded-lg  text-[14px]  " >Annuler</button>
-                                    </div>
-                                    <div  className="border-2 border-red-800 gap-3 flex items-center" >
-                                        <input className="w-full" type="text" />
-                                    </div>
-                                    <div  className=" flex justify-between items-center border-2 border-red-800 gap-3" >
-                                        <div className=" space-x-2 ">
-                                            <label htmlFor="">F/P</label>
-                                            <input type="checkbox" name="" id="" />
-                                        </div>
-                                        <div className='  space-x-2 '>
-                                            <label htmlFor="">B/L</label>
-                                            <input type="checkbox" name="" id="" />
-                                        </div>
-                                    </div>
-                                    <div  className="border-2 border-red-800 gap-3" >
-                                        <button 
-                                        onClick={handleSubmit(onSubmit)} 
-                                        type='submit'
-                                        className=" w-full text-center p-[10px] bg-[#4594ff] text-white transition duration-300 hover:bg-[#3386e0]  rounded-lg  text-[14px]  " >Repriprint</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> */}
-
                     <div className="mt-4 p-4 bg-gray-50 rounded-lg shadow-lg">
                     {/* Header Section */}
 
-                    <div className="grid grid-cols-12 items-center mb-4">
-                        <div className="col-span-9">
-                        <h1 className="text-sm font-medium text-gray-700">Total</h1>
+                    <div className="grid grid-cols-9  mb-4 ">
+                        <div className="col-span-8  ">
+                            <h1 className="text-sm font-medium text-gray-700">Total</h1>
                         </div>
-                        <div className="col-span-3 text-right">
-                        <h1 className="text-sm font-medium text-gray-700">Différence</h1>
+                        <div className="col-span-1 text-left ">
+                            <h1 className="text-sm font-medium text-gray-700">Différence</h1>
                         </div>
                     </div>
 
                     {/* Main Content Section */}
-                    <div className="grid grid-cols-8 gap-2 mb-4">
+                    <div className="grid grid-cols-9 gap-2 mb-4">
                         {/* Facture Section */}
                         <div className="col-span-2 flex items-center gap-2 p-2 bg-white rounded border border-gray-900 ">
                             <div className="grid grid-cols-2 w-full text-sm">
@@ -809,7 +664,7 @@ export default function FormArticleSale() {
                                 <h1 className="text-gray-600">Facture</h1>
                                 </div>
                                 <div className="text-right">
-                                <h1 className="font-medium text-gray-800">57,650</h1>
+                                <h1 className="font-medium text-gray-800">{getTotalPrice().toFixed(2)}</h1>
                                 </div>
                                 <div>
                                 <h1 className="text-gray-600">Remise</h1>
@@ -821,67 +676,110 @@ export default function FormArticleSale() {
                                 <h1 className="text-gray-600">À Payer</h1>
                                 </div>
                                 <div className="text-right">
-                                <h1 className="font-medium text-gray-800">57,650</h1>
+                                <h1 className="font-medium text-gray-800">{getTotalPrice().toFixed(2)}</h1>
                                 </div>
                             </div>
-                        <h1 className="text-sm font-medium text-blue-600">CDF</h1>
+                            <h1 className="text-sm font-medium text-blue-600">CDF</h1>
                         </div>
 
                         {/* USD Section */}
                         <div className="col-span-2 flex items-center gap-2 p-2 bg-white rounded border border-gray-900">
-                        <div className="grid grid-cols-1 w-full text-sm">
-                            <div className="text-right">
-                            <h1 className="font-medium text-gray-800">57,650</h1>
+                            <div className="grid grid-cols-1 w-full text-sm">
+                                <div className="text-right">
+                                <h1 className="font-medium text-gray-800">{(getTotalPrice()/rate).toFixed(2)}</h1>
+                                </div>
+                                <div className="text-right">
+                                <h1 className="font-medium text-gray-800">0</h1>
+                                </div>
+                                <div className="text-right">
+                                <h1 className="font-medium text-gray-800">{(getTotalPrice()/rate).toFixed(2)}</h1>
+                                </div>
                             </div>
-                            <div className="text-right">
-                            <h1 className="font-medium text-gray-800">0</h1>
-                            </div>
-                            <div className="text-right">
-                            <h1 className="font-medium text-gray-800">57,650</h1>
-                            </div>
-                        </div>
-                        <h1 className="text-sm font-medium text-green-600">USD</h1>
+                            <h1 className="text-sm font-medium text-green-600">USD</h1>
                         </div>
 
                         {/* Montant Payé Section */}
                         <div className="col-span-2 flex items-center gap-2 p-2 bg-white rounded border border-gray-900">
-                        <div className="grid grid-cols-2 w-full text-sm">
-                            <div>
-                            <h1 className="text-gray-600">Montant payé</h1>
+                            <div className="grid grid-cols-2 w-full text-sm">
+                                <div>
+                                <h1 className="text-gray-600">Montant payé</h1>
+                                </div>
+                                <div className="text-right">
+                                <input
+                                    type="number"
+                                    value={cdfPaidAmount}
+                                    className="w-full h-8 p-1 border border-gray-300 rounded text-center text-sm"
+                                    onChange={(event) => changeCdfHandler(event) }
+                                />
+                                </div>
+                                <div>
+                                <h1 className="text-gray-600">Remise</h1>
+                                </div>
+                                <div className="text-center">
+                                <h1 className="font-medium text-gray-800">0</h1>
+                                </div>
                             </div>
-                            <div className="text-right">
-                            <input
-                                type="number"
-                                value={57650}
-                                className="w-full h-8 p-1 border border-gray-300 rounded text-center text-sm"
-                            />
-                            </div>
-                            <div>
-                            <h1 className="text-gray-600">Remise</h1>
-                            </div>
-                            <div className="text-center">
-                            <h1 className="font-medium text-gray-800">0</h1>
-                            </div>
-                        </div>
-                        <h1 className="text-sm font-medium text-blue-600">CDF</h1>
+                            <h1 className="text-sm font-medium text-blue-600">CDF</h1>
                         </div>
 
                         {/* Montant Payé USD */}
                         <div className="col-span-2 flex items-center gap-2 p-2 bg-white rounded border border-gray-800">
-                        <div className="grid grid-cols-1 w-full text-sm">
-                            <div className="text-right">
-                            <input
-                                type="number"
-                                value={57650}
-                                className="w-full h-8 p-1 border border-gray-300 rounded text-center text-sm"
-                            />
+                            <div className="grid grid-cols-1 w-full text-sm">
+                                <div className="text-right">
+                                <input
+                                    type="number"
+                                    value={usdPaidAmount}
+                                    onChange={(event) => changeDollarHandler(event) }
+                                    className="w-full h-8 p-1 border border-gray-300 rounded text-center text-sm"
+                                />
+                                </div>
+                                <div className="flex justify-center">
+                                <h1 className="text-center font-medium text-gray-800">0</h1>
+                                </div>
                             </div>
-                            <div className="flex justify-end">
-                            <h1 className="text-center font-medium text-gray-800">0</h1>
+                            <h1 className="text-sm font-medium text-green-600">USD</h1>
+                        </div>
+
+                        {/* Différence en USD et en CDF */}
+                        <div className="flex items-center gap-2 p-2 bg-white rounded border border-gray-800">
+                            <div className="grid grid-cols-1 w-full text-sm">
+                                <div className="">
+                                    <h1 className="text-center font-medium text-gray-800">
+                                        { 
+                                            (cdfPaidAmount > 0 || usdPaidAmount > 0) ? (
+                                                ` ${ !currency ? ((cdfPaidAmount-getTotalPrice()).toFixed(2)) : ((usdPaidAmount*rate-getTotalPrice()).toFixed(2)) } ` 
+                                            )
+                                            :
+                                            (
+                                                (0).toFixed(2)
+                                            )
+                                        }
+                                    </h1>
+                                </div>
+                                <div className="">
+                                    <h1 className="text-center font-medium text-gray-800">
+                                        { 
+                                            (cdfPaidAmount > 0 || usdPaidAmount > 0) ? (
+                                                ` ${ !currency ? (((cdfPaidAmount-getTotalPrice())/rate).toFixed(2)) : ((usdPaidAmount-getTotalPrice()/rate).toFixed(2)) } ` 
+                                            )
+                                            :
+                                            (
+                                                (0).toFixed(2)
+                                            )
+                                        }
+                                    </h1>
+                                </div>
+                            </div>
+                            <div>
+                                <div>
+                                    <h1 className="text-sm font-medium text-green-600">CDF</h1>
+                                </div>
+                                <div>
+                                    <h1 className="text-sm font-medium text-green-600">USD</h1>
+                                </div>
                             </div>
                         </div>
-                        <h1 className="text-sm font-medium text-green-600">USD</h1>
-                        </div>
+
                     </div>
 
                     {/* Footer Section */}
@@ -897,7 +795,7 @@ export default function FormArticleSale() {
 
                         <div className="col-start-6 col-span-4 bg-white p-2 rounded border border-gray-200">
                         <div className="grid grid-cols-5 gap-2">
-                            <button className="col-span-1 h-8 bg-blue-600 text-white rounded text-sm transition hover:bg-blue-500">
+                            <button onClick={handleSubmit(onSubmit)}  className="col-span-1 h-8 bg-blue-600 text-white rounded text-sm transition hover:bg-blue-500">
                             Enregistrer
                             </button>
                             <button className="col-span-1 h-8 bg-red-600 text-white rounded text-sm transition hover:bg-red-500">

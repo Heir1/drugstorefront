@@ -20,6 +20,7 @@ import { useMovementService } from '@/app/redux/slices/movements/useMovementServ
 import FormArticleSale from '@/app/components/form/FormArticleSale';
 import { useInvoiceService } from '@/app/redux/slices/invoices/useInvoiceService';
 import { InvoiceColumns } from '@/components/ui/DataTable/invoices/InvoiceColumns';
+import { useRateService } from '@/app/redux/slices/rates/useRateService';
 
 interface IFormInputs {
     barcode: string;
@@ -56,6 +57,10 @@ export default function Sale() {
         const [isStateArticle, setIsStateArticle] = useState(false);
         const [isExportArticle, setIsExportArticle] = useState(false);
         const [isReportArticle, setIsReportArticle] = useState(false);
+
+        const { rates } = useRateService()
+
+        const rate = rates[0]?.value
     
     
         const total = invoices.reduce((acc:any, invoice:any) => acc + invoice.subtotal, 0);
@@ -204,7 +209,7 @@ export default function Sale() {
                                     {/* Title Section */}
                                     <div className="col-span-3 text-center">
                                         <h1 className="text-lg font-bold text-gray-800">
-                                        VENTE DU 19/12/2024 AU 19/12/2024
+                                            VENTE DU 19/12/2024 AU 19/12/2024
                                         </h1>
                                     </div>
 
@@ -227,7 +232,7 @@ export default function Sale() {
                                     {/* Vente Details in USD */}
                                     <div className="col-span-1 flex flex-col items-center bg-white p-4 rounded-lg shadow-md">
                                         <h2 className="text-sm text-gray-500">VENTE</h2>
-                                        <h1 className="text-lg font-bold text-green-600">{total} USD</h1>
+                                        <h1 className="text-lg font-bold text-green-600">{(total/rate).toFixed(2)} USD</h1>
                                     </div>
 
                                     <div className="col-span-1 flex flex-col items-center bg-white p-4 rounded-lg shadow-md">
@@ -237,7 +242,7 @@ export default function Sale() {
 
                                     <div className="col-span-1 flex flex-col items-center bg-white p-4 rounded-lg shadow-md">
                                         <h2 className="text-sm text-gray-500">SOLDE</h2>
-                                        <h1 className="text-lg font-bold text-blue-600">{total} USD</h1>
+                                        <h1 className="text-lg font-bold text-blue-600">{(total/rate).toFixed(2)} USD</h1>
                                     </div>
                                     </div>
 

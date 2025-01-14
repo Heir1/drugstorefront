@@ -9,6 +9,7 @@ import { useState } from "react";
 import { Icon } from '@iconify/react';
 import IArticle from "@/app/interfaces/article";
 import FormArticleUpdate from "@/app/components/form/FormArticleUpdate";
+import { useRateService } from "@/app/redux/slices/rates/useRateService";
 
 
 const CellComponent = ({ row }: { row: any }) => {
@@ -74,7 +75,7 @@ export const ArticleColumns: ColumnDef<IArticle>[] = [
 
     {
         accessorKey: "purchase_price",
-        header: "PA/USD",
+        header: "PA/CDF",
         cell: ({ row }) => (
         <div className="capitalize">{row.getValue("purchase_price")}</div>
         ),
@@ -82,10 +83,34 @@ export const ArticleColumns: ColumnDef<IArticle>[] = [
 
     {
         accessorKey: "selling_price",
-        header: "PV/USD",
+        header: "PV/CDF",
         cell: ({ row }) => (
         <div className="capitalize">{row.getValue("selling_price")}</div>
         ),
+    },
+
+    {
+        header: "PA/USD",
+        cell: ({ row }: { row: any }) => {
+            const { rates } = useRateService();
+            const rate = rates?.[0]?.value ?? 1; // Fallback to 1 if rates are unavailable
+            const purchasePrice = Number(row.getValue("purchase_price"));
+            return (
+                <div className="capitalize">{(purchasePrice / rate).toFixed(2)}</div>
+            );
+        },
+    },
+
+    {
+        header: "PV/USD",
+        cell: ({ row }: { row: any }) => {
+            const { rates } = useRateService();
+            const rate = rates?.[0]?.value ?? 1; // Fallback to 1 if rates are unavailable
+            const sellingPrice = Number(row.getValue("selling_price"));
+            return (
+                <div className="capitalize">{(sellingPrice / rate).toFixed(2)}</div>
+            );
+        },
     },
 
     // {
