@@ -40,6 +40,10 @@ import { Icon } from '@iconify/react';
 import IArticle from "@/app/interfaces/article";
 import FormArticleUpdate from "@/app/components/form/FormArticleUpdate";
 import FormArticleAppro from "@/app/components/form/FormArticleAppro";
+import { useMovementService } from "@/app/redux/slices/movements/useMovementService";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/app/redux/store/store";
+import { fetchMovements } from "@/app/redux/slices/movements/actions";
 
 
 
@@ -69,14 +73,26 @@ export function DataTableSupply<TData, TValue>({
     pageSize: 10,
   })
 
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
   const [globalFilter, setGlobalFilter] = React.useState('');
   const [selected, setSelected] = React.useState('plusRecent');
   const [redirection, setRedirection] = React.useState(false);
   const [ isUpdateFormOpen, setIsUpdateFormOpen ] = React.useState(false);
   const [article, setArticle] = React.useState<IArticle[]>([]);
+
+  const today = new Date();
+  const formattedDate:string = today.toISOString().split('T')[0];
+
+  const [startDate, setStartDate ] = React.useState(formattedDate);
+  const [endDate, setEndDate ] = React.useState(formattedDate);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const getDate = () => {
+      if(startDate && endDate){
+        dispatch(fetchMovements({ typeId: "1", firstrange: startDate, secondrange: endDate }))
+      }
+  }
 
   const table = useReactTable({
     data,
@@ -118,6 +134,8 @@ export function DataTableSupply<TData, TValue>({
     setArticle(articleInfo)
   }
 
+ 
+
 
 
   const numberOfPage = table.getPageCount().toLocaleString();
@@ -128,18 +146,40 @@ export function DataTableSupply<TData, TValue>({
     <>
       <div className="bg-transparent   rounded-2xl ">
         <div className="flex items-center justify-between " >
-          <div className="flex justify-end">
+          <div className="flex justify-end  ">
             {
               title == "Invoice" ? (
                 <input className=' w-[700px] px-6 py-2 my-3 border-[1px] border-black text-black rounded-3xl text-[14px] uppercase ' placeholder='Rechercher le produit pharmaceutique par sa description' type="text" value={(table.getColumn("invoices.invoice_number")?.getFilterValue() as string) ?? "" } onChange={(event) => table.getColumn("invoices.invoice_number")?.setFilterValue(event.target.value)}/>
               )
               :
               (
-                <input className=' w-[700px] px-6 py-2 my-3 border-[1px] border-black text-black rounded-3xl text-[14px] uppercase ' placeholder='Rechercher le produit pharmaceutique par sa description' type="text" value={(table.getColumn("article.description")?.getFilterValue() as string) ?? "" } onChange={(event) => table.getColumn("article.description")?.setFilterValue(event.target.value)} />
+                title == "Movements" ? (
+                  <input className=' w-[700px] px-6 py-2 my-3 border-[1px] border-black text-black rounded-3xl text-[14px] uppercase ' placeholder='Rechercher le produit pharmaceutique par sa description' type="text" value={(table.getColumn("article.description")?.getFilterValue() as string) ?? "" } onChange={(event) => table.getColumn("article.description")?.setFilterValue(event.target.value)} />
+                )
+                :
+                (
+                  <input className=' w-[700px] px-6 py-2 my-3 border-[1px] border-black text-black rounded-3xl text-[14px] uppercase ' placeholder='Rechercher le produit pharmaceutique par sa description' type="text" value={(table.getColumn("article.description")?.getFilterValue() as string) ?? "" } onChange={(event) => table.getColumn("article.description")?.setFilterValue(event.target.value)} />
+
+                )
               )
             }
 
           </div>
+          {
+            title == "Movements" && (
+              <div className="flex gap-5 " >
+                <div className="flex gap-4 items-center  " >
+                  <h1 className=" font-semibold text-sm italic " >Du</h1>
+                  <input onChange={(e) => setStartDate(e.target.value) }  className="uppercase italic font-semibold border-[1px] py-[5px] px-2 rounded-2xl border-black " type="date" name="" id="" />
+                </div>
+                <div className="flex gap-4 items-center">
+                  <h1 className=" font-semibold text-sm italic ">Au</h1>
+                  <input onChange={(e) => setEndDate(e.target.value) }  className="uppercase italic font-semibold  border-[1px] py-[5px] px-2 rounded-2xl border-black" type="date" name="" id="" />
+                </div>
+                <button onClick={getDate}  className=" px-4 text-sm rounded-lg text-white bg-slate-400 " >Filtrer</button>
+              </div>
+            )
+          }
         </div>
 
         <div className="rounded-md ">
@@ -247,6 +287,9 @@ export function DataTableSupply<TData, TValue>({
           )
         }
 
+      </div>
+      <div className="grid grid-cols-1">
+        <h1>Total achat du {startDate } au {endDate} </h1>
       </div>
     </>
     

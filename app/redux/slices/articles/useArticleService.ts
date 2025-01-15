@@ -11,7 +11,8 @@ export const useArticleService = () => {
     const { articles, articleStatus, error } = useSelector((state: RootState) => state.articles )
 
     useEffect(() => {
-        articleStatus !== "succeeded" && dispatch(fetchArticles())
+        // articleStatus !== "succeeded" && dispatch(fetchArticles())
+        dispatch(fetchArticles())
     }, [dispatch])
 
     return { articles , articleStatus, error }

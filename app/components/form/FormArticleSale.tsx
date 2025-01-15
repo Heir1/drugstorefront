@@ -30,6 +30,8 @@ import IMovement from '@/app/interfaces/movement';
 import { v4 as uuidv4 } from 'uuid';
 import { createMovement } from '@/app/redux/slices/movements/actions';
 import { useRateService } from '@/app/redux/slices/rates/useRateService';
+import Iinvoice from '@/app/interfaces/invoice';
+import { createInvoice } from '@/app/redux/slices/invoices/actions';
 // Dynamically import React Select without SSR
 const Select = dynamic(() => import('react-select'), { ssr: false });
 
@@ -180,34 +182,22 @@ export default function FormArticleSale() {
             [suppliers] // Dépend uniquement de `suppliers`
         );
 
-    
         
         const dispatch = useDispatch<AppDispatch>();
 
-        const onSubmit = () => {
+        const onSubmit = async() => {
 
             console.log("PANIER1",cart1);
-            // articles
+            // articles 
 
-            const cartDate = {
+            const cartDate:any = {
                 "articles" : cart1 
             }
 
+            await dispatch(createInvoice(cartDate))
+            
 
         }
-
-        // [
-        //     {
-        //         "id": "5",
-        //         "quantity1": 2,
-        //         "prix_total": 5000
-        //     },
-        //     {
-        //         "id": "3",
-        //         "quantity1": 2,
-        //         "prix_total": 7500
-        //     }
-        // ]
 
       
         const onSubmit1: SubmitHandler<IFormInputs> = (data) => {
@@ -332,6 +322,7 @@ export default function FormArticleSale() {
 
         const removeItem = (index: number) => {
             setCart(cart.filter((_, i) => i !== index));
+            setCart1(cart1.filter((_, i) => i !== index));
         };
 
         const getTotalPrice = (): number => {

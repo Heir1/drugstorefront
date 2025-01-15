@@ -17,6 +17,11 @@ import { DataTableSupply } from '@/components/ui/DataTable/DataTableSupply';
 import FormArticleAppro from '@/app/components/form/FormArticleAppro';
 import { ArticleApproColumns } from '@/components/ui/DataTable/articles/ArticleApproColumns';
 import { useMovementService, useMovementType } from '@/app/redux/slices/movements/useMovementService';
+import { fetchMovements } from '@/app/redux/slices/movements/actions';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/app/redux/store/store';
+import IMovement from '@/app/interfaces/movement';
+import { useRateService } from '@/app/redux/slices/rates/useRateService';
 
 
 interface IFormInputs {
@@ -47,7 +52,8 @@ export default function Supply() {
     const { placements, placementStatus, placementError } = usePlacementService();
     const { currencies, currencyStatus, currencyError } = useCurrencyService();
     // const { movements, movementStatus, movementError } = useMovementType("2");
-    const { movements, movementStatus, movementError } = useMovementService();
+    const { movements, movementStatus, movementError } = useMovementService("","");
+    const { rates } = useRateService()
 
 
     const [isNewArticle, setIsNewArticle] = useState(true);
@@ -55,6 +61,10 @@ export default function Supply() {
     const [isStateArticle, setIsStateArticle] = useState(false);
     const [isExportArticle, setIsExportArticle] = useState(false);
     const [isReportArticle, setIsReportArticle] = useState(false);
+
+
+    const totalMovement = movements?.reduce((acc: any, mouvement: any) => acc + (mouvement.quantity * mouvement.article.purchase_price), 0);
+
 
 
 
@@ -138,6 +148,7 @@ export default function Supply() {
         }
     }
 
+
     return (
         <>
 
@@ -201,8 +212,16 @@ export default function Supply() {
                     (
                         isStateArticle ? (
                             <div>
-                                <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white h-[650px] rounded-xl" >
-                                    <DataTableSupply columns={ArticleApproColumns} data={movements} needFilter={false} paginate={true} title=""/>
+                                <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] h-[700px] bg-white rounded-xl" >
+                                    <DataTableSupply columns={ArticleApproColumns} data={movements} needFilter={false} paginate={true} title="Movements"/>
+                                    <div className=" flex mt-2 " >
+                                        <div className=" w-1/2 text-center border-2 border-emerald-500 " >
+                                            {(totalMovement/rates[0].value).toFixed(2)} USD
+                                        </div>
+                                        <div className=" w-1/2 text-center border-2 border-emerald-500 " >
+                                            {totalMovement.toFixed(2)} CDF
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         )

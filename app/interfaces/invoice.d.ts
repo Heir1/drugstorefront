@@ -19,25 +19,31 @@ export default interface Iinvoice     {
         created_at?: string,
         updated_at?: string
     },
-    articles?: {
-        id?: number,
-        barcode?: string,
-        location?: string,
-        description?: string,
-        alert?: number,
-        expiration_date?: string,
-        quantity?: number,
-        purchase_price?: number,
-        selling_price?: number,
-        is_active?: boolean,
-        comment?: string,
-        row_id?: string,
-        created_at?: string,
-        updated_at?: string,
-        created_by?: string,
-        updated_by?: string,
-        currency_id?: number,
-        category_id?: number,
-        packaging_id?: number
-    }
+    articles?: [
+        {
+            id: string,
+            quantity1: number,
+            prix_total: number
+        }   
+        ] | {
+            id?: number,
+            barcode?: string,
+            location?: string,
+            description?: string,
+            alert?: number,
+            expiration_date?: string,
+            quantity?: number,
+            purchase_price?: number,
+            selling_price?: number,
+            is_active?: boolean,
+            comment?: string,
+            row_id?: string,
+            created_at?: string,
+            updated_at?: string,
+            created_by?: string,
+            updated_by?: string,
+            currency_id?: number,
+            category_id?: number,
+            packaging_id?: number
+        }
 }

@@ -28,7 +28,7 @@ interface IFormInputs {
 export default function Regulation() {
 
 
-        const { movements, movementStatus, movementError } = useMovementService();
+        const { movements, movementStatus, movementError } = useMovementService("","");
     
         const [isNewArticle, setIsNewArticle] = useState(true);
         const [isUpdateArticle, setIsUpdateArticle] = useState(false);

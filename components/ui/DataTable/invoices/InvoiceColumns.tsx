@@ -42,7 +42,7 @@ export const InvoiceColumns: ColumnDef<Iinvoice>[] = [
 
     {
         accessorKey: "articles.description",
-        header: "Produit",
+        header: "PRODUIT",
         id: "articles.description", // Explicitly set the ID
         cell: ({ row } : { row : any} ) => row.original?.articles?.description || "N/A",
     },

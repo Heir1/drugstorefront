@@ -42,26 +42,26 @@ export const fetchInvoices = createAsyncThunk<Iinvoice[]>(
 // );
 
 
-// // Action pour créer un nouvel article
-// export const createArticle = createAsyncThunk<IArticle, IArticle>(
-//     'articles/createArticle',
-//     async (newArticle: IArticle, { rejectWithValue }) => {
-//       try {
-//         const response = await postRequest<IArticle>('articles', newArticle); // Remplacez avec votre endpoint
+// Action pour créer un nouvel invoice
+export const createInvoice = createAsyncThunk<Iinvoice, Iinvoice>(
+    'invoices/createInvoice',
+    async (newInvoice: Iinvoice, { rejectWithValue }) => {
+      try {
+        const response = await postRequest<Iinvoice>('invoices', newInvoice); // Remplacez avec votre endpoint
         
-//         if (response.error) {
-//           console.log(response.error)
-//           alert(response.error.message)
-//           return rejectWithValue(response.error);
-//         }
-//         alert("Insertion avec succès")
+        if (response.error) {
+          console.log(response.error)
+          alert(response.error.message)
+          return rejectWithValue(response.error);
+        }
+        alert("Facture avec succès")
         
-//         return response.data as IArticle;
-//       } catch (error: any) {
-//         return rejectWithValue(error.message);
-//       }
-//     }
-// );
+        return response.data as Iinvoice;
+      } catch (error: any) {
+        return rejectWithValue(error.message);
+      }
+    }
+);
 
 
 // // Action pour mettre à jour un article

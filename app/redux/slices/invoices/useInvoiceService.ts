@@ -11,7 +11,8 @@ export const useInvoiceService = () => {
     const { invoices, invoiceStatus , invoiceError } = useSelector((state: RootState) => state.invoices )
 
     useEffect(() => {
-        invoiceStatus !== "succeeded" && dispatch(fetchInvoices())
+        // invoiceStatus !== "succeeded" && dispatch(fetchInvoices())
+        dispatch(fetchInvoices())
     }, [dispatch])
 
     return { invoices, invoiceStatus , invoiceError }

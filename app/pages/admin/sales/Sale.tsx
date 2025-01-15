@@ -49,7 +49,7 @@ export default function Sale() {
         const { indications, indicationStatus, indicationError } = useIndicationService();
         const { placements, placementStatus, placementError } = usePlacementService();
         const { currencies, currencyStatus, currencyError } = useCurrencyService();
-        const { movements, movementStatus, movementError } = useMovementService();
+        const { movements, movementStatus, movementError } = useMovementService("","");
         const { invoices, invoiceStatus, invoiceError } = useInvoiceService();
     
         const [isNewArticle, setIsNewArticle] = useState(true);
@@ -147,7 +147,7 @@ export default function Sale() {
         <>
 
             {
-                (articleStatus == "loading" ||  packagingStatus == "loading" || categoryStatus == "loading" || supplierStatus == "loading" || moleculeStatus == "loading" || indicationStatus == "loading" || placementStatus == "loading" || currencyStatus == "loading" || movementStatus == "loading" ) && <Loading/>
+                (articleStatus == "loading" ||  packagingStatus == "loading" || categoryStatus == "loading" || supplierStatus == "loading" || moleculeStatus == "loading" || indicationStatus == "loading" || placementStatus == "loading" || currencyStatus == "loading" || movementStatus == "loading" || invoiceStatus == "loading" ) && <Loading/>
             }
 
             <div className="mx-2 p-5 " >
@@ -203,7 +203,7 @@ export default function Sale() {
                     (
                         isStateArticle ? (
                             <div>
-                                <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white h-[650px] rounded-xl" >
+                                <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white rounded-xl" >
                                     <DataTableSupply columns={InvoiceColumns} data={invoices} needFilter={false} paginate={true} title="Invoice"/>
                                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-gray-50 p-6 rounded-lg shadow-lg">
                                     {/* Title Section */}

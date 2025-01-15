@@ -11,7 +11,8 @@ export const useMoleculeService = () => {
     const { molecules, moleculeStatus, moleculeError } = useSelector((state: RootState) => state.molecules )
 
     useEffect(() => {
-        moleculeStatus !== "succeeded" && dispatch(fetchMolecules())
+        // moleculeStatus !== "succeeded" && dispatch(fetchMolecules())
+        dispatch(fetchMolecules())
     }, [dispatch])
 
     return { molecules , moleculeStatus, moleculeError }

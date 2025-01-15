@@ -3,24 +3,45 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ApiErrorResponse, deleteRequest, getRequest, postRequest, putRequest } from '@/app/helpers/api/verbes';
 import IMovement from '@/app/interfaces/movement';
 
+// Define the parameter type for the thunk
+interface FetchMovementsParams {
+  typeId: string;
+  firstrange: string;
+  secondrange: string;
+}
 
-// Action pour récupérer tous les mouvements
-export const fetchMovements = createAsyncThunk<IMovement[]>(
-    'movements/fetchMovements',
-    async (_, { rejectWithValue }) => {
 
-      try {
-        const response = await getRequest<IMovement[]>('movements'); // Remplacez avec votre endpoint
-        if (response.error) {
-          return rejectWithValue(response.error);
-        }
-        console.log(response.data);
-        return response.data as IMovement[] ;
-        
-      } catch (error: any) {
-        return rejectWithValue(error.message);
+// Action for fetching movements
+// export const fetchMovements = createAsyncThunk<IMovement[], FetchMovementsParams, { rejectValue: string }>(
+//   'movements/fetchMovements',
+//   async ({ typeId, firstrange, secondrange }, { rejectWithValue }) => {
+//     try {
+//       // Update your endpoint accordingly
+//       const response = await getRequest<IMovement[]>(`/movements/type/${typeId}/${firstrange}/${secondrange}`);
+//       if (response.error) {
+//         return rejectWithValue(response.error);
+//       }
+//       console.log(response.data);
+//       return response.data as IMovement[];
+//     } catch (error: any) {
+//       return rejectWithValue(error.message);
+//     }
+//   }
+// );*
+
+export const fetchMovements = createAsyncThunk<IMovement[], FetchMovementsParams, { rejectValue: string }>(
+  'movements/fetchMovements',
+  async ({ typeId, firstrange, secondrange }, { rejectWithValue }) => {
+    try {
+      const response = await getRequest<IMovement[]>(`/movements/type/${typeId}/${firstrange}/${secondrange}`);
+      if (response.error) {
+        return rejectWithValue(response.error.message || 'An unknown error occurred');
       }
+      return response.data as IMovement[];
+    } catch (error: any) {
+      return rejectWithValue(error.message || 'An unknown error occurred');
     }
+  }
 );
 
 
