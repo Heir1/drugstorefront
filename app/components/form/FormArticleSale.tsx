@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState, useMemo, use } from 'react'
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import { DataTable } from '@/components/ui/DataTable/DataTable';
@@ -32,6 +32,7 @@ import { createMovement } from '@/app/redux/slices/movements/actions';
 import { useRateService } from '@/app/redux/slices/rates/useRateService';
 import Iinvoice from '@/app/interfaces/invoice';
 import { createInvoice } from '@/app/redux/slices/invoices/actions';
+import { usePaymentModeService } from '@/app/redux/slices/paymentmodes/usePaymentModeService';
 // Dynamically import React Select without SSR
 const Select = dynamic(() => import('react-select'), { ssr: false });
 
@@ -47,6 +48,7 @@ interface IFormInputs {
     packaging: { value: string; label: string } | null;
     category: { value: string; label: string } | null;
     supplier: { value: string; label: string } | null;
+    paymentmode: { value: string; label: string } | null;
     expirationDate: string;
     alert: number;
     currency: number;
@@ -74,7 +76,8 @@ export default function FormArticleSale() {
     const [cart, setCart] = useState<CartItem[]>([]);
     const [cart1, setCart1] = useState<CartItem1[]>([]);
 
-    const [article, setArticle] = useState<any>(null)
+    const [article, setArticle] = useState<any>(null);
+    const [ paymentMode, setPaymentMode ] = useState<any>(null);
 
     const { articles, articleStatus, error } = useArticleService()  
     const { packagings, packagingStatus, packagingError } = usePackagingService()
@@ -84,6 +87,7 @@ export default function FormArticleSale() {
     const { indications, indicationStatus, indicationError } = useIndicationService();
     const { placements, placementStatus, placementError } = usePlacementService();
     const { currencies, currencyStatus, currencyError } = useCurrencyService();
+    const {paymentModes, paymentModeStatus, paymentModeError} = usePaymentModeService();
 
     
     const [isNewArticle, setIsNewArticle] = useState(true);
@@ -111,6 +115,7 @@ export default function FormArticleSale() {
             packaging : null,
             category : null,
             supplier : null,
+            paymentmode: null,
             expirationDate : "",
             alert : 0,
             currency : 1,
@@ -133,6 +138,15 @@ export default function FormArticleSale() {
             })), 
             [articles]
         );
+
+        const paymentModeFormated = useMemo(() => 
+            paymentModes.map((paymentMode:any) => ({ 
+                value: paymentMode.id , // Convertir id en string
+                label: paymentMode.name ,
+            })), 
+            [paymentModes]
+        );
+        
 
         const placementsFormated = useMemo(() => 
             placements.map((location) => ({ 
@@ -185,12 +199,16 @@ export default function FormArticleSale() {
         
         const dispatch = useDispatch<AppDispatch>();
 
-        const onSubmit = async() => {
+        // const onSubmit = async ( data: IFormInputs) => {
+        const onSubmit = async(data: any) => {
 
-            console.log("PANIER1",cart1);
-            // articles 
+            const { paymentmode } = data;
+
+            // console.log("PAYMENT MODE ",paymentmode);
+
 
             const cartDate:any = {
+                "paymentmode" : paymentmode.value,
                 "articles" : cart1 
             }
 
@@ -251,6 +269,7 @@ export default function FormArticleSale() {
             // Réinitialiser le formulaire après soumission
             // reset();
           };
+
 
         const handleChange = (selected: any) => {
             
@@ -339,6 +358,10 @@ export default function FormArticleSale() {
             setCurrency(false)
             setCdfPaidAmount(Number(event.target.value))
         }
+
+        const  handleChangePaymentMode = (event:any) => {
+            setPaymentMode(event.label)
+        }
         
 
         return (
@@ -360,18 +383,18 @@ export default function FormArticleSale() {
                         {/* Input Section */}
                         <div className="w-2/3">
                             <Controller
-                            name="description1"
-                            control={control}
-                            render={({ field }) => (
-                                <Select
-                                {...field}
-                                value={article}
-                                options={articlesFormated}
-                                onChange={handleChange}
-                                placeholder="Sélectionnez un article"
-                                className="text-sm rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                />
-                            )}
+                                name="description1"
+                                control={control}
+                                render={({ field }) => (
+                                    <Select
+                                    {...field}
+                                    value={article}
+                                    options={articlesFormated}
+                                    onChange={handleChange}
+                                    placeholder="Sélectionnez un article"
+                                    className="text-sm rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    />
+                                )}
                             />
                         </div>
                         </div>
@@ -775,13 +798,32 @@ export default function FormArticleSale() {
 
                     {/* Footer Section */}
                     <div className="grid grid-cols-9 gap-2">
-                        <div className="col-span-2 flex items-center gap-2 bg-white p-2 rounded border border-gray-200">
+                        <div className="col-span-3 flex items-center gap-2 bg-white p-2 rounded border border-gray-200">
                         <h1 className="text-sm text-gray-600">Type Vente</h1>
-                        <input
+                        {/* <input
                             type="text"
                             className="w-20 h-8 p-1 border border-gray-300 rounded text-sm"
-                        />
-                        <span className="text-sm font-medium text-gray-800">CASH</span>
+                        /> */}
+
+                            <Controller
+                                name="paymentmode"
+                                control={control}
+                                render={({ field }) => (
+                                    <Select
+                                    {...field}
+                                    // value={paymentMode}
+                                    options={paymentModeFormated}
+                                    // onChange={handleChangePaymentMode}
+                                    placeholder="Sélectionnez le mode de paiement"
+                                    className="text-sm rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    />
+                                )}
+
+                                rules={{ required: 'Le type de vente est requis' }}
+                            />
+
+
+                        {/* <span className="text-sm font-medium text-gray-800">{paymentMode}</span> */}
                         </div>
 
                         <div className="col-start-6 col-span-4 bg-white p-2 rounded border border-gray-200">

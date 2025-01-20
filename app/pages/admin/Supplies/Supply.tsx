@@ -149,6 +149,15 @@ export default function Supply() {
     }
 
 
+    function formatNumberWithSpaces(amount: number): string {
+        // Utilise toLocaleString pour formatter le nombre avec espace comme séparateur
+        return amount.toLocaleString("fr-FR", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        });
+    }
+
+
     return (
         <>
 
@@ -216,10 +225,11 @@ export default function Supply() {
                                     <DataTableSupply columns={ArticleApproColumns} data={movements} needFilter={false} paginate={true} title="Movements"/>
                                     <div className=" flex mt-2 " >
                                         <div className=" w-1/2 text-center border-2 border-emerald-500 " >
-                                            {(totalMovement/rates[0].value).toFixed(2)} USD
+                                            {(formatNumberWithSpaces(totalMovement/rates[0].value))} USD
+                                            
                                         </div>
                                         <div className=" w-1/2 text-center border-2 border-emerald-500 " >
-                                            {totalMovement.toFixed(2)} CDF
+                                            {formatNumberWithSpaces(totalMovement)} CDF
                                         </div>
                                     </div>
                                 </div>

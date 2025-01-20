@@ -156,7 +156,7 @@ export default function Sale() {
                         <div className="grid grid-cols-5 place-content-center">
                             <Link href={``}>
                                 <div className={`flex justify-center items-center py-2 rounded-lg ${ isNewArticle && "bg-[#262B62] text-white" } `} onClick={ ()=> setActivation("new") } >
-                                    <h1>Appro</h1>
+                                    <h1>Vente</h1>
                                 </div>
                             </Link>
                             <Link href={``}>
