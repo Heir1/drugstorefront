@@ -121,7 +121,7 @@ export default function FormArticleCreation() {
     }));
 
 
-    const packagingsFormated = packagings.map((packaging) => ({
+    const packagingsFormated = packagings.map((packaging:any) => ({
         value: packaging.id.toString(), // Convertir id en string
         label: packaging.name,
     }));

@@ -44,6 +44,8 @@ import { useMovementService } from "@/app/redux/slices/movements/useMovementServ
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/app/redux/store/store";
 import { fetchMovements } from "@/app/redux/slices/movements/actions";
+import StockRegulForm from "@/app/components/form/StockRegulForm";
+import SaleRegulForm from "@/app/components/form/SaleRegulForm";
 
 
 
@@ -66,7 +68,8 @@ export function DataTableSupply<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
-  const [openApproFormOpen, setIsApproFormOpen] = React.useState(false);
+
+  // const [openApproFormOpen, setIsApproFormOpen] = React.useState(false);
 
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
@@ -78,7 +81,8 @@ export function DataTableSupply<TData, TValue>({
   const [globalFilter, setGlobalFilter] = React.useState('');
   const [selected, setSelected] = React.useState('plusRecent');
   const [redirection, setRedirection] = React.useState(false);
-  const [ isUpdateFormOpen, setIsUpdateFormOpen ] = React.useState(false);
+  const [isStockRegulFormOpen, setisStockRegulFormOpen ] = React.useState(false);
+  const [isSaleRegulFormOpen, setIsSaleRegulFormOpen ] = React.useState(false);
   const [article, setArticle] = React.useState<IArticle[]>([]);
 
   const today = new Date();
@@ -129,13 +133,20 @@ export function DataTableSupply<TData, TValue>({
     
   }
 
-  const getArticleInfo = (articleInfo:any) => {
-    setIsApproFormOpen(true)
-    setArticle(articleInfo)
+  const getArticleInfo = (articleInfo:any, title:string) => {
+    if(title == "Invoice"){
+      setIsSaleRegulFormOpen(true)
+      setArticle(articleInfo)
+    }
+    else if(title == "Movements"){
+      setisStockRegulFormOpen(true)
+      setArticle(articleInfo)
+    }
+
+    console.log(articleInfo);
+    console.log(title);
+
   }
-
- 
-
 
 
   const numberOfPage = table.getPageCount().toLocaleString();
@@ -144,6 +155,15 @@ export function DataTableSupply<TData, TValue>({
 
   return (
     <>
+
+        { 
+          isStockRegulFormOpen &&  <StockRegulForm content={article} setisStockRegulFormOpen={setisStockRegulFormOpen}  />
+        }
+
+        {
+          isSaleRegulFormOpen && <SaleRegulForm content={article} setIsSaleRegulFormOpen={setIsSaleRegulFormOpen}  />
+        }
+    
       <div className="bg-transparent   rounded-2xl ">
         <div className="flex items-center justify-between " >
           <div className="flex justify-end  ">
@@ -217,7 +237,7 @@ export function DataTableSupply<TData, TValue>({
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
                                     // onClick={() => redirectionPage(row.original)}
-                                    onClick={() => getArticleInfo(row.original)}
+                                    onClick={() => getArticleInfo(row.original, title)}
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell className="px-10"  key={cell.id}>

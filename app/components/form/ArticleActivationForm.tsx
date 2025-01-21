@@ -1,31 +1,11 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import Tab from 'react-bootstrap/Tab';
-import Tabs from 'react-bootstrap/Tabs';
-import { DataTable } from '@/components/ui/DataTable/DataTable';
-import { ArticleColumns } from '@/components/ui/DataTable/articles/ArticleColumns';
-import { useArticleService } from '@/app/redux/slices/articles/useArticleService';
 import { useForm, Controller, SubmitHandler, FieldValues } from 'react-hook-form';
-import { usePackagingService } from '@/app/redux/slices/packaging/usePackagingService';
-import { useCategoryService } from '@/app/redux/slices/category/useCategoryService';
 import ICategory from '@/app/interfaces/category';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/app/redux/store/store';
 import IArticle from '@/app/interfaces/article';
 import { createArticle, updateArticle } from '@/app/redux/slices/articles/actions';
-import IPackaging from '@/app/interfaces/packaging';
-import { Icon } from '@iconify/react'; // Import Iconify's Icon component
-import { useCurrencyService } from '@/app/redux/slices/currencies/useCurrencyService';
-import Link from 'next/link';
-import MenuTab from '@/app/components/MenuTab';
-import { OptionsOrGroups, GroupBase } from "react-select";
-import { useSupplierService } from '@/app/redux/slices/suppliers/useSuppliseService';
-import { useMoleculeService } from '@/app/redux/slices/molecules/useMoleculeService';
-import { useIndicationService } from '@/app/redux/slices/indications/useIndicationService';
-import { usePlacementService } from '@/app/redux/slices/placements/usePlacementService';
-import Loading from '@/app/components/loading';
-import dynamic from 'next/dynamic';
-import { log } from 'console';
 
 
 interface IFormInputs {

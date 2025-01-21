@@ -53,8 +53,8 @@ export default function Header() {
                                                 </div>
                                                 <hr />
                                                 <div className="  pl-6 py-2">
-                                                    <Link className="flex items-center space-x-2" href={`/pages/admin/regulations`}>
-                                                        <span className=" text-sm "> Régulation </span> 
+                                                    <Link className="flex items-center space-x-2" href={`/pages/admin/regularisations`}>
+                                                        <span className=" text-sm "> Régularisation </span> 
                                                     </Link>
                                                 </div>
                                                 <hr />

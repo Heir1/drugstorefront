@@ -117,6 +117,8 @@ export const updateMovement = createAsyncThunk<IMovement, { id: string; data: IM
             // return rejectWithValue(response.error);
         }
         alert("Modification avec succès")
+        // console.log(response.data);
+        
         return response.data as IMovement;
       } catch (error: any) {
         return rejectWithValue(error.message);

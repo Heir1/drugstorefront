@@ -50,7 +50,7 @@ export default function Sale() {
         const { placements, placementStatus, placementError } = usePlacementService();
         const { currencies, currencyStatus, currencyError } = useCurrencyService();
         const { movements, movementStatus, movementError } = useMovementService("","");
-        const { invoices, invoiceStatus, invoiceError } = useInvoiceService();
+        const { invoices, invoiceStatus, invoiceError } = useInvoiceService("","");
     
         const [isNewArticle, setIsNewArticle] = useState(true);
         const [isUpdateArticle, setIsUpdateArticle] = useState(false);

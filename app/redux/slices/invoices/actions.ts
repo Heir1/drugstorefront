@@ -3,25 +3,46 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ApiErrorResponse, deleteRequest, getRequest, postRequest, putRequest } from '@/app/helpers/api/verbes';
 import Iinvoice from '@/app/interfaces/invoice';
 
+interface FetchInvoicesParams {
+  paymentModeId: string;
+  firstrange: string;
+  secondrange: string;
+}
+
 
 // Action pour récupérer tous les invoices
-export const fetchInvoices = createAsyncThunk<Iinvoice[]>(
+export const fetchInvoices = createAsyncThunk<Iinvoice[], FetchInvoicesParams, { rejectValue: string }>(
     'invoices/fetchInvoices',
-    async (_, { rejectWithValue }) => {
+    async ({ paymentModeId, firstrange, secondrange }, { rejectWithValue }) => {
 
       try {
-        const response = await getRequest<Iinvoice[]>('invoices'); // Remplacez avec votre endpoint
+        const response = await getRequest<Iinvoice[]>(`/invoices/mode/${paymentModeId}/${firstrange}/${secondrange}`); // Remplacez avec votre endpoint
         if (response.error) {
-          return rejectWithValue(response.error);
+          return rejectWithValue(response.error.message || 'An unknown error occurred');
         }
         console.log(response.data);
         return response.data as Iinvoice[] ;
         
       } catch (error: any) {
-        return rejectWithValue(error.message);
+        return rejectWithValue(error.message || 'An unknown error occurred');
       }
     }
 );
+
+// export const fetchMovements = createAsyncThunk<IMovement[], FetchMovementsParams, { rejectValue: string }>(
+//   'movements/fetchMovements',
+//   async ({ typeId, firstrange, secondrange }, { rejectWithValue }) => {
+//     try {
+//       const response = await getRequest<IMovement[]>(`/movements/type/${typeId}/${firstrange}/${secondrange}`);
+//       if (response.error) {
+//         return rejectWithValue(response.error.message || 'An unknown error occurred');
+//       }
+//       return response.data as IMovement[];
+//     } catch (error: any) {
+//       return rejectWithValue(error.message || 'An unknown error occurred');
+//     }
+//   }
+// );
 
 
 // // Action pour récupérer un article par ID
@@ -55,6 +76,9 @@ export const createInvoice = createAsyncThunk<Iinvoice, Iinvoice>(
           return rejectWithValue(response.error);
         }
         alert("Facture avec succès")
+
+        console.log(response);
+        
         
         return response.data as Iinvoice;
       } catch (error: any) {
@@ -64,26 +88,27 @@ export const createInvoice = createAsyncThunk<Iinvoice, Iinvoice>(
 );
 
 
-// // Action pour mettre à jour un article
-// export const updateArticle = createAsyncThunk<IArticle, { id: string; data: IArticle }, { rejectValue: string }>(
-//     'articles/updateArticle',
-//     async ({ id, data }, { rejectWithValue }) => {
-//       try {
-//         const response = await putRequest<IArticle>(`articles/${id}`, data); // Remplacez avec votre endpoint
-//         if (response.error) {
+// Action pour mettre à jour un item facture
+export const updateInvoice = createAsyncThunk<Iinvoice, { id: string; data: Iinvoice }, { rejectValue: string }>(
+  'invoices/updateInvoice',
+  async ({ id, data }, { rejectWithValue }) => {
+    try {
+      const response = await putRequest<Iinvoice>(`invoices/${id}`, data); // Remplacez avec votre endpoint
+      if (response.error) {
 
-//             const errorMessage = (response.error as ApiErrorResponse).message || 'Unknown error';
-//             return rejectWithValue(errorMessage); // Pass the error message to rejectWithValue
+          const errorMessage = (response.error as ApiErrorResponse).message || 'Unknown error';
+          return rejectWithValue(errorMessage); // Pass the error message to rejectWithValue
 
-//             // return rejectWithValue(response.error);
-//         }
-//         alert("Modification avec succès")
-//         return response.data as IArticle;
-//       } catch (error: any) {
-//         return rejectWithValue(error.message);
-//       }
-//     }
-// );
+          // return rejectWithValue(response.error);
+      }
+      alert("Modification avec succès")
+      console.log(response.data);
+      return response.data as Iinvoice;
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 
 // // Action pour supprimer un article

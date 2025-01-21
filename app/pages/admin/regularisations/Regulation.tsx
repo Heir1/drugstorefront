@@ -99,17 +99,17 @@ export default function Regulation() {
                 <div className="grid grid-cols-5 place-content-center">
                     <Link href={``}>
                         <div className={`flex justify-center items-center py-2 rounded-lg ${ isNewArticle && "bg-[#262B62] text-white" } `} onClick={ ()=> setActivation("new") } >
-                            <h1>Appro</h1>
+                            <h1>Stock</h1>
                         </div>
                     </Link>
                     <Link href={``}>
                         <div className={`flex justify-center items-center py-2 rounded-lg ${ isUpdateArticle && "bg-[#262B62] text-white" } `} onClick={ ()=> setActivation("update") }>
-                            <h1>Liste Produits</h1>
+                            <h1>Vente</h1>
                         </div>
                     </Link>
                     <Link href={``}>
                         <div className={`flex justify-center items-center py-2 rounded-lg ${ isStateArticle && "bg-[#262B62] text-white" } `} onClick={ ()=> setActivation("state") }>
-                            <h1>Liste Appro</h1>
+                            <h1>Liste Produits</h1>
                         </div>
                     </Link>
                     <Link href={``}>
@@ -126,7 +126,7 @@ export default function Regulation() {
         isNewArticle ? (
             <div>
                 <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white h-[650px] rounded-xl" >
-                    <DataTableSupply columns={ArticleApproColumns} data={movements} needFilter={false} paginate={true} title=""/>
+                    <DataTableSupply columns={ArticleApproColumns} data={movements} needFilter={false} paginate={true} title="Movements"/>
                 </div>
             </div>
         )
