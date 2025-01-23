@@ -39,18 +39,10 @@ import {
 import { Icon } from '@iconify/react';
 import IArticle from "@/app/interfaces/article";
 import FormArticleUpdate from "@/app/components/form/FormArticleUpdate";
-import FormArticleAppro from "@/app/components/form/FormArticleAppro";
-import { useMovementService } from "@/app/redux/slices/movements/useMovementService";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/app/redux/store/store";
-import { fetchMovements } from "@/app/redux/slices/movements/actions";
-import StockRegulForm from "@/app/components/form/StockRegulForm";
-import SaleRegulForm from "@/app/components/form/SaleRegulForm";
-import { fetchInvoices } from "@/app/redux/slices/invoices/actions";
 
 
 
-interface DataTableSupplyProps<TData, TValue> {
+interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   needFilter: boolean;
@@ -58,54 +50,32 @@ interface DataTableSupplyProps<TData, TValue> {
   paginate: boolean;
 }
 
-export function DataTableSupply<TData, TValue>({
+export function DataTableStock<TData, TValue>({
   columns,
   data,
   needFilter,
   title,
   paginate,
-}: DataTableSupplyProps<TData, TValue>) {
+}: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
-
-  // const [openApproFormOpen, setIsApproFormOpen] = React.useState(false);
+  const [openPersonalForm, setOpenPersonalForm] = React.useState(false);
 
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 10,
+    pageSize: 5,
   })
 
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
   const [globalFilter, setGlobalFilter] = React.useState('');
   const [selected, setSelected] = React.useState('plusRecent');
   const [redirection, setRedirection] = React.useState(false);
-  const [isStockRegulFormOpen, setisStockRegulFormOpen ] = React.useState(false);
-  const [isSaleRegulFormOpen, setIsSaleRegulFormOpen ] = React.useState(false);
+  const [ isUpdateFormOpen, setIsUpdateFormOpen ] = React.useState(false);
   const [article, setArticle] = React.useState<IArticle[]>([]);
-
-  const today = new Date();
-  const formattedDate:string = today.toISOString().split('T')[0];
-
-  const [startDate, setStartDate ] = React.useState(formattedDate);
-  const [endDate, setEndDate ] = React.useState(formattedDate);
-  const dispatch = useDispatch<AppDispatch>();
-
-  const getDate = () => {
-
-      if(startDate && endDate){
-
-        if(title=="Movements"){
-          dispatch(fetchMovements({ typeId: "1", firstrange: startDate, secondrange: endDate }))
-        }
-        else if(title=="Invoice"){
-          dispatch(fetchInvoices({ paymentModeId: "1", firstrange: startDate, secondrange: endDate }))
-        }
-          
-      }
-  }
 
   const table = useReactTable({
     data,
@@ -142,20 +112,11 @@ export function DataTableSupply<TData, TValue>({
     
   }
 
-  const getArticleInfo = (articleInfo:any, title:string) => {
-    if(title == "Invoice"){
-      setIsSaleRegulFormOpen(true)
-      setArticle(articleInfo)
-    }
-    else if(title == "Movements"){
-      setisStockRegulFormOpen(true)
-      setArticle(articleInfo)
-    }
-
-    console.log(articleInfo);
-    console.log(title);
-
+  const getArticleInfo = (articleInfo:any) => {
+    setIsUpdateFormOpen(true)
+    setArticle(articleInfo)
   }
+
 
 
   const numberOfPage = table.getPageCount().toLocaleString();
@@ -164,67 +125,16 @@ export function DataTableSupply<TData, TValue>({
 
   return (
     <>
+      {
+        isUpdateFormOpen &&  <FormArticleUpdate content={article} setIsUpdateFormOpen={setIsUpdateFormOpen}  />
+      }
+      <div className="bg-transparent   rounded-2xl">
+        <div className="flex items-center justify-between  " >
 
-        { 
-          isStockRegulFormOpen &&  <StockRegulForm content={article} setisStockRegulFormOpen={setisStockRegulFormOpen}  />
-        }
-
-        {
-          isSaleRegulFormOpen && <SaleRegulForm content={article} setIsSaleRegulFormOpen={setIsSaleRegulFormOpen}  />
-        }
-    
-      <div className="bg-transparent   rounded-2xl ">
-        <div className="flex items-center justify-between " >
-          <div className="flex justify-end  ">
-            {
-              title == "Invoice" ? (
-                <input className=' w-[700px] px-6 py-2 my-3 border-[1px] border-black text-black rounded-3xl text-[14px] uppercase ' placeholder='Rechercher le produit pharmaceutique par sa description' type="text" value={(table.getColumn("invoices.invoice_number")?.getFilterValue() as string) ?? "" } onChange={(event) => table.getColumn("invoices.invoice_number")?.setFilterValue(event.target.value)}/>
-              )
-              :
-              (
-                title == "Movements" ? (
-                  <input className=' w-[700px] px-6 py-2 my-3 border-[1px] border-black text-black rounded-3xl text-[14px] uppercase ' placeholder='Rechercher le produit pharmaceutique par sa description' type="text" value={(table.getColumn("article.description")?.getFilterValue() as string) ?? "" } onChange={(event) => table.getColumn("article.description")?.setFilterValue(event.target.value)} />
-                )
-                :
-                (
-                  <input className=' w-[700px] px-6 py-2 my-3 border-[1px] border-black text-black rounded-3xl text-[14px] uppercase ' placeholder='Rechercher le produit pharmaceutique par sa description' type="text" value={(table.getColumn("article.description")?.getFilterValue() as string) ?? "" } onChange={(event) => table.getColumn("article.description")?.setFilterValue(event.target.value)} />
-
-                )
-              )
-            }
-
+          <div className="flex justify-end">
+            <input className=' w-[700px] px-6 py-2 my-3 border-[1px] border-black text-black rounded-3xl text-[14px] uppercase ' placeholder='Rechercher le produit pharmaceutique par sa description' type="text"value={(table.getColumn("description")?.getFilterValue() as string) ?? "" } onChange={(event) => table.getColumn("description")?.setFilterValue(event.target.value)} />
           </div>
-          {
-            title == "Movements" ? (
-              <div className="flex gap-5 " >
-                <div className="flex gap-4 items-center  " >
-                  <h1 className=" font-semibold text-sm italic " >Du</h1>
-                  <input onChange={(e) => setStartDate(e.target.value) }  className="uppercase italic font-semibold border-[1px] py-[5px] px-2 rounded-2xl border-black " type="date" name="" id="" />
-                </div>
-                <div className="flex gap-4 items-center">
-                  <h1 className=" font-semibold text-sm italic ">Au</h1>
-                  <input onChange={(e) => setEndDate(e.target.value) }  className="uppercase italic font-semibold  border-[1px] py-[5px] px-2 rounded-2xl border-black" type="date" name="" id="" />
-                </div>
-                <button onClick={getDate}  className=" px-4 text-sm rounded-lg text-white bg-slate-400 " >Filtrer</button>
-              </div>
-            )
-            :
-            (
-              title == "Invoice" && (
-                <div className="flex gap-5 " >
-                  <div className="flex gap-4 items-center  " >
-                    <h1 className=" font-semibold text-sm italic " >Du</h1>
-                    <input onChange={(e) => setStartDate(e.target.value) }  className="uppercase italic font-semibold border-[1px] py-[5px] px-2 rounded-2xl border-black " type="date" name="" id="" />
-                  </div>
-                  <div className="flex gap-4 items-center">
-                    <h1 className=" font-semibold text-sm italic ">Au</h1>
-                    <input onChange={(e) => setEndDate(e.target.value) }  className="uppercase italic font-semibold  border-[1px] py-[5px] px-2 rounded-2xl border-black" type="date" name="" id="" />
-                  </div>
-                  <button onClick={getDate}  className=" px-4 text-sm rounded-lg text-white bg-slate-400 " >Filtrer</button>
-                </div>
-              )
-            )
-          }
+
         </div>
 
         <div className="rounded-md ">
@@ -258,11 +168,9 @@ export function DataTableSupply<TData, TValue>({
                         table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
-                                    className=" hover:cursor-pointer text-xs  border-b-[1px] border-black text-black "
-                                    key={row.id}
-                                    data-state={row.getIsSelected() && "selected"}
-                                    // onClick={() => redirectionPage(row.original)}
-                                    onClick={() => getArticleInfo(row.original, title)}
+                                  className=" hover:cursor-pointer text-xs  border-b-[1px] border-black text-black "
+                                  key={row.id}
+                                  data-state={row.getIsSelected() && "selected"}
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell className="px-10"  key={cell.id}>
@@ -296,6 +204,7 @@ export function DataTableSupply<TData, TValue>({
                       {table.getPageCount().toLocaleString()}
                     </strong>
                   </span>
+
                 </div>
 
                 <div className="flex items-center gap-[0.5em]">
@@ -332,9 +241,6 @@ export function DataTableSupply<TData, TValue>({
           )
         }
 
-      </div>
-      <div className="grid grid-cols-1">
-        <h1>Total achat du {startDate } au {endDate} </h1>
       </div>
     </>
     

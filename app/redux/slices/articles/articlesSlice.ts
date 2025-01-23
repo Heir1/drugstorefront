@@ -1,6 +1,6 @@
 // app/slices/articlesSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { createArticle, deleteArticle, fetchArticles, getArticleById, updateArticle } from './actions';
+import { createArticle, deleteArticle, fetchArticles, fetchExpirederticles, fetchLowStockArticles, getArticleById, updateArticle } from './actions';
 import IArticle from '@/app/interfaces/article';
 import { RootState } from '../../store/store'; // Importez le type RootState
 
@@ -34,6 +34,32 @@ const articlesSlice = createSlice({
           state.articles = action.payload;
         })
         .addCase(fetchArticles.rejected, (state, action) => {
+          state.articleStatus = 'failed';
+          state.error = action.error.message || 'Erreur inconnue';
+        })
+
+        // Récupérer tous les lowstockarticles
+        .addCase(fetchLowStockArticles.pending, (state) => {
+          state.articleStatus = 'loading';
+        })
+        .addCase(fetchLowStockArticles.fulfilled, (state, action: PayloadAction<IArticle[]>) => {
+          state.articleStatus = 'succeeded';
+          state.articles = action.payload;
+        })
+        .addCase(fetchLowStockArticles.rejected, (state, action) => {
+          state.articleStatus = 'failed';
+          state.error = action.error.message || 'Erreur inconnue';
+        })
+
+        // Récupérer tous les expirederticles
+        .addCase(fetchExpirederticles.pending, (state) => {
+          state.articleStatus = 'loading';
+        })
+        .addCase(fetchExpirederticles.fulfilled, (state, action: PayloadAction<IArticle[]>) => {
+          state.articleStatus = 'succeeded';
+          state.articles = action.payload;
+        })
+        .addCase(fetchExpirederticles.rejected, (state, action) => {
           state.articleStatus = 'failed';
           state.error = action.error.message || 'Erreur inconnue';
         })

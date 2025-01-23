@@ -81,6 +81,7 @@ export const createInvoice = createAsyncThunk<Iinvoice, Iinvoice>(
         
         
         return response.data as Iinvoice;
+        
       } catch (error: any) {
         return rejectWithValue(error.message);
       }
@@ -111,23 +112,25 @@ export const updateInvoice = createAsyncThunk<Iinvoice, { id: string; data: Iinv
 );
 
 
-// // Action pour supprimer un article
-// export const deleteArticle = createAsyncThunk<string, string, { rejectValue: string }>(
-//     'articles/deleteArticle',
-//     async (articleId: string, { rejectWithValue }) => {
-//       try {
-//         const response = await deleteRequest(`articles/${articleId}`); // Remplacez avec votre endpoint
-//         if (response.error) {
+// Action pour supprimer une facture
+export const deleteInvoice = createAsyncThunk<string, string, { rejectValue: string }>(
+    'invoices/deleteInvoice',
+    async (invoiceId: string, { rejectWithValue }) => {
+      try {
+        const response = await deleteRequest(`invoices/${invoiceId}`); // Remplacez avec votre endpoint
+        if (response.error) {
 
-//             const errorMessage = (response.error as ApiErrorResponse).message || 'Unknown error';
+            const errorMessage = (response.error as ApiErrorResponse).message || 'Unknown error';
             
-//             return rejectWithValue(errorMessage); // Pass the error message to rejectWithValue
+            return rejectWithValue(errorMessage); // Pass the error message to rejectWithValue
 
-//             // return rejectWithValue(response.error);
-//         }
-//         return articleId; // Retourner l'ID de l'article supprimé
-//       } catch (error: any) {
-//         return rejectWithValue(error.message);
-//       }
-//     }
-// );
+            // return rejectWithValue(response.error);
+        }
+        console.log(response);
+        
+        return invoiceId; // Retourner l'ID de la facture supprimé
+      } catch (error: any) {
+        return rejectWithValue(error.message);
+      }
+    }
+);

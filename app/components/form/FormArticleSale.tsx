@@ -616,14 +616,14 @@ export default function FormArticleSale() {
                     <table className="table-auto w-full bg-white shadow-md rounded">
                         <thead>
                         <tr className="bg-gray-200">
-                            <th className="px-4 py-2">LOC</th>
-                            <th className="px-4 py-2">Description</th>
-                            <th className="px-4 py-2">Quantité</th>
-                            <th className="px-4 py-2">Prix Unitaire</th>
-                            <th className="px-4 py-2">Prix Total</th>
-                            <th className="px-4 py-2">Emballage</th>
-                            <th className="px-4 py-2">Molécule</th>
-                            <th className="px-4 py-2">Action</th>
+                            <th className="px-4 py-2 text-left">LOC</th>
+                            <th className="px-4 py-2 text-left">Description</th>
+                            <th className="px-4 py-2 text-left">Quantité</th>
+                            <th className="px-4 py-2 text-left">Prix Unitaire</th>
+                            <th className="px-4 py-2 text-left">Prix Total</th>
+                            <th className="px-4 py-2 text-left">Emballage</th>
+                            <th className="px-4 py-2 text-left">Molécule</th>
+                            <th className="px-4 py-2 text-left">Action</th>
                         </tr>
                         </thead>
                         {cart.length === 0 ? (

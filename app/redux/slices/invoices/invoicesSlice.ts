@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import IArticle from '@/app/interfaces/article';
 import { RootState } from '../../store/store'; // Importez le type RootState
 import Iinvoice from '@/app/interfaces/invoice';
-import { fetchInvoices, updateInvoice } from './actions';
+import { deleteInvoice, fetchInvoices, updateInvoice } from './actions';
 
 
 interface InvoicesState {
@@ -84,18 +84,21 @@ const invoicesSlice = createSlice({
           state.invoiceError = action.payload || 'Erreur de mise à jour';
         })
   
-        // // Supprimer un article
-        // .addCase(deleteArticle.pending, (state) => {
-        //   state.articleStatus = 'loading';
-        // })
-        // .addCase(deleteArticle.fulfilled, (state, action: PayloadAction<string>) => {
-        //   state.articleStatus = 'succeeded';
-        //   state.articles = state.articles.filter((article) => article.id !== action.payload);
-        // })
-        // .addCase(deleteArticle.rejected, (state, action) => {
-        //   state.articleStatus = 'failed';
-        //   state.error = action.payload || 'Erreur de suppression';
-        // });
+        // Supprimer un article
+        .addCase(deleteInvoice.pending, (state) => {
+          state.invoiceStatus = 'loading';
+        })
+        .addCase(deleteInvoice.fulfilled, (state, action: PayloadAction<string>) => {
+          state.invoiceStatus = 'succeeded';
+          state.invoices = state.invoices.filter((invoice) => {
+            const invoiceId = invoice.id ?? invoice.invoice_id; // Check for `id` or fallback to `invoice_id`
+            return invoiceId !== Number(action.payload); // Compare against the payload
+          });
+        })
+        .addCase(deleteInvoice.rejected, (state, action) => {
+          state.invoiceStatus = 'failed';
+          state.invoiceError = action.payload || 'Erreur de suppression';
+        });
     },
   });
 

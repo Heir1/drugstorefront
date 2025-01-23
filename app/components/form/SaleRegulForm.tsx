@@ -9,7 +9,7 @@ import { createArticle, updateArticle } from '@/app/redux/slices/articles/action
 import IMovement from '@/app/interfaces/movement';
 import { deleteMovement, updateMovement } from '@/app/redux/slices/movements/actions';
 import Iinvoice from '@/app/interfaces/invoice';
-import { updateInvoice } from '@/app/redux/slices/invoices/actions';
+import { deleteInvoice, updateInvoice } from '@/app/redux/slices/invoices/actions';
 
 interface IFormInputs {
     description : string;
@@ -33,34 +33,35 @@ export default function SaleRegulForm({content, setIsSaleRegulFormOpen}:ArticleF
 
     const onSubmit = async (data: IFormInputs) => {
 
-        console.log(content);
+        console.log('Article id ',content.id);
+        console.log('Invoice id ',content.invoice_id);
 
-        const { quantity } = data;
+        // const { quantity } = data;
 
-        const invoiceLineData : Iinvoice = {
-            id : content.id, 
-            quantity,
-            article_id : content.article_id
-        }
+        // const invoiceLineData : Iinvoice = {
+        //     id : content.id, 
+        //     quantity,
+        //     article_id : content.article_id
+        // }
 
-        console.log( "INVOICELINE" , invoiceLineData );
+        // console.log( "INVOICELINE" , invoiceLineData );
         
-        try {
-                await dispatch(updateInvoice({ id : content.id, data : invoiceLineData}));
-                setIsSaleRegulFormOpen(false);
-        } catch (err) {
-            // Handle errors that happen outside the action (e.g., network failures)
-            setIsSaleRegulFormOpen(false);
-            console.error(err);
-        }
+        // try {
+        //         await dispatch(updateInvoice({ id : content.id, data : invoiceLineData}));
+        //         setIsSaleRegulFormOpen(false);
+        // } catch (err) {
+        //     // Handle errors that happen outside the action (e.g., network failures)
+        //     setIsSaleRegulFormOpen(false);
+        //     console.error(err);
+        // }
 
 
     };
 
-    const onSubmitDelete =  async () => {
+    const onSubmitDelete =  async ( id:string ) => {
          
         try {
-            await dispatch(deleteMovement(content.id));
+            await dispatch(deleteInvoice(id));
             setIsSaleRegulFormOpen(false);
         } catch (err) {
             // Handle errors that happen outside the action (e.g., network failures)
@@ -89,7 +90,7 @@ export default function SaleRegulForm({content, setIsSaleRegulFormOpen}:ArticleF
             <div className="fixed z-40 left-0 top-0  w-full h-screen bg-[#00000040]" onClick={()=> setIsSaleRegulFormOpen(false)}>
             </div>
 
-            <div className=" fixed z-50 top-[15%] left-[35%] mx-5 "  >
+            <div className=" fixed z-50 top-[15%] left-[26%] mx-5 "  >
                 <form onSubmit={handleSubmit(onSubmit)}>
 
                         <div className=" w-[150%]   bg-white p-10  rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
@@ -115,24 +116,28 @@ export default function SaleRegulForm({content, setIsSaleRegulFormOpen}:ArticleF
 
                             <div className=" flex justify-between gap-4 pt-4 " >
                                 <div className=" w-full " >
-                                    <button className=" w-full  border-[1px] hover:bg-[#FE6212] hover:text-white border-[#FE6212] text-center  text-[14px] p-2 transition duration-300 text-[#FE6212] rounded-lg " 
+                                    {/* <button className=" w-full  border-[1px] hover:bg-[#FE6212] hover:text-white border-[#FE6212] text-center  text-[14px] p-2 transition duration-300 text-[#FE6212] rounded-lg " 
                                     // onClick={()=> setActivationFormOpen(false)}
                                     // onClick={handleSubmit(onSubmitDelete)}
-                                    >Annuler</button>
+                                    >Annulerr</button> */}
+                                    <button className=" w-full  border-[1px] hover:bg-[#D32F2F] hover:text-white border-[#FE6212] text-center  text-[14px] p-2 transition duration-300 text-[#D32F2F] rounded-lg " 
+                                    // onClick={()=> setActivationFormOpen(false)}
+                                    onClick={handleSubmit(() => onSubmitDelete(content.id))}
+                                    >Supprimer seulement cet article</button>
                                 </div>
                                 <div className="w-full" >
-                                    <button type="submit" className=" w-full text-center p-2 bg-[#4594ff]  text-white transition duration-300 hover:bg-[#3386e0]  rounded-lg  text-[14px]" >Modifier</button>
+                                    <button type="submit" className=" w-full text-center p-2 bg-[#4594ff]  text-white transition duration-300 hover:bg-[#3386e0]  rounded-lg  text-[14px]" >Modifier cet article</button>
                                 </div>
                             </div>
 
-                            <div className=" flex justify-between gap-4 pt-4 " >
+                            {/* <div className=" flex justify-between gap-4 pt-4 " >
                                 <div className=" w-full " >
                                     <button className=" w-full  border-[1px] hover:bg-[#D32F2F] hover:text-white border-[#FE6212] text-center  text-[14px] p-2 transition duration-300 text-[#D32F2F] rounded-lg " 
                                     // onClick={()=> setActivationFormOpen(false)}
-                                    // onClick={handleSubmit(onSubmitDelete)}
+                                    onClick={handleSubmit(() => onSubmitDelete(content.invoice_id))}
                                     >Supprimer toute la facture</button>
                                 </div>
-                            </div>
+                            </div> */}
 
                         </div>
 

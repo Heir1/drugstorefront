@@ -168,11 +168,11 @@ export function DataTable<TData, TValue>({
                         table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
-                                    className=" hover:cursor-pointer text-xs  border-b-[1px] border-black text-black "
-                                    key={row.id}
-                                    data-state={row.getIsSelected() && "selected"}
-                                    // onClick={() => redirectionPage(row.original)}
-                                    onClick={() => getArticleInfo(row.original)}
+                                  className=" hover:cursor-pointer text-xs  border-b-[1px] border-black text-black "
+                                  key={row.id}
+                                  data-state={row.getIsSelected() && "selected"}
+                                  // onClick={() => redirectionPage(row.original)}
+                                  onClick={() => getArticleInfo(row.original)}
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell className="px-10"  key={cell.id}>

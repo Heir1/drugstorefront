@@ -23,6 +23,45 @@ export const fetchArticles = createAsyncThunk<IArticle[]>(
     }
 );
 
+// Action pour récupérer tous les lowstockarticles
+export const fetchLowStockArticles = createAsyncThunk<IArticle[]>(
+  'articles/fetchLowStockArticles',
+  async (_, { rejectWithValue }) => {
+
+    try {
+      const response = await getRequest<IArticle[]>('lowstockarticles'); // Remplacez avec votre endpoint
+      if (response.error) {
+        return rejectWithValue(response.error);
+      }
+      console.log(response.data);
+      return response.data as IArticle[] ;
+      
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+
+// Action pour récupérer tous les expirederticles
+export const fetchExpirederticles = createAsyncThunk<IArticle[]>(
+  'articles/fetchExpirederticles',
+  async (_, { rejectWithValue }) => {
+
+    try {
+      const response = await getRequest<IArticle[]>('expirederticles'); // Remplacez avec votre endpoint
+      if (response.error) {
+        return rejectWithValue(response.error);
+      }
+      console.log(response.data);
+      return response.data as IArticle[] ;
+      
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 
 // Action pour récupérer un article par ID
 export const getArticleById = createAsyncThunk<IArticle, string, { rejectValue: string }>(
