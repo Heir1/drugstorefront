@@ -373,30 +373,30 @@ export default function FormArticleSale() {
                     <form onSubmit={handleSubmit(onSubmit1)}>
 
                         <div className="flex justify-start bg-gray-50 rounded-xl shadow-lg p-5 mx-5 gap-8 items-center">
-                        {/* Label Section */}
-                        <div className="w-1/3 flex flex-col items-start pl-10">
-                            <label className="font-semibold text-sm text-gray-700">
-                            Recherche d'article
-                            </label>
-                        </div>
+                            {/* Label Section */}
+                            <div className="w-1/3 flex flex-col items-start pl-10">
+                                <label className="font-semibold text-sm text-gray-700">
+                                    Recherche d'article
+                                </label>
+                            </div>
 
-                        {/* Input Section */}
-                        <div className="w-2/3">
-                            <Controller
-                                name="description1"
-                                control={control}
-                                render={({ field }) => (
-                                    <Select
-                                    {...field}
-                                    value={article}
-                                    options={articlesFormated}
-                                    onChange={handleChange}
-                                    placeholder="Sélectionnez un article"
-                                    className="text-sm rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    />
-                                )}
-                            />
-                        </div>
+                            {/* Input Section */}
+                            <div className="w-2/3">
+                                <Controller
+                                    name="description1"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Select
+                                        {...field}
+                                        value={article}
+                                        options={articlesFormated}
+                                        onChange={handleChange}
+                                        placeholder="Sélectionnez un article"
+                                        className="text-sm rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        />
+                                    )}
+                                />
+                            </div>
                         </div>
 
 

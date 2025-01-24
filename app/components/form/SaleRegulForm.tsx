@@ -36,24 +36,24 @@ export default function SaleRegulForm({content, setIsSaleRegulFormOpen}:ArticleF
         console.log('Article id ',content.id);
         console.log('Invoice id ',content.invoice_id);
 
-        // const { quantity } = data;
+        const { quantity } = data;
 
-        // const invoiceLineData : Iinvoice = {
-        //     id : content.id, 
-        //     quantity,
-        //     article_id : content.article_id
-        // }
+        const invoiceLineData : Iinvoice = {
+            id : content.id, 
+            quantity,
+            article_id : content.article_id
+        }
 
-        // console.log( "INVOICELINE" , invoiceLineData );
+        console.log( "INVOICELINE" , invoiceLineData );
         
-        // try {
-        //         await dispatch(updateInvoice({ id : content.id, data : invoiceLineData}));
-        //         setIsSaleRegulFormOpen(false);
-        // } catch (err) {
-        //     // Handle errors that happen outside the action (e.g., network failures)
-        //     setIsSaleRegulFormOpen(false);
-        //     console.error(err);
-        // }
+        try {
+                await dispatch(updateInvoice({ id : content.id, data : invoiceLineData}));
+                setIsSaleRegulFormOpen(false);
+        } catch (err) {
+            // Handle errors that happen outside the action (e.g., network failures)
+            setIsSaleRegulFormOpen(false);
+            console.error(err);
+        }
 
 
     };

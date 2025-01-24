@@ -5,10 +5,15 @@ import { DataTable } from "@/components/ui/DataTable/DataTable";
 import Loading from '@/app/components/loading';
 import { DataTableStock } from "@/components/ui/DataTable/DataTableStock";
 import { LowStockColumns } from "@/components/ui/DataTable/articles/LowStockColumns";
+import { useRateService } from "@/app/redux/slices/rates/useRateService";
 
 export default function Article() {
 
     const { articles, articleStatus, error } = useArticleService();
+
+    const { rates } = useRateService()
+
+    const rate = rates[0]?.value
 
     const totalPrices = articles.reduce(
         (totals, article) => {
@@ -38,9 +43,7 @@ export default function Article() {
                 </div>
             </div>
 
-
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-2 ">
-
                 <div className="col-start-2 border-2 border-[#007A3D] rounded-lg shadow-md">
                     <div className="text-center font-bold text-sm text-white bg-[#007A3D] py-2 rounded-t-lg">
                         <h1>RAPPORT DE STOCK ACTUEL EN USD</h1>
@@ -58,11 +61,11 @@ export default function Article() {
             </div>
 
             <div>
-                <h1> {totalPrices.totalPurchasePrice} </h1>
+                <h1> {(totalPrices.totalPurchasePrice/rate).toFixed(2)} </h1>
             </div>
 
             <div>
-                <h1> {totalPrices.totalSellingPrice} </h1>
+                <h1> {(totalPrices.totalSellingPrice/rate).toFixed(2)} </h1>
             </div>
 
         </div>
