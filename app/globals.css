@@ -19,6 +19,33 @@ body {
   display: none; /* This will hide the dropdown arrow */
 }
 
+@media print {
+  /* Définir la taille de la page en format 58mm x auto */
+  @page {
+    size: 80mm auto; /* Largeur fixe de 58mm, longueur flexible */
+    margin: 0; /* Retirer les marges par défaut */
+  }
+
+  /* Réinitialisation des marges et tailles pour l'impression */
+  body {
+    margin: 0;
+    padding: 0;
+    font-size: 12px; /* Taille de police réduite pour l'impression */
+  }
+
+  .print-container {
+    width: 58mm; /* Fixer la largeur à 58mm */
+    overflow: hidden;
+    padding: 5mm; /* Ajout d'un peu de marge intérieure */
+  }
+
+  /* Cacher les éléments non nécessaires pour l'impression */
+  .no-print {
+    display: none;
+  }
+}
+
+
 @layer base {
   :root {
     --background: 0 0% 100%;

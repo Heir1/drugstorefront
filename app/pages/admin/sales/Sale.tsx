@@ -150,7 +150,7 @@ export default function Sale() {
                 (articleStatus == "loading" ||  packagingStatus == "loading" || categoryStatus == "loading" || supplierStatus == "loading" || moleculeStatus == "loading" || indicationStatus == "loading" || placementStatus == "loading" || currencyStatus == "loading" || movementStatus == "loading" || invoiceStatus == "loading" ) && <Loading/>
             }
 
-            <div className="mx-2 p-5 " >
+            <div className=" block print:hidden mx-2 p-5 " >
                 <div className="grid grid-cols-11">
                     <div className="col-start-4 col-span-5 shadow-[0px_4px_8px_0px_#00000026] bg-[#F6F7F9] rounded-xl py-1 px-2  ">
                         <div className="grid grid-cols-5 place-content-center">

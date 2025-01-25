@@ -16,7 +16,7 @@ export default function Header() {
                     </div>
             }
             
-            <div className=" grid grid-cols-12  mt-8 mx-2 h-20 my-2 gap-5 px-5 " >
+            <div className="print:hidden grid grid-cols-12  mt-8 mx-2 h-20 my-2 gap-5 px-5 " >
                 <div className=" col-span-2 flex justify-center h-16  items-center shadow-[0px_4px_8px_0px_#00000026] bg-[#F6F7F9]  rounded-xl py-2  hover:cursor-pointer">
                     <Link href={`/pages/admin/dashboard`} >
                         <h1 className=" leading-[36px]  font-[700]  text-[18px] text-[#262B62]   " >Arsue Pharma </h1>
