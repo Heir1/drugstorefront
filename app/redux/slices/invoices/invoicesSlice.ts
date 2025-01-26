@@ -3,11 +3,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import IArticle from '@/app/interfaces/article';
 import { RootState } from '../../store/store'; // Importez le type RootState
 import Iinvoice from '@/app/interfaces/invoice';
-import { deleteInvoice, fetchInvoices, updateInvoice } from './actions';
+import { deleteInvoice, fetchInvoiceNumber, fetchInvoices, updateInvoice } from './actions';
+import IInvoiceResponse from '@/app/interfaces/invoicenumber';
 
 
 interface InvoicesState {
     invoices: Iinvoice[];
+    invoiceNumber: IInvoiceResponse;
     currentInvoice: Iinvoice | null;
     invoiceStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
     invoiceError: string | null;
@@ -15,6 +17,7 @@ interface InvoicesState {
   
 const initialState: InvoicesState = {
     invoices: [],
+    invoiceNumber: {success : false, message: "", data:"" },
     currentInvoice: null,
     invoiceStatus: 'idle',
     invoiceError: null,
@@ -38,7 +41,20 @@ const invoicesSlice = createSlice({
           state.invoiceStatus = 'failed';
           state.invoiceError = action.error.message || 'Erreur inconnue';
         })
-  
+        
+        // Récupérer tous le invoice number
+        .addCase(fetchInvoiceNumber.pending, (state) => {
+          state.invoiceStatus = 'loading';
+        })
+        .addCase(fetchInvoiceNumber.fulfilled, (state, action: PayloadAction<IInvoiceResponse>) => {
+          state.invoiceStatus = 'succeeded';
+          state.invoiceNumber = action.payload;
+        })
+        .addCase(fetchInvoiceNumber.rejected, (state, action) => {
+          state.invoiceStatus = 'failed';
+          state.invoiceError = action.error.message || 'Erreur inconnue';
+        })
+
         // Récupérer un article par ID
         // .addCase(getArticleById.pending, (state) => {
         //   state.articleStatus = 'loading';

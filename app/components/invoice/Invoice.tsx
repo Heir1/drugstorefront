@@ -12,9 +12,14 @@ interface Product {
 interface ProFormaProps {
     client: string;
     products: Product[];
+    invoicenumber: string;
+    isInvoice: boolean;
 }
 
-const Invoice: React.FC<ProFormaProps> = ({ products, client }) => {
+
+
+
+const Invoice: React.FC<ProFormaProps> = ({ products, client, invoicenumber,  isInvoice}) => {
 
     // Calcul du total général
     const grandTotal = products.reduce((total, product) => total + product.prix_total, 0);
@@ -39,7 +44,11 @@ const Invoice: React.FC<ProFormaProps> = ({ products, client }) => {
                     <h1 className=" text-center ">+243 997 845 319</h1>
                 </div>
                 <div className=" border-b-2 border-black mb-1 " >
-                    <h2 className="title">Pro Forma</h2>
+                    <h2 className="title">
+                        {
+                            isInvoice ? `FACTURE : ${invoicenumber}` : 'Pro Forma'
+                        } 
+                    </h2>
                     <h2 className="title">CLIENT : {client} </h2>
                 </div>
                 <table className="table w-full">

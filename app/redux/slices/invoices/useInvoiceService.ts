@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../store/store"
 import { useEffect } from "react";
-import { fetchInvoices } from "./actions";
+import { fetchInvoiceNumber, fetchInvoices } from "./actions";
 
 
 export const useInvoiceService = (selectedFirstrange:string, selectedSecondrange:string) => {
@@ -31,5 +31,19 @@ export const useInvoiceService = (selectedFirstrange:string, selectedSecondrange
     }, [dispatch])
 
     return { invoices, invoiceStatus , invoiceError }
+
+}
+
+export const useInvoiceNumberService = () => {
+
+    const dispatch = useDispatch<AppDispatch>();
+
+    const { invoiceNumber , invoiceStatus , invoiceError } = useSelector((state: RootState) => state.invoices )
+
+    useEffect(() => {
+        dispatch(fetchInvoiceNumber())
+    }, [dispatch])
+
+    return { invoiceNumber, invoiceStatus , invoiceError }
 
 }

@@ -18,7 +18,7 @@ import FormArticleAppro from '@/app/components/form/FormArticleAppro';
 import { ArticleApproColumns } from '@/components/ui/DataTable/articles/ArticleApproColumns';
 import { useMovementService } from '@/app/redux/slices/movements/useMovementService';
 import FormArticleSale from '@/app/components/form/FormArticleSale';
-import { useInvoiceService } from '@/app/redux/slices/invoices/useInvoiceService';
+import { useInvoiceNumberService, useInvoiceService } from '@/app/redux/slices/invoices/useInvoiceService';
 import { InvoiceColumns } from '@/components/ui/DataTable/invoices/InvoiceColumns';
 import { useRateService } from '@/app/redux/slices/rates/useRateService';
 

@@ -2,6 +2,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ApiErrorResponse, deleteRequest, getRequest, postRequest, putRequest } from '@/app/helpers/api/verbes';
 import Iinvoice from '@/app/interfaces/invoice';
+import IInvoiceResponse from '@/app/interfaces/invoicenumber';
 
 interface FetchInvoicesParams {
   paymentModeId: string;
@@ -27,6 +28,26 @@ export const fetchInvoices = createAsyncThunk<Iinvoice[], FetchInvoicesParams, {
         return rejectWithValue(error.message || 'An unknown error occurred');
       }
     }
+);
+
+
+// Action pour récupérer tous le invoice number
+  export const fetchInvoiceNumber = createAsyncThunk<IInvoiceResponse>(
+  'invoices/fetchInvoiceNumber',
+  async (_, { rejectWithValue }) => {
+
+    try {
+      const response = await getRequest<IInvoiceResponse>("invoicenumber"); // Remplacez avec votre endpoint
+      if (response.error) {
+        return rejectWithValue(response.error.message || 'An unknown error occurred');
+      }
+      console.log(response.data);
+      return response.data as IInvoiceResponse ;
+      
+    } catch (error: any) {
+      return rejectWithValue(error.message || 'An unknown error occurred');
+    }
+  }
 );
 
 // export const fetchMovements = createAsyncThunk<IMovement[], FetchMovementsParams, { rejectValue: string }>(

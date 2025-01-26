@@ -34,6 +34,7 @@ import Iinvoice from '@/app/interfaces/invoice';
 import { createInvoice } from '@/app/redux/slices/invoices/actions';
 import { usePaymentModeService } from '@/app/redux/slices/paymentmodes/usePaymentModeService';
 import Invoice from '../invoice/Invoice';
+import { useInvoiceNumberService } from '@/app/redux/slices/invoices/useInvoiceService';
 // Dynamically import React Select without SSR
 const Select = dynamic(() => import('react-select'), { ssr: false });
 
@@ -89,6 +90,9 @@ export default function FormArticleSale() {
     const { placements, placementStatus, placementError } = usePlacementService();
     const { currencies, currencyStatus, currencyError } = useCurrencyService();
     const {paymentModes, paymentModeStatus, paymentModeError} = usePaymentModeService();
+    const [submittedData, setSubmittedData] = useState<any>(null);
+    const { invoiceNumber } = useInvoiceNumberService();
+    
 
     
     const [isNewArticle, setIsNewArticle] = useState(true);
@@ -96,7 +100,8 @@ export default function FormArticleSale() {
     const [isStateArticle, setIsStateArticle] = useState(false);
     const [isExportArticle, setIsExportArticle] = useState(false);
     const [isReportArticle, setIsReportArticle] = useState(false);
-    const [ clientName, setClientName ] = useState("");
+    const [ isInvoice, setIsInvoice ] = useState(false);
+    const [ clientName, setClientName ] = useState("NOT SET");
 
     const [ cdfPaidAmount, setCdfPaidAmount ] = useState(0)
     const [ usdPaidAmount, setUsdPaidAmount ] = useState(0)
@@ -202,28 +207,44 @@ export default function FormArticleSale() {
         const dispatch = useDispatch<AppDispatch>();
 
         // const onSubmit = async ( data: IFormInputs) => {
+        
         const onSubmit = async(data: any) => {
 
-            const { paymentmode } = data;
-
-            // console.log("PAYMENT MODE ",paymentmode);
-
-
-            const cartDate:any = {
-                "paymentmode" : paymentmode.value,
-                "articles" : cart1 
-            }
-
-            await dispatch(createInvoice(cartDate))
-            
-
+            setIsInvoice(true);
+            setSubmittedData(data)
         }
+
+        useEffect(() => {
+            const handleCreateInvoice = async () => {
+              if (isInvoice) {
+                const { paymentmode } = submittedData;
+          
+                const cartDate: any = {
+                  paymentmode: paymentmode.value,
+                  articles: cart1,
+                };
+          
+                try {
+                  // Attendre la fin de la création de la facture
+                  const result = await dispatch(createInvoice(cartDate));
+          
+                  // Si la création de la facture a réussi, exécutez onSubmitProf()
+                  if (result.meta.requestStatus === 'fulfilled') {
+                    onSubmitProf();
+                  } else {
+                    console.error('Erreur lors de la création de la facture');
+                  }
+                } catch (error) {
+                  console.error('Erreur dans la création de la facture', error);
+                }
+              }
+            };
+          
+            handleCreateInvoice();
+          }, [isInvoice, submittedData, dispatch, cart1]);
 
       
         const onSubmit1: SubmitHandler<IFormInputs> = (data) => {
-
-            console.log("ARTICLE ",article.value.id);
-            
 
             const id = article.value.id;
 
@@ -377,14 +398,12 @@ export default function FormArticleSale() {
 
         const onSubmitProf = () => {
 
-            console.log(cart);
+            setIsInvoice(false)
             
-
             const products = formatProducts(cart);
 
             window.print();
-            
-            console.log("Produits ",products);
+
 
         }
 
@@ -393,7 +412,7 @@ export default function FormArticleSale() {
             <>
 
                 <div className="hidden print:block" >
-                    <Invoice products={formatProducts(cart)} client={clientName} />
+                    <Invoice products={formatProducts(cart)} client={clientName} invoicenumber={invoiceNumber.data} isInvoice={isInvoice}  />
                 </div>
 
                 <div className="block print:hidden" >
@@ -595,11 +614,15 @@ export default function FormArticleSale() {
 
                                 <div className=" col-span-3 space-y-4 " >
                                     
-                                    <div className=" w-full  pl-[58px] " >
+                                    <div className=" w-full  flex " >
                                         <div className=" w-1/2 flex items-center gap-2 " >
                                             <label htmlFor="" className=" font-bold " >Client</label>
                                             <input className=" rounded-sm border-[1px] border-gray-700 py-[2px] px-[2px] text-sm "  type="text" onChange={ (e) => setClientName(e.target.value) } />
                                         </div>
+                                        <div className=" w-1/2 flex items-center gap-2 " >
+                                            <label htmlFor="" className=" font-bold " >Num : {invoiceNumber.data} </label>
+                                        </div>
+                                        {/* invoiceNumber */}
                                     </div>
 
                                     {/* <div className=" w-full flex" >
@@ -655,7 +678,7 @@ export default function FormArticleSale() {
 
                                     <div className=" w-full  pl-[58px] " >
                                         <div className=" w-1/2 flex items-center gap-2 " >
-                                            <button onClick={onSubmitProf} className="col-span-1 h-8 bg-blue-600 text-white rounded text-sm transition hover:bg-blue-500 px-4 " >
+                                            <button type="button" onClick={onSubmitProf} className="col-span-1 h-8 bg-blue-600 text-white rounded text-sm transition hover:bg-blue-500 px-4 " >
                                                 Imprimer proforma
                                             </button>
                                         </div>
@@ -872,7 +895,7 @@ export default function FormArticleSale() {
                                         // value={paymentMode}
                                         options={paymentModeFormated}
                                         // onChange={handleChangePaymentMode}
-                                        placeholder="Sélectionnez le mode de paiement"
+                                        // placeholder="Sélectionnez le mode de paiement"
                                         className="text-sm rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         />
                                     )}
@@ -886,7 +909,7 @@ export default function FormArticleSale() {
 
                             <div className="col-start-6 col-span-4 bg-white p-2 rounded border border-gray-200">
                             <div className="grid grid-cols-5 gap-2">
-                                <button onClick={handleSubmit(onSubmit)}  className="col-span-1 h-8 bg-blue-600 text-white rounded text-sm transition hover:bg-blue-500">
+                                <button type="button" onClick={handleSubmit(onSubmit)}  className="col-span-1 h-8 bg-blue-600 text-white rounded text-sm transition hover:bg-blue-500">
                                 Enregistrer
                                 </button>
                                 <button className="col-span-1 h-8 bg-red-600 text-white rounded text-sm transition hover:bg-red-500">
