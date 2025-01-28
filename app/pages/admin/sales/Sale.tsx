@@ -132,7 +132,7 @@ export default function Sale() {
                 setIsUpdateArticle(true)
                 setIsExportArticle(false)
                 setIsReportArticle(false)
-                setIsStateArticle(false) 
+                setIsStateArticle(false)  
             }
             else if(tab == "state"){
                 setIsNewArticle(false) 
@@ -182,7 +182,7 @@ export default function Sale() {
             {
                 isNewArticle ? (
                     <div>
-                         <FormArticleSale/>
+                        <FormArticleSale/>
                     </div>
                 )
                 :

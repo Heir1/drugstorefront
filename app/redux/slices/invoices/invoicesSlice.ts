@@ -24,9 +24,11 @@ const initialState: InvoicesState = {
 };
 
 const invoicesSlice = createSlice({
+
     name: 'invoices',
     initialState,
     reducers: {},
+
     extraReducers: (builder) => {
       builder
         // Récupérer tous les invoices
@@ -36,6 +38,8 @@ const invoicesSlice = createSlice({
         .addCase(fetchInvoices.fulfilled, (state, action: PayloadAction<Iinvoice[]>) => {
           state.invoiceStatus = 'succeeded';
           state.invoices = action.payload;
+          console.log("INVOICESSS ", action.payload);
+          
         })
         .addCase(fetchInvoices.rejected, (state, action) => {
           state.invoiceStatus = 'failed';
@@ -89,27 +93,37 @@ const invoicesSlice = createSlice({
         })
         .addCase(updateInvoice.fulfilled, (state, action: PayloadAction<Iinvoice>) => {
           state.invoiceStatus = 'succeeded';
+
           const updatedInvoice = action.payload;
+          
           const index = state.invoices.findIndex((invoice) => invoice.id === updatedInvoice.id);
+          
           if (index !== -1) {
             state.invoices[index] = updatedInvoice;
           }
+
         })
         .addCase(updateInvoice.rejected, (state, action) => {
           state.invoiceStatus = 'failed';
           state.invoiceError = action.payload || 'Erreur de mise à jour';
         })
+
   
         // Supprimer un article
         .addCase(deleteInvoice.pending, (state) => {
           state.invoiceStatus = 'loading';
         })
         .addCase(deleteInvoice.fulfilled, (state, action: PayloadAction<string>) => {
+          
           state.invoiceStatus = 'succeeded';
+          console.log("DELETION ", state.invoices);
           state.invoices = state.invoices.filter((invoice) => {
             const invoiceId = invoice.id ?? invoice.invoice_id; // Check for `id` or fallback to `invoice_id`
             return invoiceId !== Number(action.payload); // Compare against the payload
           });
+          
+          console.log("DELETION 1 ", state.invoices);
+
         })
         .addCase(deleteInvoice.rejected, (state, action) => {
           state.invoiceStatus = 'failed';

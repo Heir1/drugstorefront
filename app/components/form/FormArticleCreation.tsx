@@ -106,11 +106,16 @@ export default function FormArticleCreation() {
     });
 
  
-    const articlesFormated = useMemo(() => 
-        articles.map((article) => ({ 
-            value: article.id , // Convertir id en string
-            label: article.description ,
-        })), 
+    const articlesFormated = useMemo(() => {
+        if(articles.length){
+            return(
+                articles.map((article) => ({ 
+                    value: article.id , // Convertir id en string
+                    label: article.description ,
+                }))
+            )
+        }
+    }, 
         [articles]
     );
 

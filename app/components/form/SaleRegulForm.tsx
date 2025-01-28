@@ -22,7 +22,8 @@ interface ArticleFormActivationprops {
 }
 
 export default function SaleRegulForm({content, setIsSaleRegulFormOpen}:ArticleFormActivationprops) {
-    const { control,setValue, register, handleSubmit, formState: { errors } } = useForm<IFormInputs>({
+
+    const { control, setValue, register, handleSubmit, formState: { errors } } = useForm<IFormInputs>({
         defaultValues: {
             description : "",
             quantity : 0,

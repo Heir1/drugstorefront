@@ -122,6 +122,9 @@ export function DataTableStock<TData, TValue>({
   const numberOfPage = table.getPageCount().toLocaleString();
   const numberOfPageTable = Array.from({ length: Number(numberOfPage) }, (_, index) => index + 1);
   
+  const onPrint = () => {
+    window.print();
+  }
 
   return (
     <>
@@ -129,10 +132,14 @@ export function DataTableStock<TData, TValue>({
         isUpdateFormOpen &&  <FormArticleUpdate content={article} setIsUpdateFormOpen={setIsUpdateFormOpen}  />
       }
       <div className="bg-transparent   rounded-2xl">
-        <div className="flex items-center justify-between  " >
+        <div className="flex items-center justify-between" >
 
           <div className="flex justify-end">
             <input className=' w-[700px] px-6 py-2 my-3 border-[1px] border-black text-black rounded-3xl text-[14px] uppercase ' placeholder='Rechercher le produit pharmaceutique par sa description' type="text"value={(table.getColumn("description")?.getFilterValue() as string) ?? "" } onChange={(event) => table.getColumn("description")?.setFilterValue(event.target.value)} />
+          </div>
+
+          <div>
+            <button onClick={onPrint}  className=" px-6 py-2 text-sm rounded-lg text-white bg-slate-400 " >Voir </button>
           </div>
 
         </div>

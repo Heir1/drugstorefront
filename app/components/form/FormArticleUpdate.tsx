@@ -47,10 +47,10 @@ interface IFormInputs {
     selling_price: number;
   }
 
-  interface ArticleFormUpdateprops {
-    content: any;
-    setIsUpdateFormOpen: (value: boolean) => void; // Type for the function prop
-}
+    interface ArticleFormUpdateprops {
+        content: any;
+        setIsUpdateFormOpen: (value: boolean) => void; // Type for the function prop
+    }
 
 
 export default function FormArticleUpdate({content, setIsUpdateFormOpen}:ArticleFormUpdateprops) {

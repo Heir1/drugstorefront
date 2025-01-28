@@ -85,39 +85,6 @@ export default function Article() {
         }
     });
 
-    const placementsFormated = placements.map((location) => ({
-        value: location.id.toString(), // Convertir id en string
-        label: location.name,
-    }));
-
-
-    const packagingsFormated = packagings.map((packaging) => ({
-        value: packaging.id.toString(), // Convertir id en string
-        label: packaging.name,
-    }));
-
-
-    const categoriesFormated = categories.map((category) => ({
-        value: category.id.toString(), // Convertir id en string
-        label: category.name,
-    }));
-
-    
-    const suppliersFormated = suppliers.map((supplier) => ({
-        value: supplier.id.toString(), // Convertir id en string
-        label: supplier.name,
-    }));
-
-    const indicationsFormated = indications.map((indication) => ({
-        value: indication.id.toString(), // Convertir id en string
-        label: indication.name,
-    }));
-
-    const moleculeFormated = molecules.map((molecule) => ({
-        value: molecule.id.toString(), // Convertir id en string
-        label: molecule.name,
-    }));
-
 
     const setActivation = (tab:string) => {
         if(tab == "new"){

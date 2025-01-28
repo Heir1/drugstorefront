@@ -15,6 +15,8 @@ body {
   
 }
 
+pro-forma print-container
+
 .navbar .dropdown-toggle::after {
   display: none; /* This will hide the dropdown arrow */
 }
@@ -22,9 +24,8 @@ body {
 @media print {
   /* Définir la taille de la page en format 58mm x auto */
   @page {
-    size: 80mm auto; /* Largeur fixe de 58mm, longueur flexible */
-    margin: 0; /* Retirer les marges par défaut */
-  }
+    size: landscape;
+}
 
   /* Réinitialisation des marges et tailles pour l'impression */
   body {

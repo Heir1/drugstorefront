@@ -21,7 +21,7 @@ export const fetchInvoices = createAsyncThunk<Iinvoice[], FetchInvoicesParams, {
         if (response.error) {
           return rejectWithValue(response.error.message || 'An unknown error occurred');
         }
-        console.log(response.data);
+        console.log("INVOICE LINEE",response.data);
         return response.data as Iinvoice[] ;
         
       } catch (error: any) {
@@ -124,7 +124,7 @@ export const updateInvoice = createAsyncThunk<Iinvoice, { id: string; data: Iinv
           // return rejectWithValue(response.error);
       }
       alert("Modification avec succès")
-      console.log(response.data);
+      console.log("SINGLE LINE",response.data);
       return response.data as Iinvoice;
     } catch (error: any) {
       return rejectWithValue(error.message);
