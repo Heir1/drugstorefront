@@ -12,6 +12,7 @@ import movementsReducer from '../slices/movements/movementsSlice'
 import invoicesReducer from '../slices/invoices/invoicesSlice'
 import rateReducer from '../slices/rates/ratesSlice'
 import paymentModeReducer from '../slices/paymentmodes/paymentmodesSlice'
+import loginReducer from '../slices/login/loginSlice'
 
 const store = configureStore({
   reducer: {
@@ -26,7 +27,8 @@ const store = configureStore({
     movements: movementsReducer,
     invoices: invoicesReducer,
     rates: rateReducer,
-    paymentmodes: paymentModeReducer
+    paymentmodes: paymentModeReducer,
+    login: loginReducer
   },
 });
 

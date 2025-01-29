@@ -26,7 +26,7 @@ export default function PrintFile({articles}:Articleprops) {
                 <h1>ARSUE PHARMA</h1>
             </div>
             <div className=" w-full px-4 " >
-                <div className="text-center text-[12px] text-gray-700 font-semibold bg-white w-full border-b-2 border-gray-700 pb-4 ">
+                <div className="text-center text-[12px] text-gray-700 font-semibold bg-white w-full border-b-[1px] border-gray-700 pb-4 ">
                     <h1>RCCM 17-A-00178/ IDN : 01-93-N17135U/ IMPORT: A1703348J</h1>
                     <h1>+243 997 845 319</h1>
                     <h1>suzanoah@yahoo.fr</h1>
@@ -35,7 +35,7 @@ export default function PrintFile({articles}:Articleprops) {
                 </div>
             </div>
             <div className="w-full px-4" >
-                <div className="grid grid-cols-5 border-b-2 border-gray-700 pb-2" >
+                <div className="grid grid-cols-5 border-b-[1px] border-gray-700 pb-2" >
                     <div className="w-full flex flex-col justify-center items-center" >
                         <h1>CATEGORIE PRODUIT</h1>
                         <h1>TOUS</h1>
@@ -62,7 +62,7 @@ export default function PrintFile({articles}:Articleprops) {
                 <div className=" flex justify-center mt-2 " >
                     <h1 className="font-bold">RAPPORT DE REQUISITION</h1>
                 </div>
-                <div className="grid grid-cols-9 border-t-2 border-b-2 border-gray-700" >
+                <div className="grid grid-cols-9 border-t-[1px] border-b-[1px] border-gray-700" >
                     <div className="w-full" >
                         <h1 className="font-bold" >LOC</h1>
                     </div>
