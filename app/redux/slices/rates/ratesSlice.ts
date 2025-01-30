@@ -1,8 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import IMolecule from '@/app/interfaces/molecule';
 import IRate from '@/app/interfaces/rate';
-import { fetchRates } from './actions';
-
+import { fetchRates, createRate, updateRate } from './actions';
 
 interface RatesState {
     rates: IRate[];
@@ -10,7 +8,7 @@ interface RatesState {
     rateStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
     rateError: string | null;
 }
-  
+
 const initialState: RatesState = {
     rates: [],
     currentRate: null,
@@ -23,78 +21,51 @@ const ratesSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: (builder) => {
-      builder
-        // Récupérer tous les molecules
-        .addCase(fetchRates.pending, (state) => {
-          state.rateStatus = 'loading';
-        })
-        .addCase(fetchRates.fulfilled, (state, action: PayloadAction<IRate[]>) => {
-          state.rateStatus = 'succeeded';
-          state.rates = action.payload;
-        })
-        .addCase(fetchRates.rejected, (state, action) => {
-          state.rateStatus = 'failed';
-          state.rateError = action.error.message || 'Erreur inconnue';
-        });
-  
-        // // Récupérer un packaging par ID
-        // .addCase(getArticleById.pending, (state) => {
-        //   state.articleStatus = 'loading';
-        // })
-        // .addCase(getArticleById.fulfilled, (state, action: PayloadAction<IArticle>) => {
-        //   state.articleStatus = 'succeeded';
-        //   state.currentArticle = action.payload;
-        // })
-        // .addCase(getArticleById.rejected, (state, action) => {
-        //   state.articleStatus = 'failed';
-        //   state.error = action.payload || 'Erreur inconnue';
-        // })
-  
-        // // Créer un article
-        // .addCase(createArticle.pending, (state) => {
-        //   state.articleStatus = 'loading';
-        //   state.error = null;
-        // })
-        // .addCase(createArticle.fulfilled, (state, action: PayloadAction<IArticle>) => {
-        //   state.articleStatus = 'succeeded';
-        //   state.articles.push(action.payload);
-        // })
-        // .addCase(createArticle.rejected, (state, action) => {
-        //   state.articleStatus = 'failed';
-        //   state.error = action.error.message || 'Échec de la création';
-        // })
-  
-        // // Mettre à jour un article
-        // .addCase(updateArticle.pending, (state) => {
-        //   state.articleStatus = 'loading';
-        // })
-        // .addCase(updateArticle.fulfilled, (state, action: PayloadAction<IArticle>) => {
-        //   state.articleStatus = 'succeeded';
-        //   const updatedArticle = action.payload;
-        //   const index = state.articles.findIndex((article) => article.id === updatedArticle.id);
-        //   if (index !== -1) {
-        //     state.articles[index] = updatedArticle;
-        //   }
-        // })
-        // .addCase(updateArticle.rejected, (state, action) => {
-        //   state.articleStatus = 'failed';
-        //   state.error = action.payload || 'Erreur de mise à jour';
-        // })
-  
-        // // Supprimer un article
-        // .addCase(deleteArticle.pending, (state) => {
-        //   state.articleStatus = 'loading';
-        // })
-        // .addCase(deleteArticle.fulfilled, (state, action: PayloadAction<string>) => {
-        //   state.articleStatus = 'succeeded';
-        //   state.articles = state.articles.filter((article) => article.id !== action.payload);
-        // })
-        // .addCase(deleteArticle.rejected, (state, action) => {
-        //   state.articleStatus = 'failed';
-        //   state.error = action.payload || 'Erreur de suppression';
-        // });
+        builder
+            // Récupérer tous les rates
+            .addCase(fetchRates.pending, (state) => {
+                state.rateStatus = 'loading';
+            })
+            .addCase(fetchRates.fulfilled, (state, action: PayloadAction<IRate[]>) => {
+                state.rateStatus = 'succeeded';
+                state.rates = action.payload;
+                state.currentRate = action.payload.length > 0 ? action.payload[0] : null;
+            })
+            .addCase(fetchRates.rejected, (state, action) => {
+                state.rateStatus = 'failed';
+                state.rateError = action.error.message || 'Erreur inconnue';
+            })
+
+            // Créer un taux
+            .addCase(createRate.pending, (state) => {
+                state.rateStatus = 'loading';
+            })
+            .addCase(createRate.fulfilled, (state, action: PayloadAction<IRate>) => {
+                state.rateStatus = 'succeeded';
+                state.rates.push(action.payload);
+                state.currentRate = action.payload;
+            })
+            .addCase(createRate.rejected, (state, action) => {
+                state.rateStatus = 'failed';
+                state.rateError = action.payload || 'Erreur lors de la création du taux';
+            })
+
+            // Mettre à jour un taux
+            .addCase(updateRate.pending, (state) => {
+                state.rateStatus = 'loading';
+            })
+            .addCase(updateRate.fulfilled, (state, action: PayloadAction<IRate>) => {
+                state.rateStatus = 'succeeded';
+                state.rates = state.rates.map(rate =>
+                    rate.id === action.payload.id ? action.payload : rate
+                );
+                state.currentRate = action.payload;
+            })
+            .addCase(updateRate.rejected, (state, action) => {
+                state.rateStatus = 'failed';
+                state.rateError = action.payload || 'Erreur lors de la mise à jour du taux';
+            });
     },
-  });
-  
-  export default ratesSlice.reducer;
-  
+});
+
+export default ratesSlice.reducer;

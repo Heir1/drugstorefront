@@ -23,7 +23,8 @@ export default function LowStock() {
             </div>
 
             <div className="block print:hidden">
-                <div className="grid grid-cols-3 md:grid-cols-3 gap-6 mb-2  ">
+
+                {/* <div className="grid grid-cols-3 md:grid-cols-3 gap-6 mb-2  ">
                     <div className=" col-start-2   flex flex-col items-center space-y-2">
                         <div className="text-center font-bold text-xl text-white bg-[#007A3D] py-2 px-4 rounded-lg shadow-lg w-full">
                             <h1>ARSUE PHARMA</h1>
@@ -44,12 +45,11 @@ export default function LowStock() {
                             <h1>TAUX DE CHANGE : {rate}</h1>
                         </div>
                     </div>
-                </div>
+                </div> */}
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-2 ">
-
-                    <div className="col-start-2 border-2 border-[#007A3D] rounded-lg shadow-md">
-                        <div className="text-center font-bold text-sm text-white bg-[#007A3D] py-2 rounded-t-lg">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4 ">
+                    <div className="col-start-2 border-2 rounded-lg shadow-md">
+                        <div className="text-center font-bold text-sm text-gray-700 py-2 rounded-t-lg ">
                             <h1>RAPPORT DE REQUISITION</h1>
                         </div>
                     </div>

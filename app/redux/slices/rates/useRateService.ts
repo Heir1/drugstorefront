@@ -11,7 +11,8 @@ export const useRateService = () => {
     const { rates, rateStatus, rateError } = useSelector((state: RootState) => state.rates )
 
     useEffect(() => {
-        rateStatus !== "succeeded" && dispatch(fetchRates())
+        // rateStatus !== "succeeded" && dispatch(fetchRates())
+        dispatch(fetchRates())
     }, [dispatch])
 
     return { rates , rateStatus, rateError }
