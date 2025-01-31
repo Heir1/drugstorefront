@@ -28,6 +28,8 @@ import dynamic from 'next/dynamic';
 import { SingleValue, ActionMeta } from "react-select";
 import makeAnimated from "react-select/animated";
 import { log } from 'console';
+import { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 // Dynamically import React Select without SSR
 const Select = dynamic(() => import('react-select'), { ssr: false });
 
@@ -233,29 +235,47 @@ export default function FormArticleCreation() {
 
       }
 
-    //   console.log(articleData);
+        //   console.log(articleData);
+
+        const promise = dispatch(createArticle(articleData))
+        .then((response) => {
+          // Si l'API renvoie un message, on l'affiche
+          const message = "Article créé avec succès !";
+          
+          reset();
+          setInputValue("");
+          setSelectedArticle("");
+          setNumber("");
+          setResult("");
     
-  
-        try {
-            await dispatch(createArticle(articleData));
-            reset()
-            setInputValue("")
-            setSelectedArticle("")
-            setNumber('')
-            setResult('')
-        } catch (err) {
-            reset()
-            setInputValue("")
-            setSelectedArticle("")
-            setNumber('')
-            setResult('')
-            // Handle errors that happen outside the action (e.g., network failures)
-            // setOpenForm(false);
-            console.error(err);
-        }
+          return message; // Retourne le message pour toast.promise
+        })
+        .catch((err) => {
+          console.error(err);
+    
+          reset();
+          setInputValue("");
+          setSelectedArticle("");
+          setNumber("");
+          setResult("");
+    
+          // Récupérer le message d'erreur depuis l'API ou mettre un message par défaut
+          const errorMessage = err?.response?.data?.message || "Échec de la création de l'article. Veuillez réessayer.";
+          
+          throw new Error(errorMessage); // Permet à toast.promise d'afficher l'erreur
+        });
+    
+      toast.promise(promise, {
+        loading: "Création en cours...",
+        success: (msg:any) => msg, // Affiche le message de succès de l'API
+        error: (err:any) => err.message, // Affiche le message d'erreur de l'API
+      });
+
   
     };
-    
+
+
+      
   return (
     <>
         <form onSubmit={handleSubmit(onSubmit)}>

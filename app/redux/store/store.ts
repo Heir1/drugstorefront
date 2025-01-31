@@ -13,8 +13,22 @@ import invoicesReducer from '../slices/invoices/invoicesSlice'
 import rateReducer from '../slices/rates/ratesSlice'
 import paymentModeReducer from '../slices/paymentmodes/paymentmodesSlice'
 import loginReducer from '../slices/login/loginSlice'
+import { persistStore, persistReducer } from "redux-persist";
+import storageSession from "redux-persist/lib/storage/session"; // Utilisation de sessionStorage
+
+// Configuration de la persistance avec sessionStorage
+const persistConfig = {
+  key: "auth",
+  // Assurez-vous que `storage` est toujours une valeur valide (par défaut à sessionStorage pour le client)
+  storage: typeof window !== "undefined" ? storageSession : storageSession, // Toujours une valeur valide ici
+  whitelist: ["user"],
+};
+
+// Appliquer redux-persist au slice login
+const persistedLoginReducer = persistReducer(persistConfig, loginReducer);
 
 const store = configureStore({
+
   reducer: {
     articles: articlesReducer, // L'état des articles
     packagings: packagingsReducer,
@@ -28,9 +42,17 @@ const store = configureStore({
     invoices: invoicesReducer,
     rates: rateReducer,
     paymentmodes: paymentModeReducer,
-    login: loginReducer
+    login: persistedLoginReducer
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false, // Désactiver la vérification de série pour redux-persist
+  }),
+
 });
+
+// Permet de déclencher la persistance
+export const persistor = typeof window !== "undefined" ? persistStore(store) : null;
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

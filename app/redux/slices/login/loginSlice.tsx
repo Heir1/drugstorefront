@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';  // Ensure axios is imported
 import { loginUser, logoutUser } from './actions';
 import IUser from '@/app/interfaces/user';
+import storageSession from "redux-persist/lib/storage/session"; // Import pour supprimer les données persistées
 
 // Définir l'interface pour l'utilisateur
 interface User {
@@ -42,6 +42,7 @@ const authSlice = createSlice({
     reducers: {
         logout: (state) => {
             state.user = null;
+            storageSession.removeItem("persist:auth"); // Supprime la session après logout
         },
     },
     extraReducers: (builder) => {
@@ -67,6 +68,7 @@ const authSlice = createSlice({
             .addCase(logoutUser.fulfilled, (state) => {
                 state.loading = false;
                 state.user = null;
+                storageSession.removeItem("persist:auth"); // Supprime aussi lors de logout API
             })
             .addCase(logoutUser.rejected, (state, action) => {
                 state.loading = false;

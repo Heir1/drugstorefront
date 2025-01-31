@@ -93,7 +93,7 @@ export const createArticle = createAsyncThunk<IArticle, IArticle>(
           alert(response.error.message)
           return rejectWithValue(response.error);
         }
-        alert("Insertion avec succès")
+        // alert("Insertion avec succès")
         
         return response.data as IArticle;
       } catch (error: any) {
