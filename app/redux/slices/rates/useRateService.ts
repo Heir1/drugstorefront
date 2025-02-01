@@ -15,6 +15,9 @@ export const useRateService = () => {
         dispatch(fetchRates())
     }, [dispatch])
 
+    console.log("RATES ", rates);
+    
+
     return { rates , rateStatus, rateError }
 
 }

@@ -90,7 +90,6 @@ export const createArticle = createAsyncThunk<IArticle, IArticle>(
         
         if (response.error) {
           console.log(response.error)
-          alert(response.error.message)
           return rejectWithValue(response.error);
         }
         // alert("Insertion avec succès")

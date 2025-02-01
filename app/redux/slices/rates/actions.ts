@@ -13,7 +13,7 @@ export const fetchRates= createAsyncThunk<IRate[]>(
             const response = await getRequest<IRate[]>('rates'); // Remplacez avec votre endpoint
             if (response.error) {
                 return rejectWithValue(response.error);
-            }
+            }            
             return response.data as IRate[];
       } catch (error: any) {
             return rejectWithValue(error.message);

@@ -42,7 +42,7 @@ export default function RateUpdate() {
             <div className="mb-20">
                 <h1 className="text-center font-semibold">Bienvenue</h1>
                 <h1 className="text-center font-bold text-[30px]">Arsue Pharma</h1>
-                <p className="text-center text-[10px]">Remplissez les champs ci-dessous <br /> pour vous connecter</p>
+                <p className="text-center text-[10px]">Prière de mettre à jour le taux</p>
             </div>
             <div className="flex justify-center w-full mb-4">
                 <Controller

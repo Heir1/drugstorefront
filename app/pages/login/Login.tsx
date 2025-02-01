@@ -43,7 +43,7 @@ export default function Login() {
 
       if (loginUser.fulfilled.match(result)) {
 
-        if(formattedDate !==  rates[0].updated_at?.split('T')[0]){
+        if(formattedDate !==  rates[0]?.updated_at?.split('T')[0]){
           setIsRateToUpdate(true)
         }
         else{

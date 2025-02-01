@@ -28,8 +28,7 @@ import dynamic from 'next/dynamic';
 import { SingleValue, ActionMeta } from "react-select";
 import makeAnimated from "react-select/animated";
 import { log } from 'console';
-import { Toaster } from "react-hot-toast";
-import toast from "react-hot-toast";
+import toast, { Toaster } from 'react-hot-toast'
 // Dynamically import React Select without SSR
 const Select = dynamic(() => import('react-select'), { ssr: false });
 
@@ -58,6 +57,8 @@ interface ArticleOption {
 }
 
 const animatedComponents = makeAnimated();
+
+const notify = () => toast('Here is your toast.');
 
 export default function FormArticleCreation() {
 
@@ -208,10 +209,10 @@ export default function FormArticleCreation() {
   
     const onSubmit = async ( data: IFormInputs) => {
   
-      const { barcode, location, description, indication, molecule, packaging, category, supplier,alert, expirationDate, quantity, purchase_price, selling_price , currency  } = data
+        const { barcode, location, description, indication, molecule, packaging, category, supplier,alert, expirationDate, quantity, purchase_price, selling_price , currency  } = data
 
       
-      console.log(selectedArticle.value)
+    //   console.log(selectedArticle.value)
       
   
       const articleData:IArticle = {
@@ -235,41 +236,67 @@ export default function FormArticleCreation() {
 
       }
 
-        //   console.log(articleData);
-
         const promise = dispatch(createArticle(articleData))
-        .then((response) => {
-          // Si l'API renvoie un message, on l'affiche
-          const message = "Article créé avec succès !";
-          
-          reset();
-          setInputValue("");
-          setSelectedArticle("");
-          setNumber("");
-          setResult("");
-    
-          return message; // Retourne le message pour toast.promise
-        })
+        .unwrap()
+        .then(() => ({
+          status: "fulfilled",
+          message: "Article créé avec succès !",
+        }))
         .catch((err) => {
-          console.error(err);
-    
-          reset();
-          setInputValue("");
-          setSelectedArticle("");
-          setNumber("");
-          setResult("");
-    
-          // Récupérer le message d'erreur depuis l'API ou mettre un message par défaut
-          const errorMessage = err?.response?.data?.message || "Échec de la création de l'article. Veuillez réessayer.";
-          
-          throw new Error(errorMessage); // Permet à toast.promise d'afficher l'erreur
+          // Vérifier si err est un objet et récupérer le message
+          const errorMessage =
+            typeof err === "string" ? err : err?.message || "Erreur inconnue";
+      
+          return {
+            status: "rejected",
+            message: errorMessage,
+          };
+        })
+        .then((result) => {
+            
+            // Affichage du toast
+            if (result.status === "fulfilled") {
+                // toast.success("Article crée avec succès");
+                toast.custom((t: any) => (
+                    <div
+                      className={`${
+                        t.visible ? "animate-enter" : "animate-leave"
+                      } flex items-center w-full max-w-xs p-4 text-white bg-green-600 border border-green-900 rounded-lg shadow-lg`}
+                    >
+                      {/* Icône verte avec fond rouge inversé */}
+                      <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">
+                        ✅
+                      </span>
+                      
+                      <div className="flex-1 text-center">
+                        <p className="text-sm">Article crée avec succès</p>
+                      </div>
+                    </div>
+                ));
+
+                reset();
+                setInputValue("");
+                setSelectedArticle("");
+                setNumber("");
+                setResult("");
+
+          } else {
+            // toast.error(result.message);
+            toast.custom((t:any) => (
+                <div
+                  className={`${
+                    t.visible ? "animate-enter" : "animate-leave"
+                  } flex items-center w-full max-w-xs p-4 text-white bg-red-600 border border-red-900 rounded-lg shadow-lg`}
+                >
+                  <span className="mr-2 bg-white rounded-full text-[10px] p-[2px] ">❌</span>
+                  <div className="flex-1 text-center">
+                    {/* <p className="font-bold">Erreur</p> */}
+                    <p className="text-sm">{result.message}</p>
+                  </div>
+                </div>
+            ));
+          }
         });
-    
-      toast.promise(promise, {
-        loading: "Création en cours...",
-        success: (msg:any) => msg, // Affiche le message de succès de l'API
-        error: (err:any) => err.message, // Affiche le message d'erreur de l'API
-      });
 
   
     };
@@ -279,6 +306,7 @@ export default function FormArticleCreation() {
   return (
     <>
         <form onSubmit={handleSubmit(onSubmit)}>
+            <Toaster />
             <div className="grid grid-cols-11 mx-2  gap-x-5 p-5 -mt-5  " >
                 <div className="col-span-6  p-10 bg-white  rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
                     <div className="grid grid-cols-2 gap-5">
