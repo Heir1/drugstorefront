@@ -123,8 +123,6 @@ export const updateInvoice = createAsyncThunk<Iinvoice, { id: string; data: Iinv
 
           // return rejectWithValue(response.error);
       }
-      alert("Modification avec succès")
-      console.log("SINGLE LINE",response.data);
       return response.data as Iinvoice;
     } catch (error: any) {
       return rejectWithValue(error.message);

@@ -26,6 +26,8 @@ import { usePlacementService } from '@/app/redux/slices/placements/usePlacementS
 import Loading from '@/app/components/loading';
 import dynamic from 'next/dynamic';
 import { log } from 'console';
+import toast, { Toaster } from 'react-hot-toast'
+
 // Dynamically import React Select without SSR
 const Select = dynamic(() => import('react-select'), { ssr: false });
 
@@ -238,7 +240,6 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
         const { barcode, location, description, indication, molecule, packaging, category, supplier,alert, expirationDate, quantity, purchase_price, selling_price , currency  } = data
 
         
-    
         const articleData:IArticle = {
             barcode: barcode,
             placements : [Number(location?.value)],
@@ -257,44 +258,99 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
             alert : Number(alert),
             currency_id: Number(currency) 
         }
-    
-        try {
-            await dispatch(updateArticle({ id : content.id, data : articleData}));
-            setIsUpdateFormOpen(false);
-        } catch (err) {
-            // Handle errors that happen outside the action (e.g., network failures)
-            // setOpenForm(false);
-            console.error(err);
-        }
+
+        const updateArticlePromise = dispatch(updateArticle({ id: content.id, data: articleData }))
+        .unwrap().then(() => ({
+            status: "fulfilled",
+            message: "Article mis à jour avec succès !",
+        }))
+        .catch((err) => {
+            // Vérifier si err est un objet et récupérer le message
+            const errorMessage = typeof err === "string" ? err : err?.message || "Erreur inconnue lors de la mise à jour.";
+
+            return {
+                status: "rejected",
+                message: errorMessage,
+            };
+        })
+        .then((result) => {
+
+            if (result.status === "fulfilled") {
+                // Afficher un toast de succès
+                toast.custom((t: any) => (
+                    <div
+                        className={`${t.visible ? "animate-enter" : "animate-leave"
+                    } flex items-center w-full max-w-xs p-4 text-white bg-green-600 border border-green-900 rounded-lg shadow-lg`}
+                    >
+                        {/* Icône verte avec fond blanc */}
+                        <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">
+                            ✅
+                        </span>
+
+                        <div className="flex-1 text-center">
+                            <p className="text-sm">{result.message}</p>
+                        </div>
+                    </div>
+                ),{
+                    duration: 2000,  // Délai de 3 secondes (3000ms)
+                });
+
+                // Temporiser la fermeture du formulaire après l'affichage du toast
+                setTimeout(() => {
+                    setIsUpdateFormOpen(false);
+                }, 2500); // Attendre 2 secondes avant de fermer le formulaire
+
+            } else {
+                // Afficher un toast d'erreur
+                toast.custom((t: any) => (
+                    <div
+                    className={`${
+                        t.visible ? "animate-enter" : "animate-leave"
+                    } flex items-center w-full max-w-xs p-4 text-white bg-red-600 border border-red-900 rounded-lg shadow-lg`}
+                    >
+                        {/* Icône d'erreur avec fond blanc */}
+                        <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">
+                            ❌
+                        </span>
+
+                        <div className="flex-1 text-center">
+                            <p className="text-sm">{result.message}</p>
+                        </div>
+                    </div>
+                ));
+            }
+
+        });
     
     };
 
-        const handleNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-            const value = event.target.value;
-    
-            // Si le champ est vide, réinitialiser le nombre et le résultat
-            if (value === '') {
-              setNumber('');
-              setResult('');
-              return;
-            }
-        
-            // Convertir la valeur en nombre
-            const parsedValue = parseFloat(value);
-        
-            // Mettre à jour l'état uniquement si la valeur est un nombre valide
-            if (!isNaN(parsedValue)) {
-              setNumber(parsedValue);
-              setResult(parsedValue * 1.25); // Calculer le double
-            }
-            
+    const handleNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value;
+
+        // Si le champ est vide, réinitialiser le nombre et le résultat
+        if (value === '') {
+            setNumber('');
+            setResult('');
+            return;
         }
+    
+        // Convertir la valeur en nombre
+        const parsedValue = parseFloat(value);
+    
+        // Mettre à jour l'état uniquement si la valeur est un nombre valide
+        if (!isNaN(parsedValue)) {
+            setNumber(parsedValue);
+            setResult(parsedValue * 1.25); // Calculer le double
+        }
+        
+    }
 
     return (
         <>
             <div className="fixed z-40 left-0 top-0  w-full h-screen bg-[#00000040]" onClick={()=> setIsUpdateFormOpen(false)}>
             </div>
             <div className=" fixed z-50 top-[15%] left-[0%] mx-5 "  >
+                <Toaster />
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="grid grid-cols-11  gap-x-5 p-5 " >
                         <div className="col-span-6 bg-white p-10  rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">

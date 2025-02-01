@@ -10,6 +10,7 @@ import IMovement from '@/app/interfaces/movement';
 import { deleteMovement, updateMovement } from '@/app/redux/slices/movements/actions';
 import Iinvoice from '@/app/interfaces/invoice';
 import { deleteInvoice, updateInvoice } from '@/app/redux/slices/invoices/actions';
+import toast, { Toaster } from 'react-hot-toast'
 
 interface IFormInputs {
     description : string;
@@ -45,30 +46,131 @@ export default function SaleRegulForm({content, setIsSaleRegulFormOpen}:ArticleF
             article_id : content.article_id
         }
 
-        console.log( "INVOICELINE" , invoiceLineData );
-        
-        try {
-                await dispatch(updateInvoice({ id : content.id, data : invoiceLineData}));
+
+        const updateInvoicePromise = dispatch(updateInvoice({ id: content.id, data: invoiceLineData }))
+        .unwrap()
+        .then(() => ({
+            status: "fulfilled",
+            message: "Facture mise à jour avec succès !",
+        }))
+        .catch((err) => {
+            const errorMessage = typeof err === "string" ? err : err?.message || "Erreur inconnue lors de la mise à jour.";
+            return {
+            status: "rejected",
+            message: errorMessage,
+            };
+        })
+        .then((result) => {
+            if (result.status === "fulfilled") {
+            toast.custom((t:any) => (
+                <div className={`${
+                    t.visible ? "animate-enter" : "animate-leave"
+                } flex items-center w-full max-w-xs p-4 text-white bg-green-600 border border-green-900 rounded-lg shadow-lg`}
+                >
+                    <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">✅</span>
+                    <div className="flex-1 text-center">
+                        <p className="text-sm">Facture mise à jour avec succès !</p>
+                    </div>
+                </div>
+            ), { duration: 2000 });
+
+            // Temporiser la fermeture du formulaire après l'affichage du toast
+            setTimeout(() => {
                 setIsSaleRegulFormOpen(false);
-        } catch (err) {
-            // Handle errors that happen outside the action (e.g., network failures)
-            setIsSaleRegulFormOpen(false);
-            console.error(err);
-        }
+            }, 2500); // Attendre 2,5 secondes avant de fermer le formulaire
+
+            } else {
+                toast.custom((t:any) => (
+                <div className={`${
+                    t.visible ? "animate-enter" : "animate-leave"
+                } flex items-center w-full max-w-xs p-4 text-white bg-red-600 border border-red-900 rounded-lg shadow-lg`}
+                >
+                    <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">❌</span>
+                    <div className="flex-1 text-center">
+                        <p className="text-sm">{result.message}</p>
+                    </div>
+                </div>
+            ));
+                // Fermer le formulaire même en cas d'erreur
+                setIsSaleRegulFormOpen(false);
+            }
+        });
+
+        
+        // try {
+        //         await dispatch(updateInvoice({ id : content.id, data : invoiceLineData}));
+        //         setIsSaleRegulFormOpen(false);
+        // } catch (err) {
+        //     // Handle errors that happen outside the action (e.g., network failures)
+        //     setIsSaleRegulFormOpen(false);
+        //     console.error(err);
+        // }
 
 
     };
 
     const onSubmitDelete =  async ( id:string ) => {
+
+        const deleteInvoicePromise = dispatch(deleteInvoice(id))
+        .unwrap()
+        .then(() => ({
+            status: "fulfilled",
+            message: "Article supprimée avec succès !",
+        }))
+        .catch((err) => {
+            const errorMessage = typeof err === "string" ? err : err?.message || "Erreur inconnue lors de la suppression.";
+            return {
+            status: "rejected",
+            message: errorMessage,
+            };
+        })
+        .then((result) => {
+            if (result.status === "fulfilled") {
+            toast.custom((t:any) => (
+                <div className={`${
+                    t.visible ? "animate-enter" : "animate-leave"
+                } flex items-center w-full max-w-xs p-4 text-white bg-green-600 border border-green-900 rounded-lg shadow-lg`}
+                >
+                    <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">✅</span>
+                    <div className="flex-1 text-center">
+                        <p className="text-sm">{result.message}</p>
+                    </div>
+                </div>
+            ), { duration: 2000 });
+
+            // Temporiser la fermeture du formulaire après l'affichage du toast
+            setTimeout(() => {
+                setIsSaleRegulFormOpen(false);
+            }, 2500); // Attendre 2,5 secondes avant de fermer le formulaire
+
+            } else {
+            toast.custom((t:any) => (
+                <div className={`${
+                    t.visible ? "animate-enter" : "animate-leave"
+                } flex items-center w-full max-w-xs p-4 text-white bg-red-600 border border-red-900 rounded-lg shadow-lg`}
+                >
+                <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">❌</span>
+                <div className="flex-1 text-center">
+                    <p className="text-sm">{result.message}</p>
+                </div>
+                </div>
+            ));
+
+                // Fermer le formulaire même en cas d'erreur
+                setIsSaleRegulFormOpen(false);
+            }
+        });
+
+
          
-        try {
-            await dispatch(deleteInvoice(id));
-            setIsSaleRegulFormOpen(false);
-        } catch (err) {
-            // Handle errors that happen outside the action (e.g., network failures)
-            setIsSaleRegulFormOpen(false);
-            console.error(err);
-        }
+        // try {
+        //     await dispatch(deleteInvoice(id));
+        //     setIsSaleRegulFormOpen(false);
+        // } catch (err) {
+        //     // Handle errors that happen outside the action (e.g., network failures)
+        //     setIsSaleRegulFormOpen(false);
+        //     console.error(err);
+        // }
 
     }
 
@@ -92,6 +194,7 @@ export default function SaleRegulForm({content, setIsSaleRegulFormOpen}:ArticleF
             </div>
 
             <div className=" fixed z-50 top-[15%] left-[26%] mx-5 "  >
+                <Toaster />
                 <form onSubmit={handleSubmit(onSubmit)}>
 
                         <div className=" w-[150%]   bg-white p-10  rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">

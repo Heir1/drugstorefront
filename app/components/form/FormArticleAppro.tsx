@@ -29,6 +29,7 @@ import { log } from 'console';
 import IMovement from '@/app/interfaces/movement';
 import { v4 as uuidv4 } from 'uuid';
 import { createMovement } from '@/app/redux/slices/movements/actions';
+import toast, { Toaster } from 'react-hot-toast'
 // Dynamically import React Select without SSR
 const Select = dynamic(() => import('react-select'), { ssr: false });
 
@@ -175,17 +176,46 @@ export default function FormArticleAppro() {
             expiration_date : expirationDate
         }
 
-        // console.log();
-        
-    
-        try {
-            await dispatch(createMovement(movementData));
-        
-        } catch (err) {
-            // Handle errors that happen outside the action (e.g., network failures)
-            // setOpenForm(false);
-            console.error(err);
-        }
+        const createMovementPromise = dispatch(createMovement(movementData))
+        .unwrap()
+        .then(() => ({
+            status: "fulfilled",
+            message: "Approvisionnement créé avec succès !",
+        }))
+        .catch((err) => {
+            const errorMessage = typeof err === "string" ? err : err?.message || "Erreur inconnue lors de la création.";
+            return {
+            status: "rejected",
+            message: errorMessage,
+            };
+        })
+        .then((result) => {
+            if (result.status === "fulfilled") {
+            toast.custom((t:any) => (
+                <div className={`${
+                    t.visible ? "animate-enter" : "animate-leave"
+                } flex items-center w-full max-w-xs p-4 text-white bg-green-600 border border-green-900 rounded-lg shadow-lg`}
+                >
+                <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">✅</span>
+                <div className="flex-1 text-center">
+                    <p className="text-sm">Mouvement effectué avec succès</p>
+                </div>
+                </div>
+            ), { duration: 2000 });
+            } else {
+            toast.custom((t:any) => (
+                <div className={`${
+                    t.visible ? "animate-enter" : "animate-leave"
+                } flex items-center w-full max-w-xs p-4 text-white bg-red-600 border border-red-900 rounded-lg shadow-lg`}
+                >
+                    <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">❌</span>
+                    <div className="flex-1 text-center">
+                        <p className="text-sm">{result.message}</p>
+                    </div>
+                </div>
+            ));
+            }
+        });
     
     };
 
@@ -283,6 +313,7 @@ export default function FormArticleAppro() {
     return (
         <>
             <div className="mx-2"  >
+                <Toaster />
                 {/* <form  > */}
 
                 {/* </form> */}

@@ -86,18 +86,16 @@ export const createMovement = createAsyncThunk<IMovement, IMovement>(
     'movements/createMovement',
     async (newMovement: IMovement, { rejectWithValue }) => {
       try {
-        const response = await postRequest<IMovement>('movements', newMovement); // Remplacez avec votre endpoint
-        
-        if (response.error) {
-          console.log(response.error)
-          alert(response.error.message)
-          return rejectWithValue(response.error);
-        }
-        alert("Movement créé avec succès")
-        console.log(response.data);
-        return response.data as IMovement;
+
+            const response = await postRequest<IMovement>('movements', newMovement); // Remplacez avec votre endpoint
+            
+            if (response.error) {
+              return rejectWithValue(response.error);
+            }
+            return response.data as IMovement;
+
       } catch (error: any) {
-        return rejectWithValue(error.message);
+            return rejectWithValue(error.message);
       }
     }
 );
@@ -108,18 +106,19 @@ export const updateMovement = createAsyncThunk<IMovement, { id: string; data: IM
     'movements/updateMovement',
     async ({ id, data }, { rejectWithValue }) => {
       try {
-        const response = await putRequest<IMovement>(`movements/${id}`, data); // Remplacez avec votre endpoint
-        if (response.error) {
 
-            const errorMessage = (response.error as ApiErrorResponse).message || 'Unknown error';
-            return rejectWithValue(errorMessage); // Pass the error message to rejectWithValue
+          const response = await putRequest<IMovement>(`movements/${id}`, data); // Remplacez avec votre endpoint
+          
+          if (response.error) {
 
-            // return rejectWithValue(response.error);
-        }
-        alert("Modification avec succès")
-        // console.log(response.data);
-        
-        return response.data as IMovement;
+              const errorMessage = (response.error as ApiErrorResponse).message || 'Unknown error';
+              return rejectWithValue(errorMessage); // Pass the error message to rejectWithValue
+
+              // return rejectWithValue(response.error);
+          }
+          
+          return response.data as IMovement;
+
       } catch (error: any) {
         return rejectWithValue(error.message);
       }

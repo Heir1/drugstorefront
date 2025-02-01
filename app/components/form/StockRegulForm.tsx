@@ -8,6 +8,7 @@ import IArticle from '@/app/interfaces/article';
 import { createArticle, updateArticle } from '@/app/redux/slices/articles/actions';
 import IMovement from '@/app/interfaces/movement';
 import { deleteMovement, updateMovement } from '@/app/redux/slices/movements/actions';
+import toast, { Toaster } from 'react-hot-toast'
 
 interface IFormInputs {
     description : string;
@@ -47,32 +48,108 @@ export default function StockRegulForm({content, setisStockRegulFormOpen}:Articl
             movement_date: formattedDate
         }
 
+        const updateMovementPromise = dispatch(updateMovement({ id: content.id, data: StockRegul }))
+            .unwrap()
+            .then(() => ({
+                status: "fulfilled",
+                message: "Mouvement de stock mis à jour avec succès !",
+            }))
+            .catch((err) => {
+                const errorMessage = typeof err === "string" ? err : err?.message || "Erreur inconnue lors de la mise à jour.";
+                return {
+                status: "rejected",
+                message: errorMessage,
+                };
+            })
+            .then((result) => {
+                if (result.status === "fulfilled") {
+                toast.custom((t:any) => (
+                    <div className={`${
+                        t.visible ? "animate-enter" : "animate-leave"
+                    } flex items-center w-full max-w-xs p-4 text-white bg-green-600 border border-green-900 rounded-lg shadow-lg`}
+                    >
+                        <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">✅</span>
+                        <div className="flex-1 text-center">
+                            <p className="text-sm">{result.message}</p>
+                        </div>
+                    </div>
+                ), { duration: 2000 });
 
-        console.log("Stock Regul ",StockRegul);
-        
+                // Temporiser la fermeture du formulaire après l'affichage du toast
+                setTimeout(() => {
+                    setisStockRegulFormOpen(false);
+                }, 2500); // Attendre 2,5 secondes avant de fermer le formulaire
 
-        try {
-            await dispatch(updateMovement({ id : content.id, data : StockRegul}));
-            setisStockRegulFormOpen(false);
-        } catch (err) {
-            // Handle errors that happen outside the action (e.g., network failures)
-            // setisStockRegulFormOpen(false);
-            console.error(err);
-        }
+                } else {
+                    toast.custom((t:any) => (
+                        <div className={`${
+                            t.visible ? "animate-enter" : "animate-leave"
+                        } flex items-center w-full max-w-xs p-4 text-white bg-red-600 border border-red-900 rounded-lg shadow-lg`}
+                        >
+                        <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">❌</span>
+                        <div className="flex-1 text-center">
+                            <p className="text-sm">{result.message}</p>
+                        </div>
+                        </div>
+                    ));
 
-
-    };
+                    // Fermer le formulaire même en cas d'erreur
+                    setisStockRegulFormOpen(false);
+                }
+            });
+        };
 
     const onSubmitDelete =  async () => {
          
-        try {
-            await dispatch(deleteMovement(content.id));
+        const deleteMovementPromise = dispatch(deleteMovement(content.id))
+        .unwrap()
+        .then(() => ({
+          status: "fulfilled",
+          message: "Appovisionnement supprimé avec succès !",
+        }))
+        .catch((err) => {
+          const errorMessage = typeof err === "string" ? err : err?.message || "Erreur inconnue lors de la suppression.";
+          return {
+            status: "rejected",
+            message: errorMessage,
+          };
+        })
+        .then((result) => {
+          if (result.status === "fulfilled") {
+            toast.custom((t:any) => (
+              <div className={`${
+                  t.visible ? "animate-enter" : "animate-leave"
+                } flex items-center w-full max-w-xs p-4 text-white bg-green-600 border border-green-900 rounded-lg shadow-lg`}
+              >
+                <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">✅</span>
+                <div className="flex-1 text-center">
+                  <p className="text-sm">{result.message}</p>
+                </div>
+              </div>
+            ), { duration: 2000 });
+      
+            // Temporiser la fermeture du formulaire après l'affichage du toast
+            setTimeout(() => {
+              setisStockRegulFormOpen(false);
+            }, 2500); // Attendre 2,5 secondes avant de fermer le formulaire
+      
+          } else {
+            toast.custom((t:any) => (
+              <div className={`${
+                  t.visible ? "animate-enter" : "animate-leave"
+                } flex items-center w-full max-w-xs p-4 text-white bg-red-600 border border-red-900 rounded-lg shadow-lg`}
+              >
+                <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">❌</span>
+                <div className="flex-1 text-center">
+                  <p className="text-sm">{result.message}</p>
+                </div>
+              </div>
+            ));
+      
+            // Fermer le formulaire même en cas d'erreur
             setisStockRegulFormOpen(false);
-        } catch (err) {
-            // Handle errors that happen outside the action (e.g., network failures)
-            setisStockRegulFormOpen(false);
-            console.error(err);
-        }
+          }
+        });
 
     }
 
@@ -97,42 +174,41 @@ export default function StockRegulForm({content, setisStockRegulFormOpen}:Articl
             </div>
 
             <div className=" fixed z-50 top-[15%] left-[30%] mx-5 "  >
+                <Toaster />
                 <form onSubmit={handleSubmit(onSubmit)}>
-
-                        <div className=" w-[150%]   bg-white p-10  rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
-                            <div className="space-y-2" >
-                                <label className=" font-semibold text-sm" htmlFor="">Description</label>
-                                <Controller
-                                    name="description"
-                                    control={control}
-                                    render={({ field }) => <input readOnly className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg " {...field} type="text" />}
-                                    rules={{ required: 'La description est requise' }}
-                                />
-                            </div>
-                            <div className="space-y-2" >
-                                <label className=" font-semibold text-sm" htmlFor="">Stock</label>
-                                <Controller
-                                    name="quantity"
-                                    control={control}
-                                    render={({ field }) => <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg " {...field} type="number" />}
-                                    rules={{ required: 'La description est requise' }}
-                                />
-                            </div>
-
-                            <div className=" flex justify-between gap-4 pt-4 " >
-                                <div className=" w-full " >
-                                    <button className=" w-full  border-[1px] hover:bg-[#D32F2F] hover:text-white border-[#D32F2F] text-center  text-[14px] p-2 transition duration-300 text-[#D32F2F] rounded-lg " 
-                                    // onClick={()=> setActivationFormOpen(false)}
-                                    onClick={handleSubmit(onSubmitDelete)}
-                                    >Annuler cet article</button>
-                                </div>
-                                <div className="w-full" >
-                                    <button type="submit" className=" w-full text-center p-2 bg-[#4594ff]  text-white transition duration-300 hover:bg-[#3386e0]  rounded-lg  text-[14px]" >Modifier cet article</button>
-                                </div>
-                            </div>
-                            
+                    <div className=" w-[150%]   bg-white p-10  rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
+                        <div className="space-y-2" >
+                            <label className=" font-semibold text-sm" htmlFor="">Description</label>
+                            <Controller
+                                name="description"
+                                control={control}
+                                render={({ field }) => <input readOnly className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg " {...field} type="text" />}
+                                rules={{ required: 'La description est requise' }}
+                            />
+                        </div>
+                        <div className="space-y-2" >
+                            <label className=" font-semibold text-sm" htmlFor="">Stock</label>
+                            <Controller
+                                name="quantity"
+                                control={control}
+                                render={({ field }) => <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg " {...field} type="number" />}
+                                rules={{ required: 'La description est requise' }}
+                            />
                         </div>
 
+                        <div className=" flex justify-between gap-4 pt-4 " >
+                            <div className=" w-full " >
+                                <button className=" w-full  border-[1px] hover:bg-[#D32F2F] hover:text-white border-[#D32F2F] text-center  text-[14px] p-2 transition duration-300 text-[#D32F2F] rounded-lg " 
+                                // onClick={()=> setActivationFormOpen(false)}
+                                onClick={handleSubmit(onSubmitDelete)}
+                                >Annuler cet article</button>
+                            </div>
+                            <div className="w-full" >
+                                <button type="submit" className=" w-full text-center p-2 bg-[#4594ff]  text-white transition duration-300 hover:bg-[#3386e0]  rounded-lg  text-[14px]" >Modifier cet article</button>
+                            </div>
+                        </div>
+                        
+                    </div>
                 </form>
             </div>
         </>

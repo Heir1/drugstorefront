@@ -19,9 +19,10 @@ axiosInstance.interceptors.response.use(
     if (error.response) {
       // Si l'API répond avec une erreur (code HTTP différent de 2xx)
       return Promise.reject(error.response.data);
+      
     } else if (error.request) {
       // Si la requête a été envoyée mais qu'il n'y a pas de réponse
-      return Promise.reject('Aucune réponse de l\'API');
+      return Promise.reject('Aucune réponse de l\'API (Base de données)');
     } else {
       // Autres erreurs (erreurs de configuration, etc.)
       return Promise.reject(error.message);

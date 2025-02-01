@@ -107,16 +107,19 @@ export const updateArticle = createAsyncThunk<IArticle, { id: string; data: IArt
     'articles/updateArticle',
     async ({ id, data }, { rejectWithValue }) => {
       try {
-        const response = await putRequest<IArticle>(`articles/${id}`, data); // Remplacez avec votre endpoint
-        if (response.error) {
 
-            const errorMessage = (response.error as ApiErrorResponse).message || 'Unknown error';
-            return rejectWithValue(errorMessage); // Pass the error message to rejectWithValue
+            const response = await putRequest<IArticle>(`articles/${id}`, data); // Remplacez avec votre endpoint
+            
+            if (response.error) {
+                
+                const errorMessage = (response.error as ApiErrorResponse).message || String(response.error) || 'Erreur inconnue';
+                return rejectWithValue(errorMessage); // Pass the error message to rejectWithValue
 
-            // return rejectWithValue(response.error);
-        }
-        alert("Modification avec succès")
-        return response.data as IArticle;
+                // return rejectWithValue(response.error);
+            }
+            // alert("Modification avec succès")
+            return response.data as IArticle;
+
       } catch (error: any) {
         return rejectWithValue(error.message);
       }

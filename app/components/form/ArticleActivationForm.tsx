@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/app/redux/store/store';
 import IArticle from '@/app/interfaces/article';
 import { createArticle, updateArticle } from '@/app/redux/slices/articles/actions';
-
+import toast, { Toaster } from 'react-hot-toast'
 
 interface IFormInputs {
     description : string,
@@ -64,16 +64,9 @@ export default function ArticleActivationForm({content, setActivationFormOpen}:A
     
     
         const onSubmit = async (data: IFormInputs) => {
-    
-            console.log(data);
-            console.log(content);
-            
-            
-      
+
           const { description, packaging, comment, category , alert, expirationDate, quantity, purchase_price, selling_price , currency  } = data
     
-          
-      
           const articleData:IArticle = {
             barcode: content.barcode,
             description ,
@@ -89,16 +82,41 @@ export default function ArticleActivationForm({content, setActivationFormOpen}:A
             currency_id: Number(currency) 
           }
 
-            try {
-                await dispatch(updateArticle({ id : content.id, data : articleData}));
-                setActivationFormOpen(false)
-          
-            } catch (err) {
-                // Handle errors that happen outside the action (e.g., network failures)
-                // setOpenForm(false);
-                console.error(err);
-                setActivationFormOpen(false)
-            }
+
+            dispatch(updateArticle({ id: content.id, data: articleData }))
+            .unwrap()
+            .then(() => {
+                // Afficher un toast de succès
+                toast.custom(
+                    (t: any) => (
+                        <div
+                            className={`${
+                                t.visible ? "animate-enter" : "animate-leave"
+                            } flex items-center w-full max-w-xs p-4 text-white bg-green-600 border border-green-900 rounded-lg shadow-lg`}
+                        >
+                            {/* Icône verte avec fond blanc */}
+                            <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">✅</span>
+                            <div className="flex-1 text-center">
+                                <p className="text-sm">Article mis à jour avec succès !</p>
+                            </div>
+                        </div>
+                    ),
+                    { duration: 2000 } // Toast visible pendant 2 secondes
+                );
+
+                // Fermer le formulaire après un délai
+                setTimeout(() => {
+                    setActivationFormOpen(false);
+                }, 2500);
+            })
+            .catch((err) => {
+
+                // Afficher un toast d'erreur
+
+
+                // Fermer immédiatement le formulaire en cas d'erreur
+                setActivationFormOpen(false);
+            });
     
         };
 
@@ -106,7 +124,8 @@ export default function ArticleActivationForm({content, setActivationFormOpen}:A
             <>
                 <div className="fixed z-40 left-0 top-0  w-full h-screen bg-[#00000040]" onClick={()=> setActivationFormOpen(false)}>
                 </div>
-                <div className=" fixed z-50 top-[15%] left-[35%] mx-5 "  >
+                <div className=" fixed z-50 top-[15%] left-[35%] mx-5 ">
+                    <Toaster />
                     <form onSubmit={handleSubmit(onSubmit)}>
 
                             <div className=" w-[150%]   bg-white p-10  rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
