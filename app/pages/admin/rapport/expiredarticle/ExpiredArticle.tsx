@@ -40,7 +40,7 @@ export default function ExpiredArticle() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4 ">
                     <div className="col-start-2 border-2 rounded-lg shadow-md">
                         <div className="text-center font-bold text-sm text-gray-700 py-2 rounded-t-lg ">
-                            <h1>RAPPORT DE REQUISITION</h1>
+                            <h1>ALERTE DE PEREMPTION</h1>
                         </div>
                     </div>
                 </div>

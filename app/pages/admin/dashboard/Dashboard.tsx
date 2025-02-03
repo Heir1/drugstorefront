@@ -137,7 +137,7 @@ export default function Dashboard() {
                 <div className="grid grid-cols-12 mt-6 mb-10 ">
                     <div className="col-start-2 col-span-10 px-20 " >
                         <div className="grid grid-cols-12 gap-5 ">
-                            <Link className="col-span-2 px-5 py-4 space-y-20 bg-white rounded-3xl shadow-[0px_4px_8px_0px_#00000026]" href={`/pages/admin/rapport/lowstockarticle`} >
+                            <Link href={`/pages/admin/rapport/expiredarticle`} className="col-span-2 px-5 py-4 space-y-20 bg-white rounded-3xl shadow-[0px_4px_8px_0px_#00000026]"  >
                                 <div className="flex justify-between items-center " >
                                     <div>
                                         <Icon icon="fluent:alert-on-24-regular" width="24" height="24" />
@@ -152,7 +152,7 @@ export default function Dashboard() {
                                     </p>
                                 </div>
                             </Link>
-                            <Link className="col-span-2 px-5 py-4 space-y-20 bg-white rounded-3xl shadow-[0px_4px_8px_0px_#00000026]"   href={`/pages/admin/rapport/expiredarticle`} >
+                            <Link className="col-span-2 px-5 py-4 space-y-20 bg-white rounded-3xl shadow-[0px_4px_8px_0px_#00000026]" href={`/pages/admin/rapport/lowstockarticle`}    >
                                 <div className="flex justify-between items-center " >
                                     <div>
                                         <Icon icon="lsicon:sales-return-outline" width="16" height="16" />

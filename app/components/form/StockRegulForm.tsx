@@ -168,6 +168,8 @@ export default function StockRegulForm({content, setisStockRegulFormOpen}:Articl
     }, [content,setValue]);
 
 
+    if (!content) return null; // Évite un rendu avec des valeurs non définies
+    
     return (
         <>
             <div className="fixed z-40 left-0 top-0  w-full h-screen bg-[#00000040]" onClick={()=> setisStockRegulFormOpen(false)}>
