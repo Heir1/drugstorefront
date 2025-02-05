@@ -39,6 +39,7 @@ interface IFormInputs {
     location: { value: string; label: string } | null;
     description: string;
     description1: string;
+    packaging1: string;
     indication: { value: string; label: string } | null;
     molecule: { value: string; label: string } | null;
     packaging: { value: string; label: string } | null;
@@ -85,6 +86,7 @@ export default function FormArticleAppro() {
             indication : null,
             molecule : null,
             packaging : null,
+            packaging1: "",
             category : null,
             supplier : null,
             expirationDate : "",
@@ -314,44 +316,255 @@ export default function FormArticleAppro() {
         <>
             <div className="mx-2"  >
                 <Toaster />
-                {/* <form  > */}
-
-                {/* </form> */}
                 <form onSubmit={handleSubmit(onSubmit)}>
 
-                <div className="flex justify-center bg-gray-600 rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] p-5 mx-5 " >
-                        
+                {/* <div className="flex justify-center bg-gray-600 rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] p-5 mx-5 " >  
 
-                <div className="flex justify-start bg-gray-50 rounded-xl shadow-lg p-5 mx-5 gap-8 items-center">
-                    {/* Label Section */}
-                    <div className="w-1/3 flex flex-col items-start pl-10">
-                        <label className="font-semibold text-sm text-gray-700">
-                            Recherche d'article
-                        </label>
+                    <div className="flex justify-start bg-gray-50 rounded-xl shadow-lg p-5 mx-5 gap-8 items-center">
+
+                        <div className="w-1/3 flex flex-col items-start pl-10">
+                            <label className="font-semibold text-sm text-gray-700">
+                                Recherche d'article
+                            </label>
+                        </div>
+
+                        <div className="w-2/3">
+                            <Controller
+                                name="description1"
+                                control={control}
+                                render={({ field }) => (
+                                    <Select
+                                        {...field}
+                                        value={article}
+                                        options={articlesFormated}
+                                        onChange={handleChange}
+                                        placeholder="Sélectionnez un article"
+                                    />
+                                )}
+                            />
+                        </div>
                     </div>
 
-                    {/* Input Section */}
-                    <div className="w-2/3">
-                        <Controller
-                            name="description1"
-                            control={control}
-                            render={({ field }) => (
-                                <Select
-                                    {...field}
-                                    value={article}
-                                    options={articlesFormated}
-                                    onChange={handleChange}
-                                    placeholder="Sélectionnez un article"
-                                    // isClearable
+                </div> */}
+
+                    <div className=" grid grid-cols-12 border-[1px] border-white mx-4 gap-3 p-2 " >
+                        <div className=" col-span-3 " >
+                            <div>
+                                <label className=" text-[13px] font-medium text-white "  htmlFor="">CODE BARRE</label>
+                            </div>
+                            <div>
+                                <Controller
+                                    name="barcode"
+                                    control={control}
+                                    // defaultValue=""
+                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase " type="text" readOnly />}
+                                    rules={{ required: 'Le code barre est requis' }}
                                 />
-                            )}
-                            // rules={{ required: 'L indication est requise' }}
-                        />
+                            </div>
+                        </div>
+                        <div className=" col-span-6 " >
+                            <div>
+                                <label className=" text-[13px] font-medium text-white " htmlFor="">DESCRIPTION</label>
+                            </div>
+                            <div>
+                                <Controller
+                                    name="description1"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Select
+                                            {...field}
+                                            value={article}
+                                            options={articlesFormated}
+                                            onChange={handleChange}
+                                            placeholder="Sélectionnez un article"
+                                            className="uppercase"
+                                        />
+                                    )}
+                                />
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-
-
+                    <div className=" grid grid-cols-12 border-[1px] border-white mx-4 gap-3 p-2 mt-2 " >
+                        <div className=" col-span-3 " >
+                            <div>
+                                <label className="text-[13px] font-medium text-white "  htmlFor="">DESCRIPTION</label>
+                            </div>
+                            <div>
+                                <Controller
+                                    name="description"
+                                    control={control}
+                                    // defaultValue=""
+                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="text" readOnly />}
+                                    rules={{ required: 'Le code barre est requis' }}
+                                />
+                            </div>
+                        </div>
+                        <div className=" col-span-3 " >
+                            <div>
+                                <label className="text-[13px] font-medium text-white "  htmlFor="">EMBALLAGE</label>
+                            </div>
+                            <div>
+                                <Controller
+                                    name="description"
+                                    control={control}
+                                    // defaultValue=""
+                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="text" readOnly   />}
+                                    rules={{ required: 'Le code barre est requis' }}
+                                />
+                            </div>
+                        </div>
+                        <div className=" col-span-3 " >
+                            <div>
+                                <label className="text-[13px] font-medium text-white "  htmlFor="">CATEGORIE</label>
+                            </div>
+                            <div>
+                                <Controller
+                                    name="description"
+                                    control={control}
+                                    // defaultValue=""
+                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="text" readOnly   />}
+                                    rules={{ required: 'Le code barre est requis' }}
+                                />
+                            </div>
+                        </div>
+                        <div className=" col-span-3 " >
+                            <div>
+                                <label className="text-[13px] font-medium text-white "  htmlFor="">FOURNISSEUR</label>
+                            </div>
+                            <div>
+                                <Controller
+                                    name="description"
+                                    control={control}
+                                    // defaultValue=""
+                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="text" readOnly   />}
+                                    rules={{ required: 'Le code barre est requis' }}
+                                />
+                            </div>
+                        </div>
+                        <div className=" col-span-1 " >
+                            <div>
+                                <label className="text-[13px] font-medium text-white "  htmlFor="">CODE BARRE</label>
+                            </div>
+                            <div>
+                                <Controller
+                                    name="description"
+                                    control={control}
+                                    // defaultValue=""
+                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="text" readOnly   />}
+                                    rules={{ required: 'Le code barre est requis' }}
+                                />
+                            </div>
+                        </div>
+                        <div className=" col-span-1 " >
+                            <div>
+                                <label className="text-[13px] font-medium text-white "  htmlFor="">LOCALISATION</label>
+                            </div>
+                            <div>
+                                <Controller
+                                    name="description"
+                                    control={control}
+                                    // defaultValue=""
+                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="text" readOnly   />}
+                                    rules={{ required: 'Le code barre est requis' }}
+                                />
+                            </div>
+                        </div>
+                        <div className=" col-span-1 " >
+                            <div>
+                                <label className="text-[13px] font-medium text-white "  htmlFor="">QTE STOCK</label>
+                            </div>
+                            <div>
+                                <Controller
+                                    name="quantity"
+                                    control={control}
+                                    // defaultValue=""
+                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="number"   />}
+                                    rules={{ required: 'Le code barre est requis' }}
+                                />
+                            </div>
+                        </div>
+                        <div className=" col-span-1 " >
+                            <div>
+                                <label className="text-[13px] font-medium text-white "  htmlFor="">QTE APPRO</label>
+                            </div>
+                            <div>
+                                <Controller
+                                    name="quantityappro"
+                                    control={control}
+                                    // defaultValue=""
+                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="number"   />}
+                                    rules={{ required: 'Le code barre est requis' }}
+                                />
+                            </div>
+                        </div>
+                        <div className=" flex items-end  col-span-1" >
+                        <Controller
+                                            name="currency"
+                                            control={control}
+                                            render={({ field }) => (
+                                                <>
+                                                    <div className=" w-1/3 flex justify-between items-center">
+                                                        <input
+                                                            type="radio"
+                                                            id="USD"
+                                                            value={2}
+                                                            {...register('currency', { required: 'Vous devez choisir une devise' })}
+                                                            />
+                                                        <label className=' text-[12px]  text-sm font-semibold text-white' htmlFor="">USD</label>
+                                                    </div>
+                                                    <div className=" w-1/3 flex justify-between items-center">
+                                                        <input
+                                                            type="radio"
+                                                            id="CDF"
+                                                            value={1}
+                                                            {...register('currency', { required: 'Vous devez choisir une devise' })}
+                                                            />
+                                                        <label className=' text-[12px]  text-sm font-semibold text-white' htmlFor="">CDF</label>
+                                                    </div>
+                                                </>
+                                            )}
+                                            rules={{ required: 'La monnaie est requise' }}
+                                        />
+                        </div>
+                        <div className=" col-span-1 " >
+                            <div>
+                                <label className="text-[13px] font-medium text-white "  htmlFor="">PA</label>
+                            </div>
+                            <div>
+                                <Controller
+                                    name="purchase_price"
+                                    control={control}
+                                    // defaultValue=""
+                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="number"  readOnly />}
+                                    rules={{ required: 'Le code barre est requis' }}
+                                />
+                            </div>
+                        </div>
+                        <div className=" col-span-1 " >
+                            <div>
+                                <label className="text-[13px] font-medium text-white "  htmlFor="">PV</label>
+                            </div>
+                            <div>
+                                <Controller
+                                    name="selling_price"
+                                    control={control}
+                                    // defaultValue=""
+                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="number"  readOnly />}
+                                    rules={{ required: 'Le code barre est requis' }}
+                                />
+                            </div>
+                        </div>
+                        <div className=" col-span-1 " >
+                            <div>
+                                <label className="text-[13px] font-medium text-white "  htmlFor="">Taux MB</label>
+                            </div>
+                            <div>
+                                <span className=" bg-blue-600 px-4 py-1 " >
+                                    1.25
+                                </span>
+                            </div>
+                        </div>
                     </div>
 
                     <div className="grid grid-cols-11  gap-x-5 p-5 " >

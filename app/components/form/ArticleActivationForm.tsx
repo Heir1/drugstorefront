@@ -128,9 +128,9 @@ export default function ArticleActivationForm({content, setActivationFormOpen}:A
                     <Toaster />
                     <form onSubmit={handleSubmit(onSubmit)}>
 
-                            <div className=" w-[150%]   bg-gray-600 p-10  rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
+                            <div className=" w-[150%]   bg-[#7288a5] p-10  rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
                                 <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm" htmlFor="">Description</label>
+                                    <label className=" font-semibold text-sm text-white " htmlFor="">Description</label>
                                     <Controller
                                         name="description"
                                         control={control}
@@ -139,7 +139,7 @@ export default function ArticleActivationForm({content, setActivationFormOpen}:A
                                     />
                                 </div>
                                 <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm" htmlFor="">Stock</label>
+                                    <label className=" font-semibold text-sm text-white " htmlFor="">Stock</label>
                                     <Controller
                                         name="quantity"
                                         control={control}
@@ -148,7 +148,7 @@ export default function ArticleActivationForm({content, setActivationFormOpen}:A
                                     />
                                 </div>
                                 <div className="space-y-2 mb-8 " >
-                                    <label className=" font-semibold text-sm" htmlFor="">Commentaire</label>
+                                    <label className=" font-semibold text-sm text-white " htmlFor="">Commentaire</label>
                                     <Controller
                                         name="comment"
                                         control={control}

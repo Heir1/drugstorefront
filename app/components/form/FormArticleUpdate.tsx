@@ -353,7 +353,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                 <Toaster />
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="grid grid-cols-11  gap-x-5 p-5 " >
-                        <div className="col-span-6 bg-gray-600 p-10  rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
+                        <div className="col-span-6 bg-[#7288a5fd] p-10  rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
                             <div className="grid grid-cols-2 gap-5">
                                 <div className="space-y-2" >
                                     <label className=" font-semibold text-sm text-white" htmlFor="">Code barre</label>
@@ -471,7 +471,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                 </div>
                             </div>
                         </div>
-                        <div className="col-span-5 bg-gray-600 rounded-xl p-10 space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
+                        <div className="col-span-5 bg-[#7288a5] rounded-xl p-10 space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
                             <div className="grid grid-cols-1 gap-5">
                                 <div className="space-y-2" >
                                     <label className=" font-semibold text-sm text-white " htmlFor="">Fournisseur</label>

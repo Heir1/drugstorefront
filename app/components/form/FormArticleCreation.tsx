@@ -308,7 +308,7 @@ export default function FormArticleCreation() {
         <form onSubmit={handleSubmit(onSubmit)}>
             <Toaster />
             <div className="grid grid-cols-11 mx-2  gap-x-5 p-5 -mt-5  " >
-                <div className="col-span-6  p-10 bg-gray-600   rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
+                <div className="col-span-6  p-10 bg-[#7288a5d0]   rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
                     <div className="grid grid-cols-2 gap-5">
                         <div className="space-y-2" >
                             <label className=" font-semibold text-sm text-white  " htmlFor="">Code barre</label>
@@ -441,7 +441,7 @@ export default function FormArticleCreation() {
                         </div>
                     </div>
                 </div>
-                <div className="col-span-5 bg-gray-600 rounded-xl p-10 space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
+                <div className="col-span-5 bg-[#7288a5d0] rounded-xl p-10 space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
                     <div className="grid grid-cols-1 gap-5">
                         <div className="space-y-2" >
                             <label className=" font-semibold text-sm  text-white " htmlFor="">Fournisseur</label>
