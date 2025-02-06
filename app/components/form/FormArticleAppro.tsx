@@ -37,9 +37,12 @@ const Select = dynamic(() => import('react-select'), { ssr: false });
 interface IFormInputs {
     barcode: string;
     location: { value: string; label: string } | null;
+    location1: string,
     description: string;
     description1: string;
     packaging1: string;
+    category1: string;
+    supplier1: string;
     indication: { value: string; label: string } | null;
     molecule: { value: string; label: string } | null;
     packaging: { value: string; label: string } | null;
@@ -58,7 +61,7 @@ export default function FormArticleAppro() {
 
 
     const [article, setArticle] = useState<any>(null)
-
+    const [cart, setCart] = useState<IFormInputs[]>([]);
     const { articles, articleStatus, error } = useArticleService()  
     const { packagings, packagingStatus, packagingError } = usePackagingService()
     const { categories, categoryStatus, categoryError } = useCategoryService();
@@ -69,6 +72,7 @@ export default function FormArticleAppro() {
     const { currencies, currencyStatus, currencyError } = useCurrencyService();
     const [number, setNumber] = useState<number | ''>(''); // Utiliser une chaîne vide au départ
     const [result, setResult] = useState<number | ''>(''); // Même chose pour le résultat
+
 
     
     const [isNewArticle, setIsNewArticle] = useState(true);
@@ -81,14 +85,17 @@ export default function FormArticleAppro() {
         defaultValues: {
             barcode : "",
             location : null,
+            location1: "",
             description1: "",
             description : "",
             indication : null,
             molecule : null,
             packaging : null,
-            packaging1: "",
+            packaging1 : "",
             category : null,
+            category1 : "",
             supplier : null,
+            supplier1 : "",
             expirationDate : "",
             alert : 0,
             currency : 1,
@@ -161,69 +168,96 @@ export default function FormArticleAppro() {
     
     const onSubmit = async (data: IFormInputs) => {
 
-        const newUuid = uuidv4();
-
-        console.log(data);
-
-        const { quantityappro, purchase_price, selling_price, expirationDate } = data
-        
-        
-        const movementData:IMovement = {
-            article_id: Number(article.value.id),
-            quantity : quantityappro,
-            movement_type_id: 1,
-            reference: `{REF-${newUuid}}`,
-            purchase_price : Number(number),
-            selling_price : Number(result),
-            expiration_date : expirationDate
-        }
-
-        const createMovementPromise = dispatch(createMovement(movementData))
-        .unwrap()
-        .then(() => ({
-            status: "fulfilled",
-            message: "Approvisionnement créé avec succès !",
-        }))
-        .catch((err) => {
-            const errorMessage = typeof err === "string" ? err : err?.message || "Erreur inconnue lors de la création.";
-            return {
-            status: "rejected",
-            message: errorMessage,
-            };
-        })
-        .then((result) => {
-            if (result.status === "fulfilled") {
-            toast.custom((t:any) => (
-                <div className={`${
-                    t.visible ? "animate-enter" : "animate-leave"
-                } flex items-center w-full max-w-xs p-4 text-white bg-green-600 border border-green-900 rounded-lg shadow-lg`}
-                >
-                <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">✅</span>
-                <div className="flex-1 text-center">
-                    <p className="text-sm">Mouvement effectué avec succès</p>
-                </div>
-                </div>
-            ), { duration: 2000 });
-            } else {
-            toast.custom((t:any) => (
-                <div className={`${
-                    t.visible ? "animate-enter" : "animate-leave"
-                } flex items-center w-full max-w-xs p-4 text-white bg-red-600 border border-red-900 rounded-lg shadow-lg`}
-                >
-                    <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">❌</span>
-                    <div className="flex-1 text-center">
-                        <p className="text-sm">{result.message}</p>
-                    </div>
-                </div>
-            ));
+        setCart((prevCart) => {
+            const existingItem = prevCart.find(item => item.description === data.description);
+            if (existingItem) {
+              return prevCart.map(item => 
+                item.description === data.description 
+                  ? { ...item, quantityappro: Number(item.quantityappro) + Number(data.quantityappro) } 
+                  : item
+              );
             }
-        });
+            return [...prevCart, data];
+          });
+
+        // const newUuid = uuidv4();
+
+        // console.log(data);
+
+        // const { quantityappro, purchase_price, selling_price, expirationDate } = data
+        
+        
+        // const movementData:IMovement = {
+        //     article_id: Number(article.value.id),
+        //     quantity : quantityappro,
+        //     movement_type_id: 1,
+        //     reference: `{REF-${newUuid}}`,
+        //     purchase_price : Number(number),
+        //     selling_price : Number(result),
+        //     expiration_date : expirationDate
+        // }
+
+        // const createMovementPromise = dispatch(createMovement(movementData))
+        // .unwrap()
+        // .then(() => ({
+        //     status: "fulfilled",
+        //     message: "Approvisionnement créé avec succès !",
+        // }))
+        // .catch((err) => {
+        //     const errorMessage = typeof err === "string" ? err : err?.message || "Erreur inconnue lors de la création.";
+        //     return {
+        //     status: "rejected",
+        //     message: errorMessage,
+        //     };
+        // })
+        // .then((result) => {
+        //     if (result.status === "fulfilled") {
+        //     toast.custom((t:any) => (
+        //         <div className={`${
+        //             t.visible ? "animate-enter" : "animate-leave"
+        //         } flex items-center w-full max-w-xs p-4 text-white bg-green-600 border border-green-900 rounded-lg shadow-lg`}
+        //         >
+        //         <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">✅</span>
+        //         <div className="flex-1 text-center">
+        //             <p className="text-sm">Mouvement effectué avec succès</p>
+        //         </div>
+        //         </div>
+        //     ), { duration: 2000 });
+        //     } else {
+        //     toast.custom((t:any) => (
+        //         <div className={`${
+        //             t.visible ? "animate-enter" : "animate-leave"
+        //         } flex items-center w-full max-w-xs p-4 text-white bg-red-600 border border-red-900 rounded-lg shadow-lg`}
+        //         >
+        //             <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">❌</span>
+        //             <div className="flex-1 text-center">
+        //                 <p className="text-sm">{result.message}</p>
+        //             </div>
+        //         </div>
+        //     ));
+        //     }
+        // });
     
     };
+    
+      const removeItem = (index: number) => {
+        setCart(cart.filter((_, i) => i !== index));
+      };
+    
+      const totalPurchase = cart.reduce((sum, item) => sum + item.purchase_price * item.quantity, 0);
+      const totalSelling = cart.reduce((sum, item) => sum + item.selling_price * item.quantity, 0);
+    
+    
+    //   const totalAmount = cart.reduce((sum, item) => sum + item.selling_price * item.quantity, 0);
+    
 
     const handleChange = (selected: any) => {
+
         
+        console.log("PRODUCT ");
         setArticle(selected)
+
+        
 
         setValue("barcode", selected.value.barcode, { shouldValidate: true });
         setValue("description", selected.value.description, { shouldValidate: true });
@@ -233,62 +267,14 @@ export default function FormArticleAppro() {
         setValue("purchase_price", selected.value.purchase_price, { shouldValidate: true });
         setValue("selling_price", selected.value.selling_price, { shouldValidate: true });
         setValue('currency', selected.value.currency_id.toString(), { shouldValidate: true });
+        setValue('packaging1', selected.value.packaging.name, { shouldValidate: true });
+        setValue('category1', selected.value.category.name, { shouldValidate: true });
+        setValue('location1', selected.value.placements[0].name, { shouldValidate: true });
+        setValue('supplier1', selected.value.suppliers[0].name, { shouldValidate: true });
 
         setNumber(Number(selected.value.purchase_price))
         setResult(Number(selected.value.selling_price))
 
-        // Assuming 'content.location' contains the value we need to set for the Select
-        const selectedLocation = placementsFormated.find(option => option.label === selected.value.placements[0].name); 
-
-        // Assuming 'content.indication' contains the value we need to set for the Select
-        const selectedIndication = indicationsFormated.find(option => option.label === selected.value.indications[0].name); 
-
-        // Assuming 'content.molecule' contains the value we need to set for the Select
-        const selectedMolecule = moleculeFormated.find(option => option.label === selected.value.molecules[0].name);  
-
-        // Assuming 'content.location' contains the value we need to set for the Select
-        const selectedPackaging = packagingsFormated.find(option => option.label === selected.value.packaging.name);  
-
-        // Assuming 'content.category' contains the value we need to set for the Select
-        const selectedCategory = categoriesFormated.find(option => option.label === selected.value.category.name); 
-
-        // Assuming 'content.supplier' contains the value we need to set for the Select
-        const selectedSupplier = suppliersFormated.find(option => option.label === selected.value.suppliers[0].name); 
-        
-        
-        console.log(selectedPackaging);
-        
-        
-
-        if (selectedLocation) {
-            // Setting the value for 'location' using react-hook-form's setValue
-            setValue("location", selectedLocation, { shouldValidate: true });
-        }
-
-        if (selectedIndication) {
-            // Setting the value for 'location' using react-hook-form's setValue
-            setValue("indication", selectedIndication, { shouldValidate: true });
-        }
-
-        if (selectedMolecule) {
-            // Setting the value for 'location' using react-hook-form's setValue
-            setValue("molecule", selectedMolecule, { shouldValidate: true });
-        }
-
-        if (selectedPackaging) {
-            // Setting the value for 'location' using react-hook-form's setValue
-            setValue("packaging", selectedPackaging, { shouldValidate: true });
-        }
-
-        if (selectedCategory) {
-            // Setting the value for 'location' using react-hook-form's setValue
-            setValue("category", selectedCategory, { shouldValidate: true });
-        }
-
-        if (selectedSupplier) {
-            // Setting the value for 'location' using react-hook-form's setValue
-            setValue("supplier", selectedSupplier, { shouldValidate: true });
-        }
     };
 
     const handleNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -406,7 +392,7 @@ export default function FormArticleAppro() {
                             </div>
                             <div>
                                 <Controller
-                                    name="description"
+                                    name="packaging1"
                                     control={control}
                                     // defaultValue=""
                                     render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="text" readOnly   />}
@@ -420,7 +406,7 @@ export default function FormArticleAppro() {
                             </div>
                             <div>
                                 <Controller
-                                    name="description"
+                                    name="category1"
                                     control={control}
                                     // defaultValue=""
                                     render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="text" readOnly   />}
@@ -434,7 +420,7 @@ export default function FormArticleAppro() {
                             </div>
                             <div>
                                 <Controller
-                                    name="description"
+                                    name="supplier1"
                                     control={control}
                                     // defaultValue=""
                                     render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="text" readOnly   />}
@@ -448,10 +434,10 @@ export default function FormArticleAppro() {
                             </div>
                             <div>
                                 <Controller
-                                    name="description"
+                                    name="barcode"
                                     control={control}
                                     // defaultValue=""
-                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="text" readOnly   />}
+                                    render={({ field }) => <input {...field} className="w-full text-[12px] bg-[#F2F7FC] pl-4 uppercase " type="text" readOnly   />}
                                     rules={{ required: 'Le code barre est requis' }}
                                 />
                             </div>
@@ -462,7 +448,7 @@ export default function FormArticleAppro() {
                             </div>
                             <div>
                                 <Controller
-                                    name="description"
+                                    name="location1"
                                     control={control}
                                     // defaultValue=""
                                     render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="text" readOnly   />}
@@ -498,34 +484,34 @@ export default function FormArticleAppro() {
                                 />
                             </div>
                         </div>
-                        <div className=" flex items-end  col-span-1" >
-                        <Controller
-                                            name="currency"
-                                            control={control}
-                                            render={({ field }) => (
-                                                <>
-                                                    <div className=" w-1/3 flex justify-between items-center">
-                                                        <input
-                                                            type="radio"
-                                                            id="USD"
-                                                            value={2}
-                                                            {...register('currency', { required: 'Vous devez choisir une devise' })}
-                                                            />
-                                                        <label className=' text-[12px]  text-sm font-semibold text-white' htmlFor="">USD</label>
-                                                    </div>
-                                                    <div className=" w-1/3 flex justify-between items-center">
-                                                        <input
-                                                            type="radio"
-                                                            id="CDF"
-                                                            value={1}
-                                                            {...register('currency', { required: 'Vous devez choisir une devise' })}
-                                                            />
-                                                        <label className=' text-[12px]  text-sm font-semibold text-white' htmlFor="">CDF</label>
-                                                    </div>
-                                                </>
-                                            )}
-                                            rules={{ required: 'La monnaie est requise' }}
-                                        />
+                        <div className=" flex items-center  col-span-1  " >
+                            <Controller
+                                name="currency"
+                                control={control}
+                                render={({ field }) => (
+                                    <div className=" flex justify-between items-center" >
+                                        <div className=" w-1/3 flex justify-between items-center">
+                                            <input
+                                                type="radio"
+                                                id="USD"
+                                                value={2}
+                                                {...register('currency', { required: 'Vous devez choisir une devise' })}
+                                                />
+                                            <label className=' text-[12px]  text-sm font-semibold text-white' htmlFor="">USD</label>
+                                        </div>
+                                        <div className=" w-1/3 flex justify-between items-center">
+                                            <input
+                                                type="radio"
+                                                id="CDF"
+                                                value={1}
+                                                {...register('currency', { required: 'Vous devez choisir une devise' })}
+                                                />
+                                            <label className=' text-[12px]  text-sm font-semibold text-white' htmlFor="">CDF</label>
+                                        </div>
+                                    </div>
+                                )}
+                                rules={{ required: 'La monnaie est requise' }}
+                            />
                         </div>
                         <div className=" col-span-1 " >
                             <div>
@@ -565,9 +551,25 @@ export default function FormArticleAppro() {
                                 </span>
                             </div>
                         </div>
+                        <div className=" col-span-2 " >
+                            <div>
+                                <label className="text-[13px] font-medium text-white "  htmlFor="">PEREMPTION</label>
+                            </div>
+                            <div>
+                                <Controller
+                                    name="expirationDate"
+                                    control={control}
+                                    render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC]  pl-4 pr-4 uppercase rounded-lg " {...field} type="date" readOnly />}
+                                    rules={{ required: 'La date est requise' }}
+                                />
+                            </div>
+                        </div>
+                        <div className="" >
+                            <button type="submit" className=" w-full text-center p-2 bg-[#4594ff] text-white transition duration-300 hover:bg-[#3386e0]  rounded-lg  text-[14px]  " >Ajouter</button>
+                        </div>
                     </div>
 
-                    <div className="grid grid-cols-11  gap-x-5 p-5 " >
+                    {/* <div className="grid grid-cols-11  gap-x-5 p-5 " >
                         <div className="col-span-6 bg-gray-600 p-10  rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
                             <div className="grid grid-cols-2 gap-5">
                                 <div className="space-y-2" >
@@ -575,7 +577,6 @@ export default function FormArticleAppro() {
                                     <Controller
                                         name="barcode"
                                         control={control}
-                                        // defaultValue=""
                                         render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg " type="text" readOnly />}
                                         rules={{ required: 'Le code barre est requis' }}
                                     />
@@ -773,34 +774,6 @@ export default function FormArticleAppro() {
                             </div>
                             <div className="grid grid-cols-3 gap-5 ">
                                 <div className=" flex justify-between items-end pb-3 " >
-
-                                        <Controller
-                                            name="currency"
-                                            control={control}
-                                            render={({ field }) => (
-                                                <>
-                                                    <div className=" w-1/3 flex justify-between items-center">
-                                                        <input
-                                                            type="radio"
-                                                            id="USD"
-                                                            value={2}
-                                                            {...register('currency', { required: 'Vous devez choisir une devise' })}
-                                                            />
-                                                        <label className=' text-[12px]  text-sm font-semibold text-white' htmlFor="">USD</label>
-                                                    </div>
-                                                    <div className=" w-1/3 flex justify-between items-center">
-                                                        <input
-                                                            type="radio"
-                                                            id="CDF"
-                                                            value={1}
-                                                            {...register('currency', { required: 'Vous devez choisir une devise' })}
-                                                            />
-                                                        <label className=' text-[12px]  text-sm font-semibold text-white' htmlFor="">CDF</label>
-                                                    </div>
-                                                </>
-                                            )}
-                                            rules={{ required: 'La monnaie est requise' }}
-                                        />
                                 </div>
                                 <div className=" col-span-2  space-y-2" >
                                     <label className=" font-semibold text-sm text-white" htmlFor="">TAUX MB</label>
@@ -816,8 +789,55 @@ export default function FormArticleAppro() {
                                 </div>
                             </div>
                         </div>
-                    </div>  
+                    </div>   */}
+                    
                 </form>
+
+                <div className="p-4">
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-white border border-gray-300">
+                        <thead>
+                        {/* bg-gray-700 */}
+                            <tr className="bg-white text-gray-700">
+                                <th className=" border border-gray-500 text-left pl-1 ">LOC</th>
+                                <th className=" border border-gray-500 text-left pl-1 ">Description</th>
+                                <th className=" border border-gray-500 text-left pl-1 ">STOCK</th>
+                                <th className=" border border-gray-500 text-left pl-1 ">APPRO</th>
+                                <th className=" border border-gray-500 text-left pl-1 ">P.A/CDF</th>
+                                <th className=" border border-gray-500 text-left pl-1 ">P.V/CDF</th>
+                                <th className=" border border-gray-500 text-left pl-1 ">PEREMPTION</th>
+                                <th className=" border border-gray-500 text-left pl-1 ">Fournisseur</th>
+                                <th className=" border border-gray-500 text-left pl-1 ">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {cart.map((item, index) => (
+                            <tr key={index} className="bg-white border text-gray-700 border-gray-600">
+                                <td className=" border border-gray-500 pl-1 uppercase text-[13px] font-bold ">{item.location1}</td>
+                                <td className=" border border-gray-500 pl-1 uppercase text-[13px] font-bold ">{item.description}</td>
+                                <td className=" border border-gray-500 pl-1 uppercase text-[13px] font-bold ">{item.quantity}</td>
+                                <td className=" border border-gray-500 pl-1 uppercase text-[13px] font-bold ">{item.quantityappro}</td>
+                                <td className=" border border-gray-500 pl-1 uppercase text-[13px] font-bold ">{item.purchase_price}</td>
+                                <td className=" border border-gray-500 pl-1 uppercase text-[13px] font-bold ">{item.selling_price} </td>
+                                <td className=" border border-gray-500 pl-1 uppercase text-[13px] font-bold ">{item.expirationDate}</td>
+                                <td className=" border border-gray-500 pl-1 uppercase text-[13px] font-bold ">{item.supplier1}</td>
+                                <td className=" border border-gray-500 pl-1 uppercase text-[13px] font-bold ">
+                                <button onClick={() => removeItem(index)} className="bg-red-600 text-white px-2 py-1 rounded-lg">Supprimer</button>
+                                </td>
+                            </tr>
+                            ))}
+                        </tbody>
+                        <tfoot>
+                            {/* <tr className="bg-gray-900 font-bold text-white">
+                            <td className="p-2 border border-gray-500" colSpan={2}>Total</td>
+                            <td className="p-2 border border-gray-500">{totalAmount} $</td>
+                            <td className="p-2 border border-gray-500">{totalAmount} $</td>
+                            <td className="p-2 border border-gray-500" colSpan={4}></td>
+                            </tr> */}
+                        </tfoot>
+                        </table>
+                    </div>
+                </div>
             </div>
         </>
     )

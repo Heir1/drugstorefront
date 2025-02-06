@@ -90,41 +90,8 @@ export default function Supply() {
         }
     });
 
-    const placementsFormated = placements.map((location) => ({
-        value: location.id.toString(), // Convertir id en string
-        label: location.name,
-    }));
-
-
-    const packagingsFormated = packagings.map((packaging) => ({
-        value: packaging.id.toString(), // Convertir id en string
-        label: packaging.name,
-    }));
-
-
-    const categoriesFormated = categories.map((category) => ({
-        value: category.id.toString(), // Convertir id en string
-        label: category.name,
-    }));
-
-    
-    const suppliersFormated = suppliers.map((supplier) => ({
-        value: supplier.id.toString(), // Convertir id en string
-        label: supplier.name,
-    }));
-
-    const indicationsFormated = indications.map((indication) => ({
-        value: indication.id.toString(), // Convertir id en string
-        label: indication.name,
-    }));
-
-    const moleculeFormated = molecules.map((molecule) => ({
-        value: molecule.id.toString(), // Convertir id en string
-        label: molecule.name,
-    }));
-
-
     const setActivation = (tab:string) => {
+
         if(tab == "new"){
             setIsNewArticle(true) 
             setIsUpdateArticle(false)
@@ -146,6 +113,7 @@ export default function Supply() {
             setIsReportArticle(false) 
             setIsStateArticle(true)
         }
+
     }
 
 
@@ -198,9 +166,9 @@ export default function Supply() {
                 isNewArticle ? (
                     <div>
                          <FormArticleAppro/>
-                        <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white h-[650px] rounded-xl" >
+                        {/* <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white h-[650px] rounded-xl" >
                             <DataTableSupply columns={ArticleApproColumns} data={movements} needFilter={false} paginate={true} title=""/>
-                        </div>
+                        </div> */}
                     </div>
                 )
                 :
