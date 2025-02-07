@@ -30,6 +30,7 @@ import IMovement from '@/app/interfaces/movement';
 import { v4 as uuidv4 } from 'uuid';
 import { createMovement } from '@/app/redux/slices/movements/actions';
 import toast, { Toaster } from 'react-hot-toast'
+import { useRateService } from '@/app/redux/slices/rates/useRateService';
 // Dynamically import React Select without SSR
 const Select = dynamic(() => import('react-select'), { ssr: false });
 
@@ -72,6 +73,8 @@ export default function FormArticleAppro() {
     const { currencies, currencyStatus, currencyError } = useCurrencyService();
     const [number, setNumber] = useState<number | ''>(''); // Utiliser une chaîne vide au départ
     const [result, setResult] = useState<number | ''>(''); // Même chose pour le résultat
+    const {  rates } = useRateService();
+    const rate = rates[0]?.value
 
 
     
@@ -244,8 +247,8 @@ export default function FormArticleAppro() {
         setCart(cart.filter((_, i) => i !== index));
       };
     
-      const totalPurchase = cart.reduce((sum, item) => sum + item.purchase_price * item.quantity, 0);
-      const totalSelling = cart.reduce((sum, item) => sum + item.selling_price * item.quantity, 0);
+      const totalPurchase = cart.reduce((sum, item) => sum + item.purchase_price * item.quantityappro, 0);
+      const totalSelling = cart.reduce((sum, item) => sum + item.selling_price * item.quantityappro, 0);
     
     
     //   const totalAmount = cart.reduce((sum, item) => sum + item.selling_price * item.quantity, 0);
@@ -303,35 +306,6 @@ export default function FormArticleAppro() {
             <div className="mx-2"  >
                 <Toaster />
                 <form onSubmit={handleSubmit(onSubmit)}>
-
-                {/* <div className="flex justify-center bg-gray-600 rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] p-5 mx-5 " >  
-
-                    <div className="flex justify-start bg-gray-50 rounded-xl shadow-lg p-5 mx-5 gap-8 items-center">
-
-                        <div className="w-1/3 flex flex-col items-start pl-10">
-                            <label className="font-semibold text-sm text-gray-700">
-                                Recherche d'article
-                            </label>
-                        </div>
-
-                        <div className="w-2/3">
-                            <Controller
-                                name="description1"
-                                control={control}
-                                render={({ field }) => (
-                                    <Select
-                                        {...field}
-                                        value={article}
-                                        options={articlesFormated}
-                                        onChange={handleChange}
-                                        placeholder="Sélectionnez un article"
-                                    />
-                                )}
-                            />
-                        </div>
-                    </div>
-
-                </div> */}
 
                     <div className=" grid grid-cols-12 border-[1px] border-white mx-4 gap-3 p-2 " >
                         <div className=" col-span-3 " >
@@ -568,276 +542,88 @@ export default function FormArticleAppro() {
                             <button type="submit" className=" w-full text-center p-2 bg-[#4594ff] text-white transition duration-300 hover:bg-[#3386e0]  rounded-lg  text-[14px]  " >Ajouter</button>
                         </div>
                     </div>
-
-                    {/* <div className="grid grid-cols-11  gap-x-5 p-5 " >
-                        <div className="col-span-6 bg-gray-600 p-10  rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
-                            <div className="grid grid-cols-2 gap-5">
-                                <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm text-white " htmlFor="">Code barre</label>
-                                    <Controller
-                                        name="barcode"
-                                        control={control}
-                                        render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg " type="text" readOnly />}
-                                        rules={{ required: 'Le code barre est requis' }}
-                                    />
-                                </div>
-                                <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm text-white" htmlFor="">Localisation</label>
-                                    <Controller
-                                        name="location"
-                                        control={control}
-                                        
-                                        render={({ field }) => (
-                                        <Select
-                                            id="location"
-                                            {...field}
-                                            options={placementsFormated}
-                                            placeholder="Sélectionnez la localisation du produit"
-                                            isClearable
-                                            isDisabled
-                                        />
-                                        )}
-                                        rules={{ required: 'La localisation est requise' }}
-                                    />
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-1 gap-5">
-                                <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm text-white" htmlFor="">Description</label>
-                                    <Controller
-                                        name="description"
-                                        control={control}
-                                        render={({ field }) => <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg " {...field} type="text" readOnly/>}
-                                        rules={{ required: 'La description est requise' }}
-                                    />
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-1 gap-5">
-                                <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm text-white" htmlFor="">Indication</label>
-                                    <Controller
-                                        name="indication"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <Select
-                                                {...field}
-                                                options={indicationsFormated}
-                                                placeholder="Sélectionnez une indication"
-                                                isClearable
-                                                isDisabled
-                                            />
-                                        )}
-                                        rules={{ required: 'L indication est requise' }}
-                                    />
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-1 gap-5">
-                                <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm text-white" htmlFor="">Molécule</label>
-                                    <Controller
-                                        name="molecule"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <Select
-                                                {...field}
-                                                options={moleculeFormated}
-                                                placeholder="Sélectionnez un molécule"
-                                                isClearable
-                                                isDisabled
-                                            />
-                                        )}
-                                        rules={{ required: 'Le molécule est requis' }}
-                                    />
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-2 gap-5">
-                                <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm text-white" htmlFor="">Emballage</label>
-                                    <Controller
-                                        name="packaging"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <Select
-                                                {...field}
-                                                options={packagingsFormated}
-                                                placeholder="Sélectionnez le type d'emballage "
-                                                isClearable
-                                                isDisabled
-                                            />
-                                        )}
-                                        rules={{ required: 'L emballage est requis' }}
-                                    />
-                                </div>
-                                <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm text-white" htmlFor="">Catégorie</label>
-                                    <Controller
-                                        name="category"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <Select
-                                                {...field}
-                                                options={categoriesFormated}
-                                                placeholder="Sélectionnez une categprie"
-                                                isClearable
-                                                isDisabled
-                                            />
-                                        )}
-                                        rules={{ required: 'La catégorie est requise' }}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-span-5 bg-gray-600 rounded-xl p-10 space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
-                            <div className="grid grid-cols-1 gap-5">
-                                <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm text-white" htmlFor="">Fournisseur</label>
-                                    <Controller
-                                        name="supplier"
-                                        control={control}
-                                        
-                                        render={({ field }) => (
-                                            <Select
-                                                {...field}
-                                                options={suppliersFormated}
-                                                placeholder="Sélectionnez un fournisseur"
-                                                isClearable
-                                                isDisabled
-                                            />
-                                        )}
-                                        rules={{ required: 'Le fournisseur est requis' }}
-                                    />
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-2 gap-5">
-                                <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm text-white" htmlFor="">Alerte</label>
-                                    <Controller
-                                        name="alert"
-                                        control={control}
-                                        render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4" {...field} type="number" readOnly/>}
-                                        rules={{ required: 'L alerte est requise' }}
-                                    />
-                                </div>
-                                <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm text-white" htmlFor="">Péremption</label>
-                                    <Controller
-                                        name="expirationDate"
-                                        control={control}
-                                        render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 pr-4 uppercase rounded-lg " {...field} type="date"/>}
-                                        rules={{ required: 'La date est requise' }}
-                                    />
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-3 gap-5">
-                                <div>
-                                    <div className="grid grid-cols-2 gap-2 " >
-                                        <div className="space-y-2" >
-                                            <label className=" font-semibold text-sm text-white" htmlFor="">Qté Stock</label>
-                                            <Controller
-                                                name="quantity"
-                                                control={control}
-                                                render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4" {...field} type="number"readOnly />}
-                                                rules={{ required: 'La quantité est requise' }}
-                                            />
-                                        </div> 
-                                            <div className="space-y-2" >
-                                            <label className=" font-semibold text-sm text-white" htmlFor="">Qté Appro</label>
-                                            <Controller
-                                                name="quantityappro"
-                                                control={control}
-                                                render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4" {...field} type="number" min={1} />}
-                                                rules={{ required: 'La quantité est requise' }}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                                
-
-                                <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm text-white" htmlFor="">P.A</label>
-                                    <Controller
-                                        name="purchase_price"
-                                        control={control}
-                                        render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4" {...field} type="number"  onChange={handleNumberChange} value={number}/>}
-                                        rules={{ required: 'Le prix dachat est requis' }}
-                                    />
-                                </div>
-                                <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm text-white" htmlFor="">P.V</label>
-                                    <Controller
-                                        name="selling_price"
-                                        control={control}
-                                        render={({ field }) => <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4" {...field} type="number" value={result} readOnly />}
-                                        rules={{ required: 'Le prix de vente est requis' }}
-                                    />
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-3 gap-5 ">
-                                <div className=" flex justify-between items-end pb-3 " >
-                                </div>
-                                <div className=" col-span-2  space-y-2" >
-                                    <label className=" font-semibold text-sm text-white" htmlFor="">TAUX MB</label>
-                                    <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4" value={1.25} type="number" name="" id="" readOnly/>
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-2 gap-5 pt-8 ">
-                                <div className=" " >
-                                    <button className=" w-full  border-[1px] hover:bg-[#FE6212] hover:text-white border-[#FE6212] text-center  text-[14px] p-2 transition duration-300 text-[#FE6212] rounded-lg ">Annuler</button>
-                                </div>
-                                <div className="" >
-                                    <button type="submit" className=" w-full text-center p-2 bg-[#4594ff] text-white transition duration-300 hover:bg-[#3386e0]  rounded-lg  text-[14px]  " >Ajouter</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>   */}
                     
                 </form>
 
                 <div className="p-4">
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-white border border-gray-300">
-                        <thead>
-                        {/* bg-gray-700 */}
-                            <tr className="bg-white text-gray-700">
-                                <th className=" border border-gray-500 text-left pl-1 ">LOC</th>
-                                <th className=" border border-gray-500 text-left pl-1 ">Description</th>
-                                <th className=" border border-gray-500 text-left pl-1 ">STOCK</th>
-                                <th className=" border border-gray-500 text-left pl-1 ">APPRO</th>
-                                <th className=" border border-gray-500 text-left pl-1 ">P.A/CDF</th>
-                                <th className=" border border-gray-500 text-left pl-1 ">P.V/CDF</th>
-                                <th className=" border border-gray-500 text-left pl-1 ">PEREMPTION</th>
-                                <th className=" border border-gray-500 text-left pl-1 ">Fournisseur</th>
-                                <th className=" border border-gray-500 text-left pl-1 ">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {cart.map((item, index) => (
-                            <tr key={index} className="bg-white border text-gray-700 border-gray-600">
-                                <td className=" border border-gray-500 pl-1 uppercase text-[13px] font-bold ">{item.location1}</td>
-                                <td className=" border border-gray-500 pl-1 uppercase text-[13px] font-bold ">{item.description}</td>
-                                <td className=" border border-gray-500 pl-1 uppercase text-[13px] font-bold ">{item.quantity}</td>
-                                <td className=" border border-gray-500 pl-1 uppercase text-[13px] font-bold ">{item.quantityappro}</td>
-                                <td className=" border border-gray-500 pl-1 uppercase text-[13px] font-bold ">{item.purchase_price}</td>
-                                <td className=" border border-gray-500 pl-1 uppercase text-[13px] font-bold ">{item.selling_price} </td>
-                                <td className=" border border-gray-500 pl-1 uppercase text-[13px] font-bold ">{item.expirationDate}</td>
-                                <td className=" border border-gray-500 pl-1 uppercase text-[13px] font-bold ">{item.supplier1}</td>
-                                <td className=" border border-gray-500 pl-1 uppercase text-[13px] font-bold ">
-                                <button onClick={() => removeItem(index)} className="bg-red-600 text-white px-2 py-1 rounded-lg">Supprimer</button>
-                                </td>
-                            </tr>
-                            ))}
-                        </tbody>
-                        <tfoot>
-                            {/* <tr className="bg-gray-900 font-bold text-white">
-                            <td className="p-2 border border-gray-500" colSpan={2}>Total</td>
-                            <td className="p-2 border border-gray-500">{totalAmount} $</td>
-                            <td className="p-2 border border-gray-500">{totalAmount} $</td>
-                            <td className="p-2 border border-gray-500" colSpan={4}></td>
-                            </tr> */}
-                        </tfoot>
-                        </table>
+                    <div className="overflow-x-auto flex flex-col justify-between  h-[calc(100vh-25rem)] border-2 border-white bg-[#7288a5d0] ">
+                        <div className=" h-[calc(100vh-25rem)] border-2 border-green-700 overflow-y-scroll " >
+                            <table className="w-full text-white border border-gray-300">
+                                <thead>
+                                {/* bg-gray-700 */}
+                                    <tr className="bg-white text-gray-700">
+                                        <th className=" border border-gray-500 text-left pl-1 ">LOC</th>
+                                        <th className=" border border-gray-500 text-left pl-1 ">Description</th>
+                                        <th className=" border border-gray-500 text-left pl-1 ">STOCK</th>
+                                        <th className=" border border-gray-500 text-left pl-1 ">APPRO</th>
+                                        <th className=" border border-gray-500 text-left pl-1 ">P.A/CDF</th>
+                                        <th className=" border border-gray-500 text-left pl-1 ">P.V/CDF</th>
+                                        <th className=" border border-gray-500 text-left pl-1 ">PEREMPTION</th>
+                                        <th className=" border border-gray-500 text-left pl-1 ">Fournisseur</th>
+                                        <th className=" border border-gray-500 text-left pl-1 ">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {cart.map((item, index) => (
+                                    <tr key={index} className="bg-white border text-gray-700 border-gray-600">
+                                        <td className=" border border-gray-500 pl-1 uppercase text-[13px] font-bold ">{item.location1}</td>
+                                        <td className=" border border-gray-500 pl-1 uppercase text-[13px] font-bold ">{item.description}</td>
+                                        <td className=" border border-gray-500 pl-1 uppercase text-[13px] font-bold ">{item.quantity}</td>
+                                        <td className=" border border-gray-500 pl-1 uppercase text-[13px] font-bold ">{item.quantityappro}</td>
+                                        <td className=" border border-gray-500 pl-1 uppercase text-[13px] font-bold ">{item.purchase_price}</td>
+                                        <td className=" border border-gray-500 pl-1 uppercase text-[13px] font-bold ">{item.selling_price} </td>
+                                        <td className=" border border-gray-500 pl-1 uppercase text-[13px] font-bold ">{item.expirationDate}</td>
+                                        <td className=" border border-gray-500 pl-1 uppercase text-[13px] font-bold ">{item.supplier1}</td>
+                                        <td className=" border border-gray-500 pl-1 uppercase text-[13px] font-bold ">
+                                        <button onClick={() => removeItem(index)} className="bg-red-600 text-white px-2 py-1 rounded-lg">Supprimer</button>
+                                        </td>
+                                    </tr>
+                                    ))}
+                                </tbody>
+                                <tfoot>
+                                    {/* <tr className="bg-gray-900 font-bold text-white">
+                                    <td className="p-2 border border-gray-500" colSpan={2}>Total</td>
+                                    <td className="p-2 border border-gray-500">{totalAmount} $</td>
+                                    <td className="p-2 border border-gray-500">{totalAmount} $</td>
+                                    <td className="p-2 border border-gray-500" colSpan={4}></td>
+                                    </tr> */}
+                                </tfoot>
+                            </table>
+                        </div>
+                        <div className=" grid grid-cols-6 bg-[#7288a5d0] h-[10vh] " >
+                            <div className=" ml-2 flex items-center ">
+                                <h1 className=" font-bold " >USD</h1>
+                                <div className=" font-bold   ml-2 flex justify-center bg-yellow-500  w-full " >
+                                    {(totalPurchase/rate).toFixed(2)}
+                                </div>
+                            </div>
+                            <div className=" ml-4 flex items-center ">
+                                <h1 className=" font-bold " >CDF</h1>
+                                <div className=" font-bold   ml-2 flex justify-center bg-green-600  w-full " >
+                                    {totalPurchase}
+                                </div>
+                            </div>
+                            <div className=" ml-4 flex items-center ">
+                                <div className=" ml-2 flex justify-center w-full border-2 border-black " >
+                                    <select className=" w-full "  name="" id="">
+                                        <option className=" " value="" disabled selected>Type d'appro</option>
+                                        <option value="">NORMAL</option>
+                                        <option value="">REGUL STOCK</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div className=" flex items-center col-start-6 gap-2 mr-2 " >
+                                <div className=" w-1/2" >
+                                    <button className=" bg-gray-300  w-full " >Enregistrer</button>
+                                </div>
+                                <div className=" w-1/2">
+                                    <button className=" bg-gray-300 w-full " >Annuler</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                
             </div>
         </>
     )
