@@ -316,7 +316,7 @@ export default function FormArticleAppro() {
                                 <Controller
                                     name="barcode"
                                     control={control}
-                                    // defaultValue=""
+                                    defaultValue=""
                                     render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase " type="text" readOnly />}
                                     rules={{ required: 'Le code barre est requis' }}
                                 />
@@ -329,6 +329,7 @@ export default function FormArticleAppro() {
                             <div>
                                 <Controller
                                     name="description1"
+                                    defaultValue="" // Ajoute une valeur par défaut
                                     control={control}
                                     render={({ field }) => (
                                         <Select
