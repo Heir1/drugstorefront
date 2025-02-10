@@ -347,16 +347,17 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
 
     return (
         <>
-            <div className="fixed z-40 left-0 top-0  w-full h-screen bg-[#00000040]" onClick={()=> setIsUpdateFormOpen(false)}>
-            </div>
-            <div className=" fixed z-50 top-[15%] left-[0%] mx-5 "  >
+            {/* <div className="fixed z-40 left-0 top-0  w-full h-screen bg-[#00000040]" onClick={()=> setIsUpdateFormOpen(false)}>
+            </div> */}
+            {/* <div className=" fixed z-50 top-[15%] left-[0%] mx-5 "  > */}
+            <div>
                 <Toaster />
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className="grid grid-cols-11  gap-x-5 p-5 " >
-                        <div className="col-span-6 bg-[#7288a5fd] p-10  rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
+                    <div className="grid grid-cols-12  gap-x-5 p-5 " >
+                        <div className="col-span-6 bg-[#7288a5fd] border-2 border-white p-2  space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
                             <div className="grid grid-cols-2 gap-5">
-                                <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm text-white" htmlFor="">Code barre</label>
+                                <div className=" flex items-center " >
+                                    <label className=" w-1/3 font-semibold text-sm text-white" htmlFor="">Code barre</label>
                                     <Controller
                                         name="barcode"
                                         control={control}
@@ -365,7 +366,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                         rules={{ required: 'Le code barre est requis' }}
                                     />
                                 </div>
-                                <div className="space-y-2" >
+                                <div className=" flex items-center justify-end gap-2 " >
                                     <label className=" font-semibold text-sm text-white" htmlFor="">Localisation</label>
                                     <Controller
                                         name="location"
@@ -376,7 +377,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                             id="location"
                                             {...field}
                                             options={placementsFormated}
-                                            placeholder="Sélectionnez la localisation du produit"
+                                            placeholder="Sélectionnez la localisation"
                                             isClearable
                                             className="border-2 border-black"
                                         />
@@ -386,8 +387,8 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                 </div>
                             </div>
                             <div className="grid grid-cols-1 gap-5">
-                                <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm text-white" htmlFor="">Description</label>
+                                <div className=" flex items-center " >
+                                    <label className=" w-[14%] font-semibold text-sm text-white" htmlFor="">Description</label>
                                     <Controller
                                         name="description"
                                         control={control}
@@ -397,7 +398,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                 </div>
                             </div>
                             <div className="grid grid-cols-1 gap-5">
-                                <div className="space-y-2" >
+                                <div className=" flex items-center justify-between " >
                                     <label className=" font-semibold text-sm text-white" htmlFor="">Indication</label>
                                     <Controller
                                         name="indication"
@@ -408,7 +409,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                                 options={indicationsFormated}
                                                 placeholder="Sélectionnez une indication"
                                                 isClearable
-                                                className="border-2 border-black"
+                                                className="border-2 border-black w-[87.5%] "
                                             />
                                         )}
                                         rules={{ required: 'L indication est requise' }}
@@ -416,7 +417,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                 </div>
                             </div>
                             <div className="grid grid-cols-1 gap-5">
-                                <div className="space-y-2" >
+                                <div className="flex items-center justify-between " >
                                     <label className=" font-semibold text-sm text-white" htmlFor="">Molécule</label>
                                     <Controller
                                         name="molecule"
@@ -427,7 +428,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                                 options={moleculeFormated}
                                                 placeholder="Sélectionnez un molécule"
                                                 isClearable
-                                                className="border-2 border-black"
+                                                className="border-2 border-black w-[87.5%]"
                                             />
                                         )}
                                         rules={{ required: 'Le molécule est requis' }}
@@ -435,8 +436,8 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                 </div>
                             </div>
                             <div className="grid grid-cols-2 gap-5">
-                                <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm text-white" htmlFor="">Emballage</label>
+                                <div className="flex items-center " >
+                                    <label className=" w-1/3  font-semibold text-sm text-white" htmlFor="">Emballage</label>
                                     <Controller
                                         name="packaging"
                                         control={control}
@@ -444,15 +445,15 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                             <Select
                                                 {...field}
                                                 options={packagingsFormated}
-                                                placeholder="Sélectionnez le type d'emballage "
+                                                placeholder="Sélectionnez l'emballage "
                                                 isClearable
-                                                className="border-2 border-black"
+                                                className="border-2 border-black w-full "
                                             />
                                         )}
                                         rules={{ required: 'L emballage est requis' }}
                                     />
                                 </div>
-                                <div className="space-y-2" >
+                                <div className="flex items-center justify-end gap-2 " >
                                     <label className=" font-semibold text-sm text-white" htmlFor="">Catégorie</label>
                                     <Controller
                                         name="category"
@@ -461,7 +462,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                             <Select
                                                 {...field}
                                                 options={categoriesFormated}
-                                                placeholder="Sélectionnez une categprie"
+                                                placeholder="Sélectionnez une categorie"
                                                 isClearable
                                                 className="border-2 border-black"
                                             />
@@ -471,79 +472,60 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                 </div>
                             </div>
                         </div>
-                        <div className="col-span-5 bg-[#7288a5] rounded-xl p-10 space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
+                        <div className="col-span-6 bg-[#7288a5] border-2 border-white p-2 space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
                             <div className="grid grid-cols-1 gap-5">
-                                <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm text-white " htmlFor="">Fournisseur</label>
-                                    <Controller
-                                        name="supplier"
-                                        control={control}
-                                        
-                                        render={({ field }) => (
-                                            <Select
-                                                {...field}
-                                                options={suppliersFormated}
-                                                placeholder="Sélectionnez un fournisseur"
-                                                isClearable
-                                                className="border-2 border-black"
-                                            />
-                                        )}
-                                        rules={{ required: 'Le fournisseur est requis' }}
-                                    />
+                                <div className="flex justify-between " >
+                                    <div>
+                                        <label className=" font-semibold text-sm text-white " htmlFor="">Fournisseur</label>
+                                        <Controller
+                                            name="supplier"
+                                            control={control}
+                                            
+                                            render={({ field }) => (
+                                                <Select
+                                                    {...field}
+                                                    options={suppliersFormated}
+                                                    placeholder="Sélectionnez un fournisseur"
+                                                    isClearable
+                                                    className="border-2 border-black w-[150%] "
+                                                />
+                                            )}
+                                            rules={{ required: 'Le fournisseur est requis' }}
+                                        />
+                                    </div>
+                                    <div className="" >
+                                    <label className=" font-semibold text-sm text-white" htmlFor="">Péremption</label>
+                                        <Controller
+                                            name="expirationDate"
+                                            control={control}
+                                            render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 pr-4 uppercase rounded-lg border-2 border-black" {...field} type="date" />}
+                                            rules={{ required: 'La date est requise' }}
+                                        />
+                                    </div>
                                 </div>
                             </div>
-                            <div className="grid grid-cols-2 gap-5">
-                                <div className="space-y-2" >
+                            <div className="grid grid-cols-8 gap-2 ">
+                                <div className="" >
                                     <label className=" font-semibold text-sm text-white" htmlFor="">Alerte</label>
                                     <Controller
                                         name="alert"
                                         control={control}
-                                        render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4 border-2 border-black" {...field} type="number" />}
+                                        render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4 " {...field} type="number" />}
                                         rules={{ required: 'L alerte est requise' }}
                                     />
                                 </div>
-                                <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm text-white" htmlFor="">Péremption</label>
-                                    <Controller
-                                        name="expirationDate"
-                                        control={control}
-                                        render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 pr-4 uppercase rounded-lg border-2 border-black" {...field} type="date" />}
-                                        rules={{ required: 'La date est requise' }}
-                                    />
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-3 gap-5">
-                                <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm text-white" htmlFor="">Quantité</label>
+                                <div className="" >
+                                    <label className=" font-semibold text-sm text-white" htmlFor="">Qté</label>
                                     <Controller
                                         name="quantity"
                                         control={control}
-                                        render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4 border-2 border-black" {...field} type="number" readOnly />}
+                                        render={({ field }) => <input  className="w-full text-[14px] bg-blue-500 h-10 pl-4 uppercase rounded-lg pr-4 " {...field} type="number" readOnly />}
                                         rules={{ required: 'La quantité est requise' }}
                                     />
                                 </div>
-                                <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm text-white" htmlFor="">P.A</label>
-                                    <Controller
-                                        name="purchase_price"
-                                        control={control}
-                                        render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4 border-2 border-black" {...field} type="number" onChange={handleNumberChange} value={number} />}
-                                        rules={{ required: 'Le prix dachat est requis' }}
-                                    />
-                                </div>
-                                <div className="space-y-2" >
-                                    <label className=" font-semibold text-sm text-white" htmlFor="">P.V</label>
-                                    <Controller
-                                        name="selling_price"
-                                        control={control}
-                                        render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4 border-2 border-black" {...field} type="number" value={result} readOnly />}
-                                        rules={{ required: 'Le prix de vente est requis' }}
-                                    />
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-3 gap-5 ">
-                                <div className=" flex justify-between items-end pb-3 " >
-
+                                <div className="col-span-2" >
+                                    <label className=" font-semibold text-sm text-white" htmlFor="">Devise</label>
+                                    <div className="flex justify-between  items-center pb-3 border-2 border-white " >
                                         <Controller
                                             name="currency"
                                             control={control}
@@ -571,18 +553,39 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
                                             )}
                                             rules={{ required: 'La monnaie est requise' }}
                                         />
+                                    </div>
                                 </div>
-                                <div className=" col-span-2  space-y-2" >
+                                <div className=" col-span-3 flex " >
+                                    <div>
+                                        <label className=" font-semibold text-sm text-white" htmlFor="">P.A</label>
+                                        <Controller
+                                            name="purchase_price"
+                                            control={control}
+                                            render={({ field }) => <input  className="w-full text-[14px] text-center bg-[#F2F7FC] h-10 pl-[8px] uppercase rounded-lg pr-4 border-2 border-black" {...field} type="number" onChange={handleNumberChange} value={number} />}
+                                            rules={{ required: 'Le prix dachat est requis' }}
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className=" font-semibold text-sm text-white" htmlFor="">P.V</label>
+                                        <Controller
+                                            name="selling_price"
+                                            control={control}
+                                            render={({ field }) => <input  className="w-full text-[14px] text-center bg-[#F2F7FC] h-10 pl-[8px] uppercase rounded-lg pr-4 border-2 border-black" {...field} type="number" value={result} readOnly />}
+                                            rules={{ required: 'Le prix de vente est requis' }}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="" >
                                     <label className=" font-semibold text-sm text-white" htmlFor="">TAUX MB</label>
-                                    <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4 border-2 border-black" value={1.25} type="number" name="" id="" readOnly/>
+                                    <input className="w-full bg-blue-500 text-[14px] h-10 pl-4 uppercase rounded-lg pr-4 " value={1.25} type="number" name="" id="" readOnly/>
                                 </div>
                             </div>
                             <div className="grid grid-cols-2 gap-5 pt-8 ">
-                                <div className=" " >
-                                    <button className=" w-full  border-[1px] hover:bg-[#FE6212] hover:text-white border-[#FE6212] text-center  text-[14px] p-2 transition duration-300 text-[#FE6212] rounded-lg " onClick={()=> setIsUpdateFormOpen(false)}>Annuler</button>
-                                </div>
                                 <div className="" >
                                     <button type="submit" className=" w-full text-center p-2 bg-[#4594ff] text-white transition duration-300 hover:bg-[#3386e0]  rounded-lg  text-[14px]  " >Modifier</button>
+                                </div>
+                                <div className=" " >
+                                    <button className=" w-full  border-[1px] hover:bg-[#FE6212] hover:text-white border-[#FE6212] text-center  text-[14px] p-2 transition duration-300 text-[#FE6212] rounded-lg " onClick={()=> setIsUpdateFormOpen(false)}>Annuler</button>
                                 </div>
                             </div>
                         </div>

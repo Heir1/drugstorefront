@@ -73,25 +73,25 @@ export default function Header() {
                                             dateDropdown && (
                                                 <div className=" absolute top-6 left-10 z-40  w-[150px] bg-[#262B62] text-white " >
                                                     <div className=" pl-6 py-2  " >
-                                                        <Link href={`/pages/admin/articles`} >
+                                                        <Link href={`/pages/admin/articles`} onClick={() => setDataDropdown(!dateDropdown) } >
                                                             <span className=" text-sm " > Aricles</span>
                                                         </Link>
                                                     </div>
                                                     <hr />
                                                     <div className="  pl-6 py-2 ">
-                                                        <Link className="flex items-center space-x-2" href={`/pages/admin/Supplies`}>
+                                                        <Link className="flex items-center space-x-2" href={`/pages/admin/Supplies`} onClick={() => setDataDropdown(!dateDropdown) }>
                                                             <span className=" text-sm "> Approv </span>
                                                         </Link>
                                                     </div>
                                                     <hr />
                                                     <div className="  pl-6 py-2">
-                                                        <Link className="flex items-center space-x-2" href={`/pages/admin/regularisations`}>
+                                                        <Link className="flex items-center space-x-2" href={`/pages/admin/regularisations`} onClick={() => setDataDropdown(!dateDropdown) }>
                                                             <span className=" text-sm "> Régularisation </span> 
                                                         </Link>
                                                     </div>
                                                     <hr />
                                                     <div className="  pl-6 py-2 ">
-                                                        <Link className="flex items-center space-x-2" href={`/pages/admin/sales`}>
+                                                        <Link className="flex items-center space-x-2" href={`/pages/admin/sales`} onClick={() => setDataDropdown(!dateDropdown) }>
                                                             <span className=" text-sm "> Ventes </span>
                                                         </Link>
                                                     </div>

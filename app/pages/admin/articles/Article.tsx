@@ -110,6 +110,10 @@ export default function Article() {
         }
     }
 
+    const setIsUpdateFormOpen = () => {
+        
+    } 
+
     return (
         <>
 
@@ -159,7 +163,7 @@ export default function Article() {
 
                         {/* <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white rounded-xl" >
                             <DataTable columns={ArticleColumns} data={articles} needFilter={false} paginate={false} title=""/>
-                        </div> */}
+                        </div> h-[calc(100vh-25rem)] */}
                     </div>
                 )
                 :
@@ -168,9 +172,15 @@ export default function Article() {
                         <div>
 
                             {
-                                <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white h-[500px] rounded-xl" >
-                                    <DataTable columns={ArticleColumns} data={articles} needFilter={false} paginate={true} title=""/>
+                                <div className=" h-[80vh] flex flex-col justify-between " >
+                                    <div className=" bg-white px-4 mx-5 h-[35vh] overflow-scroll " >
+                                        <DataTable columns={ArticleColumns} data={articles} needFilter={false} paginate={false} title=""/>
+                                    </div>
+                                    <div>
+                                        <FormArticleUpdate  content="" setIsUpdateFormOpen={setIsUpdateFormOpen} />
+                                    </div>
                                 </div>
+
                             }
 
 
@@ -207,3 +217,8 @@ id={`${currency.name}`}
 value={currency.id}
 {...register('currency', { required: 'Vous devez choisir une devise' })}
 /> */}
+
+
+{/* <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white h-[500px] rounded-xl" > */}
+{/* <DataTable columns={ArticleColumns} data={articles} needFilter={false} paginate={true} title=""/> */}
+{/* </div> */}

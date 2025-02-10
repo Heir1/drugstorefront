@@ -125,9 +125,9 @@ export function DataTable<TData, TValue>({
 
   return (
     <>
-      {
+      {/* {
         isUpdateFormOpen &&  <FormArticleUpdate content={article} setIsUpdateFormOpen={setIsUpdateFormOpen}  />
-      }
+      } */}
       <div className="bg-transparent   rounded-2xl">
         <div className="flex items-center justify-between  " >
 
