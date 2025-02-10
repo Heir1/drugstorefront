@@ -220,6 +220,13 @@ export default function FormArticleSale() {
             [suppliers] // Dépend uniquement de `suppliers`
         );
 
+
+        useEffect(() => {
+            if (paymentModeFormated.length > 0) {
+              setValue("paymentmode", paymentModeFormated[0]); // Définir la valeur par défaut
+            }
+          }, [paymentModeFormated, setValue]);
+
         
         const dispatch = useDispatch<AppDispatch>();
 
@@ -615,7 +622,7 @@ export default function FormArticleSale() {
 
                                     <div className=" w-full  pl-[58px] " >
                                         <div className=" w-1/2 flex items-center gap-2 " >
-                                            <button type="button" onClick={onSubmitProf} className="col-span-1 h-8 bg-blue-600 text-white rounded text-sm transition hover:bg-blue-500 px-4 " >
+                                            <button type="button" onClick={onSubmitProf} className="col-span-1 h-8 bg-[#4594ff] text-white rounded text-sm transition hover:bg-blue-500 px-4 " >
                                                 Imprimer proforma
                                             </button>
                                         </div>
@@ -680,7 +687,7 @@ export default function FormArticleSale() {
                                                     name="location1"
                                                     control={control}
                                                     // defaultValue=""
-                                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-blue-600 pl-4 uppercase font-bold  " type="text" readOnly   />}
+                                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#4594ff] pl-4 uppercase font-bold  " type="text" readOnly   />}
                                                     rules={{ required: 'Le code barre est requis' }}
                                                 />
                                             </div>
@@ -694,7 +701,7 @@ export default function FormArticleSale() {
                                                     name="molecule1"
                                                     control={control}
                                                     // defaultValue=""
-                                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-blue-600 pl-4 font-bold  uppercase " type="text" readOnly   />}
+                                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#4594ff] pl-4 font-bold  uppercase " type="text" readOnly   />}
                                                     rules={{ required: 'Le code barre est requis' }}
                                                 />
                                             </div>
@@ -708,7 +715,7 @@ export default function FormArticleSale() {
                                                     name="indication1"
                                                     control={control}
                                                     // defaultValue=""
-                                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-blue-600 pl-4 font-bold uppercase " type="text" readOnly   />}
+                                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#4594ff] pl-4 font-bold uppercase " type="text" readOnly   />}
                                                     rules={{ required: 'Le code barre est requis' }}
                                                 />
                                             </div>
@@ -722,7 +729,7 @@ export default function FormArticleSale() {
                                                     name="category1"
                                                     control={control}
                                                     // defaultValue=""
-                                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-blue-600 pl-4 font-bold uppercase " type="text" readOnly   />}
+                                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#4594ff] pl-4 font-bold uppercase " type="text" readOnly   />}
                                                     rules={{ required: 'Le code barre est requis' }}
                                                 />
                                             </div>
@@ -736,7 +743,7 @@ export default function FormArticleSale() {
                                                     name="packaging1"
                                                     control={control}
                                                     // defaultValue=""
-                                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-blue-600 font-bold pl-4 uppercase " type="text" readOnly   />}
+                                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#4594ff] font-bold pl-4 uppercase " type="text" readOnly   />}
                                                     rules={{ required: 'Le code barre est requis' }}
                                                 />
                                             </div>
@@ -749,7 +756,7 @@ export default function FormArticleSale() {
                                                 <Controller
                                                     name="expirationDate"
                                                     control={control}
-                                                    render={({ field }) => <input  className="w-full text-[14px] bg-blue-600 font-bold  pl-4 pr-4 uppercase rounded-lg " {...field} type="date" readOnly />}
+                                                    render={({ field }) => <input  className="w-full text-[14px] bg-[#4594ff] font-bold  pl-4 pr-4 uppercase rounded-lg " {...field} type="date" readOnly />}
                                                     rules={{ required: 'La date est requise' }}
                                                 />
                                             </div>
@@ -773,7 +780,7 @@ export default function FormArticleSale() {
                                                     name="purchase_price"
                                                     control={control}
                                                     // defaultValue=""
-                                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-blue-600 pl-4 font-extrabold uppercase " type="number"  readOnly />}
+                                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#4594ff] pl-4 font-extrabold uppercase " type="number"  readOnly />}
                                                     rules={{ required: 'Le code barre est requis' }}
                                                 />
                                             </div>
@@ -846,7 +853,7 @@ export default function FormArticleSale() {
 
                                         {/* <div className=" w-full  pl-[58px] " >
                                             <div className=" w-1/2 flex items-center gap-2 " >
-                                                <button type="button" onClick={onSubmitProf} className="col-span-1 h-8 bg-blue-600 text-white rounded text-sm transition hover:bg-blue-500 px-4 " >
+                                                <button type="button" onClick={onSubmitProf} className="col-span-1 h-8 bg-[#4594ff] text-white rounded text-sm transition hover:bg-blue-500 px-4 " >
                                                     Imprimer proforma
                                                 </button>
                                             </div>
@@ -1074,13 +1081,11 @@ export default function FormArticleSale() {
                                             <Controller
                                                 name="paymentmode"
                                                 control={control}
+                                                // defaultValue={paymentModeFormated[0]}
                                                 render={({ field }) => (
                                                     <Select
                                                     {...field}
-                                                    // value={paymentMode}
                                                     options={paymentModeFormated}
-                                                    // onChange={handleChangePaymentMode}
-                                                    // placeholder="Sélectionnez le mode de paiement"
                                                     className="text-sm z-50  rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                     menuPlacement="top" 
                                                     />
@@ -1095,7 +1100,7 @@ export default function FormArticleSale() {
 
                                         <div className="col-start-6 col-span-4 ">
                                             <div className="grid grid-cols-5 gap-2">
-                                                <button type="button" onClick={handleSubmit(onSubmit)}  className="col-span-1 h-8 bg-blue-600 text-white rounded text-sm transition hover:bg-blue-500">
+                                                <button type="button" onClick={handleSubmit(onSubmit)}  className="col-span-1 h-8 bg-[#4594ff] text-white rounded text-sm transition hover:bg-blue-500">
                                                 Enregistrer
                                                 </button>
                                                 <button className="col-span-1 h-8 bg-red-600 text-white rounded text-sm transition hover:bg-red-500">
