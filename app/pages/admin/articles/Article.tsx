@@ -27,8 +27,8 @@ import Loading from '@/app/components/loading';
 import dynamic from 'next/dynamic';
 import { log } from 'console';
 import FormArticleCreation from '@/app/components/form/FormArticleCreation';
-import FormArticleUpdate from '@/app/components/form/FormArticleUpdate';
 import { DataTableState } from '@/components/ui/DataTable/DataTableState';
+import { DataTableArticleUpdate } from '@/components/ui/DataTable/DataTableArticleUpdate';
 
 
 interface IFormInputs {
@@ -173,12 +173,13 @@ export default function Article() {
 
                             {
                                 <div className=" h-[80vh] flex flex-col justify-between " >
-                                    <div className=" bg-white px-4 mx-5 h-[35vh] overflow-scroll " >
+                                    {/* <div className=" bg-white px-4 mx-5 h-[35vh] overflow-scroll " >
                                         <DataTable columns={ArticleColumns} data={articles} needFilter={false} paginate={false} title=""/>
                                     </div>
                                     <div>
                                         <FormArticleUpdate  content="" setIsUpdateFormOpen={setIsUpdateFormOpen} />
-                                    </div>
+                                    </div> */}
+                                    <DataTableArticleUpdate columns={ArticleColumns} data={articles} needFilter={false} paginate={false} title="" />
                                 </div>
 
                             }

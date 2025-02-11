@@ -22,22 +22,22 @@ const CellComponent = ({ row }: { row: any }) => {
         setArticle(article)
     }
 
-    return (
-        <>
-            <div className="flex justify-start " >
-                {/* <div className="text-white py-1 px-4 rounded-lg bg-[#4594ff] mr-3 "  >Activer</div> */}
-                {
-                    articleRow.is_active ? (
-                        <div className="bg-[#ff604e] py-1 px-4 rounded-lg text-center text-white w-24" onClick={()=> setUnActivation(articleRow) }>Desactiver</div>
-                    )
-                    :
-                    (
-                        <div className="bg-[#4594ff] py-1 px-4 rounded-lg text-center text-white w-24 " onClick={()=> setUnActivation(articleRow) }>Activer</div>
-                    )
-                }
-            </div>
-        </>
-    );
+    // return (
+    //     <>
+    //         <div className="flex justify-start " >
+    //             {/* <div className="text-white py-1 px-4 rounded-lg bg-[#4594ff] mr-3 "  >Activer</div> */}
+    //             {
+    //                 articleRow.is_active ? (
+    //                     <div className="bg-[#ff604e] py-1 px-4 rounded-lg text-center text-white w-24" onClick={()=> setUnActivation(articleRow) }>Desactiver</div>
+    //                 )
+    //                 :
+    //                 (
+    //                     <div className="bg-[#4594ff] py-1 px-4 rounded-lg text-center text-white w-24 " onClick={()=> setUnActivation(articleRow) }>Activer</div>
+    //                 )
+    //             }
+    //         </div>
+    //     </>
+    // );
 
 }
 
@@ -60,7 +60,7 @@ export const ArticleColumns: ColumnDef<IArticle>[] = [
     },
     {
         accessorKey: "description",
-        header: "Description",
+        header: "DESCRIPTION",
         cell: ({ row }) => (
         <div className="capitalize">{row.getValue("description")}</div>
         ),
@@ -143,13 +143,6 @@ export const ArticleColumns: ColumnDef<IArticle>[] = [
         cell: ({ row }) => (
         <div className="capitalize">{row.getValue("alert")}</div>
         ),
-    },
-
-    {
-        id: "actions",
-        header: "Actions",
-        enableHiding: false,
-        cell: CellComponent,
     }
 
         

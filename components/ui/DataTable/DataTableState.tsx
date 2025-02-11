@@ -38,7 +38,6 @@ import {
 } from "@/components/ui/table";
 import { Icon } from '@iconify/react';
 import IArticle from "@/app/interfaces/article";
-import FormArticleUpdate from "@/app/components/form/FormArticleUpdate";
 import ArticleActivationForm from "@/app/components/form/ArticleActivationForm";
 
 
