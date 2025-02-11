@@ -29,6 +29,7 @@ import { log } from 'console';
 import FormArticleCreation from '@/app/components/form/FormArticleCreation';
 import { DataTableState } from '@/components/ui/DataTable/DataTableState';
 import { DataTableArticleUpdate } from '@/components/ui/DataTable/DataTableArticleUpdate';
+import { DataTableArticleState } from '@/components/ui/DataTable/DataTableArticleState';
 
 
 interface IFormInputs {
@@ -191,9 +192,10 @@ export default function Article() {
                     (
                         isStateArticle ? (
                             <div>
-                                <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white h-[500px] rounded-xl" >
-                                    <DataTableState columns={ArticleColumns} data={articles} needFilter={false} paginate={true} title=""/>
-                                </div>
+                                {/* <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white h-[500px] rounded-xl" > */}
+                                    {/* <DataTableState columns={ArticleColumns} data={articles} needFilter={false} paginate={true} title=""/> */}
+                                    <DataTableArticleState columns={ArticleColumns} data={articles} needFilter={false} title="" paginate={false}/> 
+                                {/* </div> */}
                             </div>
                         )
                         :

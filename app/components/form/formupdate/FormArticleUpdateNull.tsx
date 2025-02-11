@@ -5,7 +5,7 @@ const Select = dynamic(() => import('react-select'), { ssr: false });
 
 export default function FormArticleUpdateNull() {
   return (
-    <div>
+    <div >
         <form >
             <div className="grid grid-cols-12  gap-x-5 p-5 " >
                 <div className="col-span-6 bg-[#7288a5fd] border-2 border-white p-2  space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
