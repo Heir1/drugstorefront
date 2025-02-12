@@ -9,10 +9,16 @@ import { createArticle, updateArticle } from '@/app/redux/slices/articles/action
 import IMovement from '@/app/interfaces/movement';
 import { deleteMovement, updateMovement } from '@/app/redux/slices/movements/actions';
 import toast, { Toaster } from 'react-hot-toast'
+import { useRateService } from '@/app/redux/slices/rates/useRateService';
 
 interface IFormInputs {
     description : string;
-    quantity : number
+    approv : number;
+    quantity : number;
+    purchase_price : number;
+    purchase_price1 : number;
+    supplier : string;
+    date : string;
 }
 
 interface ArticleFormActivationprops {
@@ -22,10 +28,21 @@ interface ArticleFormActivationprops {
 
 export default function StockRegulForm({content, setisStockRegulFormOpen}:ArticleFormActivationprops) {
 
+    console.log("LOG ",content);
+
+    const {  rates } = useRateService();
+    const rate = rates[0]?.value
+    
+
     const { control,setValue, register, handleSubmit, formState: { errors } } = useForm<IFormInputs>({
         defaultValues: {
             description : "",
+            approv : 0,
             quantity : 0,
+            purchase_price : 0,
+            purchase_price1 : 0,
+            supplier: "",
+            date: "",
         }
     });
 
@@ -163,6 +180,14 @@ export default function StockRegulForm({content, setisStockRegulFormOpen}:Articl
             
             setValue("description", content.article?.description, { shouldValidate: true });
             setValue("quantity", content?.quantity, { shouldValidate: true });
+            setValue("approv", content?.article.quantity, { shouldValidate: true });
+            setValue("purchase_price", content?.article.purchase_price, { shouldValidate: true });
+            setValue("purchase_price1", Number((Number(content?.article.purchase_price)/rate).toFixed(2)) , { shouldValidate: true });
+            setValue("supplier", content?.article.suppliers[0].name, { shouldValidate: true });
+            setValue("date", String(content?.article.created_at).split("T")[0], { shouldValidate: true });
+            // supplier 
+            
+            
 
         }
     }, [content,setValue]);
@@ -172,12 +197,136 @@ export default function StockRegulForm({content, setisStockRegulFormOpen}:Articl
     
     return (
         <>
-            <div className="fixed z-40 left-0 top-0  w-full h-screen bg-[#00000040]" onClick={()=> setisStockRegulFormOpen(false)}>
-            </div>
+            {/* <div className="fixed z-40 left-0 top-0  w-full h-screen bg-[#00000040]" onClick={()=> setisStockRegulFormOpen(false)}>
+            </div> */}
 
-            <div className=" fixed z-50 top-[15%] left-[30%] mx-5 "  >
+            <div className=" bg-[#7288a5fd] mx-8 border-2 border-white  "  >
                 <Toaster />
                 <form onSubmit={handleSubmit(onSubmit)}>
+                    <div className=" grid grid-cols-12 mx-4 gap-3 py-2 mt-2 " >
+
+                        <div className=" col-span-8 " >
+
+                            <div className=" flex w-full gap-2 " >
+                                <div className=" w-[80%] ">
+                                    <div>
+                                        <label className="text-[13px] font-extrabold "  htmlFor="">DESCRIPTION</label>
+                                    </div>
+                                    <div>
+                                        {/* <input readOnly className="w-full text-[14px] bg-[#4594ff] h-10 pl-4 uppercase rounded-lg " type="text" / */}
+                                    <Controller
+                                        name="description"
+                                        control={control}
+                                        render={({ field }) => <input readOnly className="w-full font-bold text-[14px] bg-[#4594ff] h-10 pl-4 uppercase rounded-lg " {...field} type="text" />}
+                                        rules={{ required: 'La description est requise' }}
+                                    />
+                                    </div>
+                                </div>
+                                <div className=" w-[20%] " >
+                                    <label className="text-[13px] font-extrabold"  htmlFor="">DATE</label>
+                                    <Controller
+                                        name="date"
+                                        control={control}
+                                        render={({ field }) => <input readOnly className="w-full font-bold text-[14px] bg-[#4594ff] h-10 pl-4 uppercase rounded-lg " {...field} type="text" />}
+                                        rules={{ required: 'La description est requise' }}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="flex w-full gap-2 " >
+                                <div className=" w-[50%] " >
+                                    <div>
+                                        <label className="text-[13px] font-extrabold "  htmlFor="">FOURNISSEUR</label>
+                                    </div>
+                                    <div>
+                                        <Controller
+                                        name="supplier"
+                                        control={control}
+                                        render={({ field }) => <input readOnly className="w-full font-bold text-[14px] bg-[#4594ff] h-10 pl-4 uppercase rounded-lg " {...field} type="text" />}
+                                        rules={{ required: 'La description est requise' }}
+                                    />
+                                    </div>
+                                </div>
+                                <div className="w-[15%]">
+                                    <div>
+                                        <label className="text-[13px] font-extrabold "  htmlFor="">STOCK ACTUEL</label>
+                                    </div>
+                                    <div>
+                                        <Controller
+                                            name="approv"
+                                            control={control}
+                                            render={({ field }) => <input className="w-full font-bold text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg " {...field} type="number" readOnly />}
+                                            rules={{ required: 'La description est requise' }}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="w-[15%]">
+                                    <div>
+                                        <label className="text-[13px] font-extrabold "  htmlFor="">QTE APPRO</label>
+                                    </div>
+                                    <div>
+                                        <Controller
+                                            name="quantity"
+                                            control={control}
+                                            render={({ field }) => <input className="w-full font-bold text-[14px] bg-[#4594ff] h-10 pl-4 uppercase rounded-lg " {...field} type="number" />}
+                                            rules={{ required: 'La description est requise' }}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="w-[15%]">
+                                    <div>
+                                        <label className="text-[13px] font-extrabold "  htmlFor="">PA/USD</label>
+                                    </div>
+                                    <div>
+                                        <Controller
+                                            name="purchase_price1"
+                                            control={control}
+                                            render={({ field }) => <input className="w-full text-[14px] font-bold bg-yellow-400 h-10 pl-4 uppercase rounded-lg " {...field} type="number" readOnly />}
+                                            rules={{ required: 'La description est requise' }}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="w-[15%]">
+                                    <div>
+                                        <label className="text-[13px] font-extrabold "  htmlFor="">PA/CDF</label>
+                                    </div>
+                                    <div>
+                                        <Controller
+                                            name="purchase_price"
+                                            control={control}
+                                            render={({ field }) => <input className="w-full font-bold text-[14px] bg-green-600 h-10 pl-4 uppercase rounded-lg " {...field} type="number" readOnly />}
+                                            rules={{ required: 'La description est requise' }}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div className=" col-span-4 gap-4 flex items-center  " >
+                            <div className=" w-[70%] flex flex-col space-y-2 gap-2 " >
+                                <label className="text-[13px] font-extrabold "  htmlFor="">COMMENTAIRE</label>
+                                <textarea className="w-full text-[14px] bg-[#F2F7FC] h-16 p-4 rounded-lg " />
+                            </div>
+                            <div className=" flex flex-col gap-2  w-[30%] " >
+                                <button className=" w-full  border-[1px] hover:bg-[#D32F2F] hover:text-white border-[#D32F2F] text-center  text-[14px] p-2 transition duration-300 text-[#D32F2F] rounded-lg "
+                                onClick={handleSubmit(onSubmitDelete)}
+                                >Annuler cet article</button>
+                                <button type="submit" className=" w-full text-center p-2 bg-[#4594ff]  text-white transition duration-300 hover:bg-[#3386e0]  rounded-lg  text-[14px]" >Modifier cet article</button>
+                            </div>
+
+
+                            {/* <div className=" w-full " >
+                                <button disabled={true} type="submit" className=" w-full  border-[1px] bg-[#D32F2F] text-white border-[#FE6212] text-center  text-[14px] p-2 transition duration-300 rounded-lg ">Désactiver</button>
+                            </div>
+                            <div className="w-full" >
+                                <button disabled={true} type="submit" className=" w-full text-center p-2 bg-[#28A745]  text-white transition duration-300  rounded-lg  text-[14px]  " >Activer</button>
+                            </div> */}
+                        </div>
+
+                    </div>
+                </form>
+                {/* <form onSubmit={handleSubmit(onSubmit)}>
                     <div className=" w-[150%]   bg-gray-600 p-10  rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
                         <div className="space-y-2" >
                             <label className=" font-semibold text-sm" htmlFor="">Description</label>
@@ -200,8 +349,7 @@ export default function StockRegulForm({content, setisStockRegulFormOpen}:Articl
 
                         <div className=" flex justify-between gap-4 pt-4 " >
                             <div className=" w-full " >
-                                <button className=" w-full  border-[1px] hover:bg-[#D32F2F] hover:text-white border-[#D32F2F] text-center  text-[14px] p-2 transition duration-300 text-[#D32F2F] rounded-lg " 
-                                // onClick={()=> setActivationFormOpen(false)}
+                                <button className=" w-full  border-[1px] hover:bg-[#D32F2F] hover:text-white border-[#D32F2F] text-center  text-[14px] p-2 transition duration-300 text-[#D32F2F] rounded-lg "
                                 onClick={handleSubmit(onSubmitDelete)}
                                 >Annuler cet article</button>
                             </div>
@@ -211,7 +359,7 @@ export default function StockRegulForm({content, setisStockRegulFormOpen}:Articl
                         </div>
                         
                     </div>
-                </form>
+                </form> */}
             </div>
         </>
     )

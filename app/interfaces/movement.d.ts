@@ -1,7 +1,7 @@
 export default interface IMovement {
     id?: string,
     article_id?: number,
-    quantity?: number
+    quantity?: number,
     movement_type_id?: number,
     movement_date?: string,
     reference?: string,

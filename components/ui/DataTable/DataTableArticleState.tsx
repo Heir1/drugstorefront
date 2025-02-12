@@ -141,7 +141,7 @@ export function DataTableArticleState<TData, TValue>({
 
                     </div>
 
-                    <div className="rounded-md h-[45vh] bg-white mx-5 border-2 border-black overflow-y-auto  ">
+                    <div className="rounded-md h-[45vh] bg-[#7288a5fd] mx-5 border-2 border-black overflow-y-auto  ">
                         <Table>
                         <TableHeader>
                             {table.getHeaderGroups().map((headerGroup) => (

@@ -45,7 +45,7 @@ export const ArticleApproColumns: ColumnDef<IMovement>[] = [
     },
     {
         accessorKey: "article.description",
-        header: "Description",
+        header: "DESCRIPTION",
         id: "article.description", // Explicitly set the ID
         cell: ({ row } : { row : any} ) => row.original.article?.description || "No Description",
     },
@@ -57,7 +57,7 @@ export const ArticleApproColumns: ColumnDef<IMovement>[] = [
 
     {
         accessorKey: "old_article_stock",
-        header: "Stock",
+        header: "STOCK",
         cell: ({ row } : { row : any} ) => row.original?.old_article_stock || "No Quantity",
     },
 
