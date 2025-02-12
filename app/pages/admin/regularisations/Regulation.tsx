@@ -11,6 +11,7 @@ import { InvoiceColumns } from '@/components/ui/DataTable/invoices/InvoiceColumn
 import { useInvoiceService } from '@/app/redux/slices/invoices/useInvoiceService';
 import { useRateService } from '@/app/redux/slices/rates/useRateService';
 import { DataTableStockSupply } from '@/components/ui/DataTable/DataTableStockSupply';
+import { DataTableSaleRegul } from '@/components/ui/DataTable/DataTableSaleRegul';
 
 interface IFormInputs {
     barcode: string;
@@ -148,50 +149,46 @@ export default function Regulation() {
         (
             isUpdateArticle ? (
                 <div>
-                    <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white rounded-xl" >
-                        <DataTableSupply columns={InvoiceColumns} data={invoices} needFilter={false} paginate={true} title="Invoice"/>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-gray-50 p-6 rounded-lg shadow-lg">
-                        {/* Title Section */}
-                        <div className="col-span-3 text-center">
-                            <h1 className="text-lg font-bold text-gray-800">
-                                VENTE DU 19/12/2024 AU 19/12/2024
-                            </h1>
-                        </div>
+                        <DataTableSaleRegul columns={InvoiceColumns} data={invoices} needFilter={false} paginate={false} title="Invoice"/>
+                        
+                        {/* <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-gray-50 p-6 rounded-lg shadow-lg">
+                        
+                            <div className="col-span-3 text-center">
+                                <h1 className="text-lg font-bold text-gray-800">
+                                    VENTE DU 19/12/2024 AU 19/12/2024
+                                </h1>
+                            </div>
 
-                        {/* Vente Details in CDF */}
-                        <div className="col-span-1 flex flex-col items-center bg-white p-4 rounded-lg shadow-md">
-                            <h2 className="text-sm text-gray-500">VENTE</h2>
-                            <h1 className="text-lg font-bold text-green-600">{total} CDF</h1>
-                        </div>
+                            <div className="col-span-1 flex flex-col items-center bg-white p-4 rounded-lg shadow-md">
+                                <h2 className="text-sm text-gray-500">VENTE</h2>
+                                <h1 className="text-lg font-bold text-green-600">{total} CDF</h1>
+                            </div>
 
-                        <div className="col-span-1 flex flex-col items-center bg-white p-4 rounded-lg shadow-md">
-                            <h2 className="text-sm text-gray-500">REMISE</h2>
-                            <h1 className="text-lg font-bold text-yellow-500">{0} CDF</h1>
-                        </div>
+                            <div className="col-span-1 flex flex-col items-center bg-white p-4 rounded-lg shadow-md">
+                                <h2 className="text-sm text-gray-500">REMISE</h2>
+                                <h1 className="text-lg font-bold text-yellow-500">{0} CDF</h1>
+                            </div>
 
-                        <div className="col-span-1 flex flex-col items-center bg-white p-4 rounded-lg shadow-md">
-                            <h2 className="text-sm text-gray-500">SOLDE</h2>
-                            <h1 className="text-lg font-bold text-blue-600">{total} CDF</h1>
-                        </div>
+                            <div className="col-span-1 flex flex-col items-center bg-white p-4 rounded-lg shadow-md">
+                                <h2 className="text-sm text-gray-500">SOLDE</h2>
+                                <h1 className="text-lg font-bold text-blue-600">{total} CDF</h1>
+                            </div>
 
-                        {/* Vente Details in USD */}
-                        <div className="col-span-1 flex flex-col items-center bg-white p-4 rounded-lg shadow-md">
-                            <h2 className="text-sm text-gray-500">VENTE</h2>
-                            <h1 className="text-lg font-bold text-green-600">{(total/rate).toFixed(2)} USD</h1>
-                        </div>
+                            <div className="col-span-1 flex flex-col items-center bg-white p-4 rounded-lg shadow-md">
+                                <h2 className="text-sm text-gray-500">VENTE</h2>
+                                <h1 className="text-lg font-bold text-green-600">{(total/rate).toFixed(2)} USD</h1>
+                            </div>
 
-                        <div className="col-span-1 flex flex-col items-center bg-white p-4 rounded-lg shadow-md">
-                            <h2 className="text-sm text-gray-500">REMISE</h2>
-                            <h1 className="text-lg font-bold text-yellow-500">{0} USD</h1>
-                        </div>
+                            <div className="col-span-1 flex flex-col items-center bg-white p-4 rounded-lg shadow-md">
+                                <h2 className="text-sm text-gray-500">REMISE</h2>
+                                <h1 className="text-lg font-bold text-yellow-500">{0} USD</h1>
+                            </div>
 
-                        <div className="col-span-1 flex flex-col items-center bg-white p-4 rounded-lg shadow-md">
-                            <h2 className="text-sm text-gray-500">SOLDE</h2>
-                            <h1 className="text-lg font-bold text-blue-600">{(total/rate).toFixed(2)} USD</h1>
-                        </div>
-                        </div>
-
-                    </div>
+                            <div className="col-span-1 flex flex-col items-center bg-white p-4 rounded-lg shadow-md">
+                                <h2 className="text-sm text-gray-500">SOLDE</h2>
+                                <h1 className="text-lg font-bold text-blue-600">{(total/rate).toFixed(2)} USD</h1>
+                            </div>
+                        </div> */}
                 </div>
             )
             :

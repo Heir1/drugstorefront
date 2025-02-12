@@ -90,6 +90,7 @@ export default function ArticleFormStockRegulNull() {
                                 <button disabled={true} type="submit" className=" w-full  border-[1px] bg-[#D32F2F] text-white border-[#FE6212] text-center  text-[14px] p-2 transition duration-300 rounded-lg ">Annuler cet article</button>
                                 <button disabled={true} type="submit" className=" w-full text-center p-2 bg-[#28A745]  text-white transition duration-300  rounded-lg  text-[14px]  " >Modifier cet article</button>
                             </div>
+
                         </div>
 
                     </div>

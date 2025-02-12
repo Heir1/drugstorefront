@@ -48,6 +48,7 @@ import StockRegulForm from "@/app/components/form/StockRegulForm";
 import SaleRegulForm from "@/app/components/form/SaleRegulForm";
 import { fetchInvoices } from "@/app/redux/slices/invoices/actions";
 import ArticleFormStockRegulNull from "@/app/components/form/formstock/ArticleFormStockRegulNull";
+import ArticleFormSaleRegulNull from "@/app/components/form/formsale/ArticleFormSaleRegulNull";
 
 
 
@@ -59,7 +60,7 @@ interface DataTableSupplyProps<TData, TValue> {
   paginate: boolean;
 }
 
-export function DataTableStockSupply<TData, TValue>({
+export function DataTableSaleRegul<TData, TValue>({
   columns,
   data,
   needFilter,
@@ -171,7 +172,7 @@ export function DataTableStockSupply<TData, TValue>({
         } */}
 
         {
-          isSaleRegulFormOpen && <SaleRegulForm content={article} setIsSaleRegulFormOpen={setIsSaleRegulFormOpen}  />
+        //   isSaleRegulFormOpen && <SaleRegulForm content={article} setIsSaleRegulFormOpen={setIsSaleRegulFormOpen}  />
         }
     
         <div className=" h-[80vh] flex flex-col justify-between bg-transparent   rounded-2xl ">
@@ -199,11 +200,11 @@ export function DataTableStockSupply<TData, TValue>({
                         title == "Invoice" && (
                             <div className="flex gap-5 " >
                                 <div className="flex gap-4 items-center  " >
-                                    <h1 className=" font-semibold text-sm italic " >Du</h1>
+                                    <h1 className=" font-semibold text-sm italic text-white" >Du</h1>
                                     <input onChange={(e) => setStartDate(e.target.value) }  className="uppercase italic font-semibold border-[1px] py-[5px] px-2 rounded-2xl border-black " type="date" name="" id="" />
                                 </div>
                                 <div className="flex gap-4 items-center">
-                                    <h1 className=" font-semibold text-sm italic ">Au</h1>
+                                    <h1 className=" font-semibold text-sm italic text-white">Au</h1>
                                     <input onChange={(e) => setEndDate(e.target.value) }  className="uppercase italic font-semibold  border-[1px] py-[5px] px-2 rounded-2xl border-black" type="date" name="" id="" />
                                 </div>
                                 <button onClick={getDate}  className=" px-4 text-sm rounded-lg text-white bg-slate-400 " >Filtrer</button>
@@ -264,14 +265,14 @@ export function DataTableStockSupply<TData, TValue>({
                                   table.getRowModel().rows?.length ? (
                                       table.getRowModel().rows.map((row) => (
                                           <TableRow
-                                              className=" hover:cursor-pointer uppercase text-xs  border-b-[1px] border-black text-black "
+                                              className=" hover:cursor-pointer font-extrabold uppercase text-xs  border-b-[1px] border-black text-black "
                                               key={row.id}
                                               data-state={row.getIsSelected() && "selected"}
                                               // onClick={() => redirectionPage(row.original)}
                                               onClick={() => getArticleInfo(row.original, title)}
                                           >
                                               {row.getVisibleCells().map((cell) => (
-                                                  <TableCell className="px-10 font-extrabold border-r-[1px] border-black "  key={cell.id}>
+                                                  <TableCell className="px-10 border-r-[1px] border-black "  key={cell.id}>
                                                   {flexRender(
                                                       cell.column.columnDef.cell,
                                                       cell.getContext()
@@ -342,12 +343,12 @@ export function DataTableStockSupply<TData, TValue>({
             
             <div>
               {
-                isStockRegulFormOpen ? (
-                  <StockRegulForm content={article} setisStockRegulFormOpen={setisStockRegulFormOpen}  />
+                isSaleRegulFormOpen ? (
+                  <SaleRegulForm content={article} setIsSaleRegulFormOpen={setIsSaleRegulFormOpen}  />
                 )
                 :
                 (
-                  <ArticleFormStockRegulNull/>
+                  <ArticleFormSaleRegulNull/>
                 )
               }
             </div>

@@ -34,22 +34,21 @@ const CellComponent = ({ row }: { row: any }) => {
 export const InvoiceColumns: ColumnDef<Iinvoice>[] = [
 
     {
-        accessorKey: "invoices.invoice_number",
-        header: "FACTURE",
-        id: "invoices.invoice_number", // Explicitly set the ID
-        cell: ({ row } : { row : any} ) => row.original?.invoices?.invoice_number || "N/A",
+        accessorKey: "invoices.invoice_date",
+        header: "DATE",
+        cell: ({ row } : { row : any} ) => String(row.original?.invoices?.invoice_date).split(" ")[0] || "No Date",
     },
 
     {
         accessorKey: "articles.description",
-        header: "PRODUIT",
+        header: "DESCRIPTION",
         id: "articles.description", // Explicitly set the ID
         cell: ({ row } : { row : any} ) => row.original?.articles?.description || "N/A",
     },
 
     {
         accessorKey: "quantity",
-        header: "QUANTITE",
+        header: "QTE",
         cell: ({ row } : { row : any} ) => row.original?.quantity || "No Quantity",
     },
 
@@ -66,9 +65,10 @@ export const InvoiceColumns: ColumnDef<Iinvoice>[] = [
     },
 
     {
-        accessorKey: "invoices.invoice_date",
-        header: "DATE",
-        cell: ({ row } : { row : any} ) => row.original?.invoices?.invoice_date || "No Price",
+        accessorKey: "invoices.invoice_number",
+        header: "FACTURE",
+        id: "invoices.invoice_number", // Explicitly set the ID
+        cell: ({ row } : { row : any} ) => row.original?.invoices?.invoice_number || "N/A",
     },
 
 

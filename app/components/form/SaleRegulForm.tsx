@@ -11,10 +11,17 @@ import { deleteMovement, updateMovement } from '@/app/redux/slices/movements/act
 import Iinvoice from '@/app/interfaces/invoice';
 import { deleteInvoice, updateInvoice } from '@/app/redux/slices/invoices/actions';
 import toast, { Toaster } from 'react-hot-toast'
+import { useRateService } from '@/app/redux/slices/rates/useRateService';
 
 interface IFormInputs {
     description : string;
-    quantity : number
+    quantity : number;
+    date : string;
+    numfact : string;
+    selling_price : number;
+    selling_price1 : number;
+    subtotal : number;
+    subtotal1 : number;
 }
 
 interface ArticleFormActivationprops {
@@ -28,13 +35,25 @@ export default function SaleRegulForm({content, setIsSaleRegulFormOpen}:ArticleF
         defaultValues: {
             description : "",
             quantity : 0,
+            date : "",
+            numfact : "",
+            selling_price : 0,
+            selling_price1 : 0,
+            subtotal : 0,
+            subtotal1 : 0
         }
     });
+
+    const { rates } = useRateService()
+    const rate = rates[0]?.value
+
+    console.log('Article content ',content);
 
     const dispatch = useDispatch<AppDispatch>();
 
     const onSubmit = async (data: IFormInputs) => {
 
+        
         console.log('Article id ',content.id);
         console.log('Invoice id ',content.invoice_id);
 
@@ -182,6 +201,12 @@ export default function SaleRegulForm({content, setIsSaleRegulFormOpen}:ArticleF
             
             setValue("description", content.articles?.description, { shouldValidate: true });
             setValue("quantity", content?.quantity, { shouldValidate: true });
+            setValue("date", String(content?.created_at).split("T")[0].split("-").reverse().join("-") , { shouldValidate: true });
+            setValue("numfact", content?.invoices.invoice_number, { shouldValidate: true });
+            setValue("selling_price", content?.unit_price, { shouldValidate: true });
+            setValue("selling_price1", Number((Number(content?.unit_price)/rate).toFixed(3)) , { shouldValidate: true });
+            setValue("subtotal", content?.subtotal, { shouldValidate: true });
+            setValue("subtotal1", Number((Number(content?.subtotal)/rate).toFixed(3)) , { shouldValidate: true });
 
         }
 
@@ -190,62 +215,159 @@ export default function SaleRegulForm({content, setIsSaleRegulFormOpen}:ArticleF
 
     return (
         <>
-            <div className="fixed z-40 left-0 top-0  w-full h-screen bg-[#00000040]" onClick={()=> setIsSaleRegulFormOpen(false)}>
-            </div>
-
-            <div className=" fixed z-50 top-[15%] left-[26%] mx-5 "  >
+            <div className=""  >
                 <Toaster />
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <div className=" bg-[#7288a5fd] mx-8 border-2 border-white  ">
+                    <Toaster />
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <div className=" grid grid-cols-12 mx-4 gap-3 py-2 mt-2 " >
 
-                        <div className=" w-[150%]   bg-gray-600 p-10  rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
-                            <div className="space-y-2" >
-                                <label className=" font-semibold text-sm" htmlFor="">Description</label>
-                                <Controller
-                                    name="description"
-                                    control={control}
-                                    render={({ field }) => <input readOnly className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg " {...field} type="text" />}
-                                    rules={{ required: 'La description est requise' }}
-                                />
+                            <div className=" col-span-8 " >
+
+                                <div className=" w-full flex gap-4 items-center ">
+                                    <div>
+                                        <label className="text-[13px] font-extrabold "  htmlFor="">PRODUIT</label>
+                                    </div>
+                                    <div className=" w-full " >
+                                        <Controller
+                                            name="description"
+                                            control={control}
+                                            render={({ field }) => <input readOnly className="w-full font-extrabold text-[14px] bg-[#4594ff] h-8 pl-4 uppercase " type="text" {...field} />}
+                                            rules={{ required: 'La description est requise' }}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className=" w-full" >
+                                    <div className="grid grid-cols-10 gap-2" >
+                                        <div className=" col-span-2  " >
+                                            <label className="text-[13px] font-extrabold "  htmlFor="">DATE</label>
+                                        </div>
+                                        <div className=" col-span-2 ">
+                                            <label className="text-[13px] font-extrabold "  htmlFor="">N. FACTURE</label>
+                                        </div>
+                                        <div className=" col-span-2">
+                                            <label className="text-[13px] font-extrabold "  htmlFor="">TYPE VENTE</label>
+                                        </div>
+                                        <div className=" col-span-2 ">
+                                            <label className="text-[13px] font-extrabold "  htmlFor="">QTE</label>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className=" w-full" >
+                                    <div className="grid grid-cols-10 gap-2" >
+                                        <div className=" col-span-2  " >
+                                            <Controller
+                                                name="date"
+                                                control={control}
+                                                render={({ field }) => <input readOnly className="w-full bg-transparent font-extrabold text-[14px] h-8 uppercase " type="text" {...field} />}
+                                                rules={{ required: 'La description est requise' }}
+                                            />
+                                        </div>
+                                        {/* numfact */}
+                                        <div className=" col-span-2  ">
+                                            <Controller
+                                                name="numfact"
+                                                control={control}
+                                                render={({ field }) => <input readOnly className="w-full bg-transparent font-extrabold text-[14px] h-8 uppercase " type="text" {...field} />}
+                                                rules={{ required: 'La description est requise' }}
+                                            />
+                                        </div>
+                                        <div className=" col-span-2  ">
+                                            <label className="text-[13px] font-extrabold "  htmlFor="">CASH</label>
+                                        </div>
+                                        <div className=" col-span-2  ">
+                                            <Controller
+                                                name="quantity"
+                                                control={control}
+                                                render={({ field }) => <input className="text-[13px] font-extrabold " {...field} type="number" />}
+                                                rules={{ required: 'La description est requise' }}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className=" w-full" >
+                                    <div className="grid grid-cols-10 gap-2 " >
+                                        <div className=" col-span-2  " >
+                                            <label className="text-[13px] font-extrabold "  htmlFor="">PU/USD</label>
+                                        </div>
+                                        <div className=" col-span-2  ">
+                                            <label className="text-[13px] font-extrabold "  htmlFor="">PU/CDF</label>
+                                        </div>
+                                        <div className=" col-span-2  ">
+                                            <label className="text-[13px] font-extrabold "  htmlFor="">PT/USD</label>
+                                        </div>
+                                        <div className=" col-span-2  ">
+                                            <label className="text-[13px] font-extrabold "  htmlFor="">PT/CDF</label>
+                                        </div>
+                                        <div className=" col-span-2  ">
+                                            <label className="text-[13px] font-extrabold "  htmlFor="">REMISE/CDF</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className=" w-full" > 
+                                    <div className="grid grid-cols-10 gap-2" >
+                                        <div className=" col-span-2  " >
+                                            <Controller
+                                                name="selling_price1"
+                                                control={control}
+                                                render={({ field }) => <input className="w-full text-[14px] font-extrabold bg-yellow-500 h-8" {...field} type="text" />}
+                                                rules={{ required: 'La description est requise' }}
+                                            />
+                                        </div>
+                                        <div className=" col-span-2  ">
+                                            <Controller
+                                                name="selling_price"
+                                                control={control}
+                                                render={({ field }) => <input className="w-full text-[14px] font-extrabold bg-green-700 h-8" {...field} type="text" />}
+                                            />  
+                                        </div>
+                                        <div className=" col-span-2  ">
+                                            <Controller
+                                                name="subtotal1"
+                                                control={control}
+                                                render={({ field }) => <input className="w-full text-[14px] font-extrabold bg-yellow-500 h-8" {...field} type="text" />}
+                                            /> 
+                                        </div>
+                                        <div className=" col-span-2  ">
+                                            <Controller
+                                                name="subtotal"
+                                                control={control}
+                                                render={({ field }) => <input className="w-full text-[14px] font-extrabold bg-green-700 h-8" {...field} type="text" />}
+                                            /> 
+                                        </div>
+                                        <div className=" col-span-2  ">
+                                            <input value="0" readOnly className="w-full font-extrabold text-[14px] bg-green-700 h-8 pl-4 uppercase " type="text" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* <input readOnly className="w-full text-[14px] bg-[#4594ff] h-10 pl-4 uppercase rounded-lg " type="text" /> */}
                             </div>
-                            <div className="space-y-2" >
-                                <label className=" font-semibold text-sm" htmlFor="">Stock</label>
-                                <Controller
-                                    name="quantity"
-                                    control={control}
-                                    render={({ field }) => <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg " {...field} type="number" />}
-                                    rules={{ required: 'La description est requise' }}
-                                />
-                            </div>
 
-
-                            <div className=" flex justify-between gap-4 pt-4 " >
-                                <div className=" w-full " >
-                                    {/* <button className=" w-full  border-[1px] hover:bg-[#FE6212] hover:text-white border-[#FE6212] text-center  text-[14px] p-2 transition duration-300 text-[#FE6212] rounded-lg " 
-                                    // onClick={()=> setActivationFormOpen(false)}
-                                    // onClick={handleSubmit(onSubmitDelete)}
-                                    >Annulerr</button> */}
+                            <div className=" col-span-4 gap-4 flex items-center  " >
+                                <div className=" w-[70%] flex flex-col space-y-2 gap-2 " >
+                                    <label className="text-[13px] font-extrabold "  htmlFor="">COMMENTAIRE</label>
+                                    <textarea className="w-full text-[14px] bg-[#F2F7FC] h-16 p-4 rounded-lg " />
+                                </div>
+                                <div className=" flex flex-col gap-2  w-[30%] " >
+                                    {/* <button disabled={true} type="submit" className=" w-full  border-[1px] bg-[#D32F2F] text-white border-[#FE6212] text-center  text-[14px] p-2 transition duration-300 rounded-lg ">Annuler cet article</button>
+                                    <button disabled={true} type="submit" className=" w-full text-center p-2 bg-[#28A745]  text-white transition duration-300  rounded-lg  text-[14px]  " >Annuler la facture</button> */}
                                     <button className=" w-full  border-[1px] hover:bg-[#D32F2F] hover:text-white border-[#FE6212] text-center  text-[14px] p-2 transition duration-300 text-[#D32F2F] rounded-lg " 
                                     // onClick={()=> setActivationFormOpen(false)}
                                     onClick={handleSubmit(() => onSubmitDelete(content.id))}
-                                    >Supprimer seulement cet article</button>
-                                </div>
-                                <div className="w-full" >
+                                    >Supprimer l'article</button>
                                     <button type="submit" className=" w-full text-center p-2 bg-[#4594ff]  text-white transition duration-300 hover:bg-[#3386e0]  rounded-lg  text-[14px]" >Modifier cet article</button>
                                 </div>
                             </div>
 
-                            {/* <div className=" flex justify-between gap-4 pt-4 " >
-                                <div className=" w-full " >
-                                    <button className=" w-full  border-[1px] hover:bg-[#D32F2F] hover:text-white border-[#FE6212] text-center  text-[14px] p-2 transition duration-300 text-[#D32F2F] rounded-lg " 
-                                    // onClick={()=> setActivationFormOpen(false)}
-                                    onClick={handleSubmit(() => onSubmitDelete(content.invoice_id))}
-                                    >Supprimer toute la facture</button>
-                                </div>
-                            </div> */}
-
                         </div>
-
-                </form>
+                    </form>
+                </div>
             </div>
         </>
     )
