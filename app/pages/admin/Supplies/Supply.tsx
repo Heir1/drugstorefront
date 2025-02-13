@@ -63,7 +63,7 @@ export default function Supply() {
     const [isReportArticle, setIsReportArticle] = useState(false);
 
 
-    const totalMovement = movements?.reduce((acc: any, mouvement: any) => acc + (mouvement.quantity * mouvement.article.purchase_price), 0);
+    const totalMovement = movements?.reduce((acc: any, mouvement: any) => acc + (mouvement.quantity * mouvement?.article?.purchase_price), 0);
 
 
 

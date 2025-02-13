@@ -92,6 +92,9 @@ export const createMovement = createAsyncThunk<IMovement, IMovement>(
             if (response.error) {
               return rejectWithValue(response.error);
             }
+
+            console.log("DATA ",response.data);
+            
             return response.data as IMovement;
 
       } catch (error: any) {

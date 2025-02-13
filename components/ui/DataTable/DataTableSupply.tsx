@@ -333,9 +333,9 @@ export function DataTableSupply<TData, TValue>({
         }
 
       </div>
-      <div className="grid grid-cols-1">
+      {/* <div className="grid grid-cols-1">
         <h1>Total achat du {startDate } au {endDate} </h1>
-      </div>
+      </div> */}
     </>
     
   );

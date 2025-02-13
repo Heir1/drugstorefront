@@ -58,13 +58,13 @@ export const ArticleApproColumns: ColumnDef<IMovement>[] = [
     {
         accessorKey: "old_article_stock",
         header: "STOCK",
-        cell: ({ row } : { row : any} ) => row.original?.old_article_stock || "No Quantity",
+        cell: ({ row } : { row : any} ) => row.original?.old_article_stock || "No",
     },
 
     {
         accessorKey: "quantity",
         header: "APPRO",
-        cell: ({ row } : { row : any} ) => row.original?.quantity || "No Quantity",
+        cell: ({ row } : { row : any} ) => row.original?.quantity || "No",
     },
 
     // {

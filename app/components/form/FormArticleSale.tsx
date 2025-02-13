@@ -152,294 +152,290 @@ export default function FormArticleSale() {
     });
 
 
+    const articlesFormated = useMemo(() => 
+        articles.map((article:any) => ({ 
+            value: article , // Convertir id en string
+            label: article.description ,
+        })), 
+        [articles]
+    );
 
-
-
-        const articlesFormated = useMemo(() => 
-            articles.map((article:any) => ({ 
-                value: article , // Convertir id en string
-                label: article.description ,
-            })), 
-            [articles]
-        );
-
-        const paymentModeFormated = useMemo(() => 
-            paymentModes.map((paymentMode:any) => ({ 
-                value: paymentMode.id , // Convertir id en string
-                label: paymentMode.name ,
-            })), 
-            [paymentModes]
-        );
+    const paymentModeFormated = useMemo(() => 
+        paymentModes.map((paymentMode:any) => ({ 
+            value: paymentMode.id , // Convertir id en string
+            label: paymentMode.name ,
+        })), 
+        [paymentModes]
+    );
         
+    const placementsFormated = useMemo(() => 
+        placements.map((location) => ({ 
+            value: location.id.toString(), // Convertir id en string
+            label: location.name,
+        })), 
+        [placements] // Dépend uniquement de `placements`
+    );
 
-        const placementsFormated = useMemo(() => 
-            placements.map((location) => ({ 
-                value: location.id.toString(), // Convertir id en string
-                label: location.name,
-            })), 
-            [placements] // Dépend uniquement de `placements`
-        );
+    const indicationsFormated = useMemo(() => 
+        indications.map((indication) => ({ 
+            value: indication.id.toString(), // Convertir id en string
+            label: indication.name,
+        })), 
+        [indications] // Dépend uniquement de `indications`
+    );
 
-        const indicationsFormated = useMemo(() => 
-            indications.map((indication) => ({ 
-                value: indication.id.toString(), // Convertir id en string
-                label: indication.name,
-            })), 
-            [indications] // Dépend uniquement de `indications`
-        );
+    const moleculeFormated = useMemo(() => 
+        molecules.map((molecule) => ({ 
+            value: molecule.id.toString(), // Convertir id en string
+            label: molecule.name,
+        })), 
+        [molecules] // Dépend uniquement de `indications`
+    );
 
-        const moleculeFormated = useMemo(() => 
-            molecules.map((molecule) => ({ 
-                value: molecule.id.toString(), // Convertir id en string
-                label: molecule.name,
-            })), 
-            [molecules] // Dépend uniquement de `indications`
-        );
+    const packagingsFormated = useMemo(() => 
+        packagings.map((packaging) => ({ 
+            value: packaging.id.toString(), // Convertir id en string
+            label: packaging.name,
+        })), 
+        [packagings] // Dépend uniquement de `packaging`
+    );
 
-        const packagingsFormated = useMemo(() => 
-            packagings.map((packaging) => ({ 
-                value: packaging.id.toString(), // Convertir id en string
-                label: packaging.name,
-            })), 
-            [packagings] // Dépend uniquement de `packaging`
-        );
+    const categoriesFormated = useMemo(() => 
+        categories.map((category) => ({ 
+            value: category.id.toString(), // Convertir id en string
+            label: category.name,
+        })), 
+        [categories] // Dépend uniquement de `categories`
+    );
 
-        const categoriesFormated = useMemo(() => 
-            categories.map((category) => ({ 
-                value: category.id.toString(), // Convertir id en string
-                label: category.name,
-            })), 
-            [categories] // Dépend uniquement de `categories`
-        );
-
-        const suppliersFormated = useMemo(() => 
-            suppliers.map((supplier) => ({ 
-                value: supplier.id.toString(), // Convertir id en string
-                label: supplier.name,
-            })), 
-            [suppliers] // Dépend uniquement de `suppliers`
-        );
+    const suppliersFormated = useMemo(() => 
+        suppliers.map((supplier) => ({ 
+            value: supplier.id.toString(), // Convertir id en string
+            label: supplier.name,
+        })), 
+        [suppliers] // Dépend uniquement de `suppliers`
+    );
 
 
-        useEffect(() => {
-            if (paymentModeFormated.length > 0) {
-              setValue("paymentmode", paymentModeFormated[0]); // Définir la valeur par défaut
-            }
-          }, [paymentModeFormated, setValue]);
-
-        
-        const dispatch = useDispatch<AppDispatch>();
-
-        // const onSubmit = async ( data: IFormInputs) => {
-        
-        const onSubmit = async(data: any) => {
-
-            setIsInvoice(true);
-            setSubmittedData(data)
+    useEffect(() => {
+        if (paymentModeFormated.length > 0) {
+            setValue("paymentmode", paymentModeFormated[0]); // Définir la valeur par défaut
         }
+    }, [paymentModeFormated, setValue]);
 
-        useEffect(() => {
-            const handleCreateInvoice = async () => {
-              if (isInvoice) {
+    
+    const dispatch = useDispatch<AppDispatch>();
+
+    // const onSubmit = async ( data: IFormInputs) => {
+    
+    const onSubmit = async(data: any) => {
+
+        setIsInvoice(true);
+        setSubmittedData(data)
+    }
+
+    useEffect(() => {
+        const handleCreateInvoice = async () => {
+            if (isInvoice) {
                 const { paymentmode } = submittedData;
-          
+            
                 const cartDate: any = {
-                  paymentmode: paymentmode.value,
-                  articles: cart1,
+                    paymentmode: paymentmode.value,
+                    articles: cart1,
                 };
-          
+        
                 try {
-                  // Attendre la fin de la création de la facture
-                  const result = await dispatch(createInvoice(cartDate));
-          
-                  // Si la création de la facture a réussi, exécutez onSubmitProf()
-                  if (result.meta.requestStatus === 'fulfilled') {
+                    // Attendre la fin de la création de la facture
+                    const result = await dispatch(createInvoice(cartDate));
+            
+                    // Si la création de la facture a réussi, exécutez onSubmitProf()
+                    if (result.meta.requestStatus === 'fulfilled') {
                     onSubmitProf();
-                  } else {
+                    } else {
                     console.error('Erreur lors de la création de la facture');
-                  }
+                    }
                 } catch (error) {
-                  console.error('Erreur dans la création de la facture', error);
+                    console.error('Erreur dans la création de la facture', error);
                 }
-              }
-            };
-          
-            handleCreateInvoice();
-          }, [isInvoice, submittedData, dispatch, cart1]);
+            }
+        };
+        
+        handleCreateInvoice();
+    }, [isInvoice, submittedData, dispatch, cart1]);
 
       
-        const onSubmit1: SubmitHandler<IFormInputs> = (data) => {
+    const onSubmit1: SubmitHandler<IFormInputs> = (data) => {
 
-            console.log("DATA ", data);
-            
-
-            const id = article.value.id;
-
-            const quantity1 = parseInt(data.quantity1.toString(), 10); // Convertir en entier
-            const price_vente = parseFloat(data.purchase_price.toString()); // Convertir en flottant
-            const prix_total = quantity1 * price_vente;
+        console.log("DATA ", data);
         
-            // Vérifier si un article avec la même description existe
-            const existingItemIndex = cart.findIndex(
-              (item) => item.description === data.description
-            );
+
+        const id = article.value.id;
+
+        const quantity1 = parseInt(data.quantity1.toString(), 10); // Convertir en entier
+        const price_vente = parseFloat(data.purchase_price.toString()); // Convertir en flottant
+        const prix_total = quantity1 * price_vente;
+    
+        // Vérifier si un article avec la même description existe
+        const existingItemIndex = cart.findIndex(
+            (item) => item.description === data.description
+        );
+    
+        if (existingItemIndex !== -1) {
+            // Si l'article existe, mettre à jour la quantité et le prix total
+            const updatedCart = [...cart];
+            const updatedCart1 = [...cart1];
+            updatedCart[existingItemIndex].quantity1 += Number(quantity1);
+            updatedCart[existingItemIndex].prix_total += Number(prix_total);
+            updatedCart1[existingItemIndex].quantity1 += Number(quantity1);
+            updatedCart1[existingItemIndex].prix_total += Number(prix_total);
+            setCart(updatedCart);
+            setCart1(updatedCart1);
+        } else {
+            // Ajouter un nouvel article au panier
+            const newItem: CartItem = {
+            ...data,
+            quantity1,
+            prix_total,
+            };
+
+            const newItem1: CartItem1 = {
+            id: article.value.id,
+            quantity1,
+            prix_total
+            }
+
+            setCart([...cart, newItem]);
+            setCart1([...cart1, newItem1]);
+
+        }
+
+        console.log("PANIER ",cart1);
         
-            if (existingItemIndex !== -1) {
-              // Si l'article existe, mettre à jour la quantité et le prix total
-              const updatedCart = [...cart];
-              const updatedCart1 = [...cart1];
-              updatedCart[existingItemIndex].quantity1 += Number(quantity1);
-              updatedCart[existingItemIndex].prix_total += Number(prix_total);
-              updatedCart1[existingItemIndex].quantity1 += Number(quantity1);
-              updatedCart1[existingItemIndex].prix_total += Number(prix_total);
-              setCart(updatedCart);
-              setCart1(updatedCart1);
-            } else {
-              // Ajouter un nouvel article au panier
-              const newItem: CartItem = {
-                ...data,
-                quantity1,
-                prix_total,
-              };
+    
+        // Réinitialiser le formulaire après soumission
+        // reset();
+    };
 
-              const newItem1: CartItem1 = {
-                id: article.value.id,
-                quantity1,
-                prix_total
-              }
 
-              setCart([...cart, newItem]);
-              setCart1([...cart1, newItem1]);
-
-            }
-
-            console.log("PANIER ",cart1);
-            
+    const handleChange = (selected: any) => {
         
-            // Réinitialiser le formulaire après soumission
-            // reset();
-          };
+        setArticle(selected)
+
+        setValue("barcode", selected.value.barcode, { shouldValidate: true });
+        setValue("description", selected.value.description, { shouldValidate: true });
+        setValue("alert", selected.value.alert, { shouldValidate: true });
+        setValue("expirationDate", selected.value.expiration_date, { shouldValidate: true });
+        setValue("quantity", selected.value.quantity, { shouldValidate: true });
+        setValue("purchase_price", selected.value.selling_price, { shouldValidate: true });
+        setValue("selling_price", Number((Number(selected.value.selling_price)/rate).toFixed(3)), { shouldValidate: true });
+        setValue('currency', selected.value.currency_id.toString(), { shouldValidate: true });
+        setValue('packaging1', selected.value.packaging.name, { shouldValidate: true });
+        setValue('category1', selected.value.category.name, { shouldValidate: true });
+        setValue('location1', selected.value.placements[0].name, { shouldValidate: true });
+        setValue('supplier1', selected.value.suppliers[0].name, { shouldValidate: true });
+        setValue('molecule1', selected.value.molecules[0].name, { shouldValidate: true });
+        setValue('indication1', selected.value.indications[0].name, { shouldValidate: true });
+        
 
 
-        const handleChange = (selected: any) => {
-            
-            setArticle(selected)
+        // Assuming 'content.location' contains the value we need to set for the Select
+        const selectedLocation = placementsFormated.find(option => option.label === selected.value.placements[0].name); 
 
-            setValue("barcode", selected.value.barcode, { shouldValidate: true });
-            setValue("description", selected.value.description, { shouldValidate: true });
-            setValue("alert", selected.value.alert, { shouldValidate: true });
-            setValue("expirationDate", selected.value.expiration_date, { shouldValidate: true });
-            setValue("quantity", selected.value.quantity, { shouldValidate: true });
-            setValue("purchase_price", selected.value.selling_price, { shouldValidate: true });
-            setValue("selling_price", Number((Number(selected.value.selling_price)/rate).toFixed(3)), { shouldValidate: true });
-            setValue('currency', selected.value.currency_id.toString(), { shouldValidate: true });
-            setValue('packaging1', selected.value.packaging.name, { shouldValidate: true });
-            setValue('category1', selected.value.category.name, { shouldValidate: true });
-            setValue('location1', selected.value.placements[0].name, { shouldValidate: true });
-            setValue('supplier1', selected.value.suppliers[0].name, { shouldValidate: true });
-            setValue('molecule1', selected.value.molecules[0].name, { shouldValidate: true });
-            setValue('indication1', selected.value.indications[0].name, { shouldValidate: true });
-            
+        // Assuming 'content.indication' contains the value we need to set for the Select
+        const selectedIndication = indicationsFormated.find(option => option.label === selected.value.indications[0].name); 
 
+        // Assuming 'content.molecule' contains the value we need to set for the Select
+        const selectedMolecule = moleculeFormated.find(option => option.label === selected.value.molecules[0].name);  
 
-            // Assuming 'content.location' contains the value we need to set for the Select
-            const selectedLocation = placementsFormated.find(option => option.label === selected.value.placements[0].name); 
+        // Assuming 'content.location' contains the value we need to set for the Select
+        const selectedPackaging = packagingsFormated.find(option => option.label === selected.value.packaging.name);  
 
-            // Assuming 'content.indication' contains the value we need to set for the Select
-            const selectedIndication = indicationsFormated.find(option => option.label === selected.value.indications[0].name); 
+        // Assuming 'content.category' contains the value we need to set for the Select
+        const selectedCategory = categoriesFormated.find(option => option.label === selected.value.category.name); 
 
-            // Assuming 'content.molecule' contains the value we need to set for the Select
-            const selectedMolecule = moleculeFormated.find(option => option.label === selected.value.molecules[0].name);  
+        // Assuming 'content.supplier' contains the value we need to set for the Select
+        const selectedSupplier = suppliersFormated.find(option => option.label === selected.value.suppliers[0].name); 
+        
+        
+        console.log(selectedPackaging);
+        
+        
 
-            // Assuming 'content.location' contains the value we need to set for the Select
-            const selectedPackaging = packagingsFormated.find(option => option.label === selected.value.packaging.name);  
-
-            // Assuming 'content.category' contains the value we need to set for the Select
-            const selectedCategory = categoriesFormated.find(option => option.label === selected.value.category.name); 
-
-            // Assuming 'content.supplier' contains the value we need to set for the Select
-            const selectedSupplier = suppliersFormated.find(option => option.label === selected.value.suppliers[0].name); 
-            
-            
-            console.log(selectedPackaging);
-            
-            
-
-            if (selectedLocation) {
-                // Setting the value for 'location' using react-hook-form's setValue
-                setValue("location", selectedLocation, { shouldValidate: true });
-            }
-
-            if (selectedIndication) {
-                // Setting the value for 'location' using react-hook-form's setValue
-                setValue("indication", selectedIndication, { shouldValidate: true });
-            }
-
-            if (selectedMolecule) {
-                // Setting the value for 'location' using react-hook-form's setValue
-                setValue("molecule", selectedMolecule, { shouldValidate: true });
-            }
-
-            if (selectedPackaging) {
-                // Setting the value for 'location' using react-hook-form's setValue
-                setValue("packaging", selectedPackaging, { shouldValidate: true });
-            }
-
-            if (selectedCategory) {
-                // Setting the value for 'location' using react-hook-form's setValue
-                setValue("category", selectedCategory, { shouldValidate: true });
-            }
-
-            if (selectedSupplier) {
-                // Setting the value for 'location' using react-hook-form's setValue
-                setValue("supplier", selectedSupplier, { shouldValidate: true });
-            }
-        };
-
-        const removeItem = (index: number) => {
-            setCart(cart.filter((_, i) => i !== index));
-            setCart1(cart1.filter((_, i) => i !== index));
-        };
-
-        const getTotalPrice = (): number => {
-            return cart.reduce((total, item) => total + item.prix_total, 0);
-        };
-
-
-        const changeDollarHandler = (event:any) => {
-            setCurrency(true)
-            setUsdPaidAmount(Number(event.target.value));
+        if (selectedLocation) {
+            // Setting the value for 'location' using react-hook-form's setValue
+            setValue("location", selectedLocation, { shouldValidate: true });
         }
 
-        const changeCdfHandler = (event:any) => {
-            setCurrency(false)
-            setCdfPaidAmount(Number(event.target.value))
+        if (selectedIndication) {
+            // Setting the value for 'location' using react-hook-form's setValue
+            setValue("indication", selectedIndication, { shouldValidate: true });
         }
 
-        const  handleChangePaymentMode = (event:any) => {
-            setPaymentMode(event.label)
+        if (selectedMolecule) {
+            // Setting the value for 'location' using react-hook-form's setValue
+            setValue("molecule", selectedMolecule, { shouldValidate: true });
         }
 
-        const formatProducts = (products: typeof cart) => {
-            return products.map((product, index) => ({
-              barcode: product.barcode,
-              description: product.description,
-              quantity: cart1[index].quantity1,
-              selling_price: product.selling_price,
-              prix_total: product.prix_total,
-            }));
-        };
-
-        const onSubmitProf = () => {
-
-            setIsInvoice(false)
-            
-            const products = formatProducts(cart);
-
-            window.print();
-
-
+        if (selectedPackaging) {
+            // Setting the value for 'location' using react-hook-form's setValue
+            setValue("packaging", selectedPackaging, { shouldValidate: true });
         }
+
+        if (selectedCategory) {
+            // Setting the value for 'location' using react-hook-form's setValue
+            setValue("category", selectedCategory, { shouldValidate: true });
+        }
+
+        if (selectedSupplier) {
+            // Setting the value for 'location' using react-hook-form's setValue
+            setValue("supplier", selectedSupplier, { shouldValidate: true });
+        }
+    };
+
+    const removeItem = (index: number) => {
+        setCart(cart.filter((_, i) => i !== index));
+        setCart1(cart1.filter((_, i) => i !== index));
+    };
+
+    const getTotalPrice = (): number => {
+        return cart.reduce((total, item) => total + item.prix_total, 0);
+    };
+
+
+    const changeDollarHandler = (event:any) => {
+        setCurrency(true)
+        setUsdPaidAmount(Number(event.target.value));
+    }
+
+    const changeCdfHandler = (event:any) => {
+        setCurrency(false)
+        setCdfPaidAmount(Number(event.target.value))
+    }
+
+    const  handleChangePaymentMode = (event:any) => {
+        setPaymentMode(event.label)
+    }
+
+    const formatProducts = (products: typeof cart) => {
+        return products.map((product, index) => ({
+            barcode: product.barcode,
+            description: product.description,
+            quantity: cart1[index].quantity1,
+            selling_price: product.selling_price,
+            prix_total: product.prix_total,
+        }));
+    };
+
+    const onSubmitProf = () => {
+
+        setIsInvoice(false)
+        
+        const products = formatProducts(cart);
+
+        window.print();
+
+
+    }
 
 
         return (

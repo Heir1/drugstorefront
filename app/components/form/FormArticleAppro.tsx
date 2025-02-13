@@ -36,6 +36,7 @@ const Select = dynamic(() => import('react-select'), { ssr: false });
 
 
 interface IFormInputs {
+    id: string;
     barcode: string;
     location: { value: string; label: string } | null;
     location1: string,
@@ -71,6 +72,7 @@ export default function FormArticleAppro() {
     const { indications, indicationStatus, indicationError } = useIndicationService();
     const { placements, placementStatus, placementError } = usePlacementService();
     const { currencies, currencyStatus, currencyError } = useCurrencyService();
+    const [submittedData, setSubmittedData] = useState<any>(null);
     const [number, setNumber] = useState<number | ''>(''); // Utiliser une chaîne vide au départ
     const [result, setResult] = useState<number | ''>(''); // Même chose pour le résultat
     const {  rates } = useRateService();
@@ -86,6 +88,7 @@ export default function FormArticleAppro() {
       
     const { control, register, handleSubmit, formState: { errors }, setValue } = useForm<IFormInputs>({
         defaultValues: {
+            id : "",
             barcode : "",
             location : null,
             location1: "",
@@ -169,7 +172,10 @@ export default function FormArticleAppro() {
     const dispatch = useDispatch<AppDispatch>();
 
     
-    const onSubmit = async (data: IFormInputs) => {
+    const addToCart = async (data: IFormInputs) => {
+
+        console.log("CART ",cart);
+        
 
         setCart((prevCart) => {
             const existingItem = prevCart.find(item => item.description === data.description);
@@ -242,13 +248,62 @@ export default function FormArticleAppro() {
         // });
     
     };
+
+    const onSubmit = async (data: any) => {
+
+        const cartData: any = {
+            movement_type_id: 1,
+            articles: cart,
+        };
+
+        const createMovementPromise = dispatch(createMovement(cartData)).unwrap()
+        .then(() => ({
+            status: "fulfilled",
+            message: "Approvisionnement créé avec succès !",
+        }))
+        .catch((err) => {
+            const errorMessage = typeof err === "string" ? err : err?.message || "Erreur inconnue lors de la création.";
+            return {
+            status: "rejected",
+            message: errorMessage,
+            };
+        })
+        .then((result) => {
+            if (result.status === "fulfilled") {
+            toast.custom((t:any) => (
+                <div className={`${
+                    t.visible ? "animate-enter" : "animate-leave"
+                } flex items-center w-full max-w-xs p-4 text-white bg-green-600 border border-green-900 rounded-lg shadow-lg`}
+                >
+                <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">✅</span>
+                <div className="flex-1 text-center">
+                    <p className="text-sm">Mouvement effectué avec succès</p>
+                </div>
+                </div>
+            ), { duration: 2000 });
+            } else {
+            toast.custom((t:any) => (
+                <div className={`${
+                    t.visible ? "animate-enter" : "animate-leave"
+                } flex items-center w-full max-w-xs p-4 text-white bg-red-600 border border-red-900 rounded-lg shadow-lg`}
+                >
+                    <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">❌</span>
+                    <div className="flex-1 text-center">
+                        <p className="text-sm">{result.message}</p>
+                    </div>
+                </div>
+            ));
+            }
+        });
+    }
+
     
-      const removeItem = (index: number) => {
-        setCart(cart.filter((_, i) => i !== index));
-      };
-    
-      const totalPurchase = cart.reduce((sum, item) => sum + item.purchase_price * item.quantityappro, 0);
-      const totalSelling = cart.reduce((sum, item) => sum + item.selling_price * item.quantityappro, 0);
+    const removeItem = (index: number) => {
+    setCart(cart.filter((_, i) => i !== index));
+    };
+
+    const totalPurchase = cart.reduce((sum, item) => sum + item.purchase_price * item.quantityappro, 0);
+    const totalSelling = cart.reduce((sum, item) => sum + item.selling_price * item.quantityappro, 0);
     
     
     //   const totalAmount = cart.reduce((sum, item) => sum + item.selling_price * item.quantity, 0);
@@ -261,7 +316,7 @@ export default function FormArticleAppro() {
         setArticle(selected)
 
         
-
+        setValue("id", selected.value.id, { shouldValidate: true });
         setValue("barcode", selected.value.barcode, { shouldValidate: true });
         setValue("description", selected.value.description, { shouldValidate: true });
         setValue("alert", selected.value.alert, { shouldValidate: true });
@@ -305,7 +360,7 @@ export default function FormArticleAppro() {
         <>
             <div className="mx-2"  >
                 <Toaster />
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form onSubmit={handleSubmit(addToCart)}>
 
                     <div className=" grid grid-cols-12 border-[1px] border-white mx-4 gap-3 p-2 " >
                         <div className=" col-span-3 " >
@@ -445,6 +500,7 @@ export default function FormArticleAppro() {
                                 />
                             </div>
                         </div>
+
                         <div className=" col-span-1 " >
                             <div>
                                 <label className="text-[13px] font-medium text-white "  htmlFor="">QTE APPRO</label>
@@ -488,6 +544,7 @@ export default function FormArticleAppro() {
                                 rules={{ required: 'La monnaie est requise' }}
                             />
                         </div>
+
                         <div className=" col-span-1 " >
                             <div>
                                 <label className="text-[13px] font-medium text-white "  htmlFor="">PA</label>
@@ -496,12 +553,14 @@ export default function FormArticleAppro() {
                                 <Controller
                                     name="purchase_price"
                                     control={control}
+                                    
                                     // defaultValue=""
-                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="number"  readOnly />}
+                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="number" onChange={handleNumberChange} value={number} />}
                                     rules={{ required: 'Le code barre est requis' }}
                                 />
                             </div>
                         </div>
+
                         <div className=" col-span-1 " >
                             <div>
                                 <label className="text-[13px] font-medium text-white "  htmlFor="">PV</label>
@@ -511,7 +570,7 @@ export default function FormArticleAppro() {
                                     name="selling_price"
                                     control={control}
                                     // defaultValue=""
-                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="number"  readOnly />}
+                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="number" value={result}  readOnly />}
                                     rules={{ required: 'Le code barre est requis' }}
                                 />
                             </div>
@@ -615,7 +674,7 @@ export default function FormArticleAppro() {
                             </div>
                             <div className=" flex items-center col-start-6 gap-2 mr-2 " >
                                 <div className=" w-1/2" >
-                                    <button className=" bg-gray-300  w-full " >Enregistrer</button>
+                                    <button onClick={handleSubmit(onSubmit)} className=" bg-gray-300  w-full " >Enregistrer</button>
                                 </div>
                                 <div className=" w-1/2">
                                     <button className=" bg-gray-300 w-full " >Annuler</button>

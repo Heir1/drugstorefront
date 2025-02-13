@@ -207,11 +207,11 @@ export default function Sale() {
                                     <DataTableSupply columns={InvoiceColumns} data={invoices} needFilter={false} paginate={true} title="Invoice"/>
                                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-gray-50 p-6 rounded-lg shadow-lg">
                                     {/* Title Section */}
-                                    <div className="col-span-3 text-center">
+                                    {/* <div className="col-span-3 text-center">
                                         <h1 className="text-lg font-bold text-gray-800">
                                             VENTE DU 19/12/2024 AU 19/12/2024
                                         </h1>
-                                    </div>
+                                    </div> */}
 
                                     {/* Vente Details in CDF */}
                                     <div className="col-span-1 flex flex-col items-center bg-white p-4 rounded-lg shadow-md">
