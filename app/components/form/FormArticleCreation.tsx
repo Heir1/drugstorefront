@@ -30,6 +30,8 @@ import makeAnimated from "react-select/animated";
 import { log } from 'console';
 import toast, { Toaster } from 'react-hot-toast'
 // Dynamically import React Select without SSR
+import { Combobox } from "@headlessui/react";
+
 const Select = dynamic(() => import('react-select'), { ssr: false });
 
 
@@ -48,7 +50,7 @@ interface IFormInputs {
     quantity: number;
     purchase_price: number;
     selling_price: number;
-  }
+}
 
   // Définition du type pour un article
 interface ArticleOption {
@@ -569,3 +571,95 @@ export default function FormArticleCreation() {
     </>
   )
 }
+
+
+// import { Combobox } from "@headlessui/react";
+// import { useState, useEffect } from "react";
+
+// type Article = {
+//   id: number;
+//   name: string;
+// };
+
+// // Liste des articles existants (normalement récupérée depuis une API)
+// const articlesFromDB: Article[] = [
+//   { id: 1, name: "Ordinateur" },
+//   { id: 2, name: "Clavier" },
+//   { id: 3, name: "Souris" },
+//   { id: 4, name: "Écran" },
+// ];
+
+// // Simule un article en cours de modification
+// const existingArticle: Article = { id: 2, name: "Clavier" };
+
+// export default function ArticleUpdateAutocomplete() {
+//   const [selectedArticle, setSelectedArticle] = useState<string>(existingArticle.name);
+//   const [query, setQuery] = useState<string>(existingArticle.name);
+//   const [filteredArticles, setFilteredArticles] = useState<Article[]>([]);
+
+//   useEffect(() => {
+//     if (query) {
+//       const filtered = articlesFromDB.filter((article) =>
+//         article.name.toLowerCase().includes(query.toLowerCase())
+//       );
+//       setFilteredArticles(filtered);
+//     } else {
+//       setFilteredArticles([]);
+//     }
+//   }, [query]);
+
+//   // Vérifie si l'article entré existe dans la base de données
+//   const articleExists = articlesFromDB.some((article) => article.name.toLowerCase() === query.toLowerCase());
+
+//   // Remet la valeur par défaut si l'article n'existe pas
+//   useEffect(() => {
+//     if (!articleExists) {
+//       setSelectedArticle(existingArticle.name);
+//       setQuery(existingArticle.name);
+//     }
+//   }, [query, articleExists]);
+
+//   return (
+//     <div className="w-72">
+//       <Combobox value={selectedArticle} onChange={setSelectedArticle}>
+//         <div className="relative mt-1">
+//           <input
+//             className="w-full border rounded-md p-2"
+//             placeholder="Modifier l'article..."
+//             onChange={(e) => setQuery(e.target.value)}
+//             value={query}
+//           />
+//           {filteredArticles.length > 0 && (
+//             <div className="absolute mt-1 w-full bg-white border rounded-md shadow-lg max-h-60 overflow-auto">
+//               {filteredArticles.map((article) => (
+//                 <Combobox.Option
+//                   key={article.id}
+//                   value={article.name}
+//                   className="cursor-pointer p-2 hover:bg-gray-100"
+//                 >
+//                   {article.name}
+//                 </Combobox.Option>
+//               ))}
+//             </div>
+//           )}
+//         </div>
+//       </Combobox>
+
+//       {!articleExists && (
+//         <p className="text-sm text-red-600 mt-1">
+//           Cet article n'existe pas. Valeur réinitialisée à "{existingArticle.name}".
+//         </p>
+//       )}
+
+//       {/* Bouton de mise à jour */}
+//       <button
+//         className="mt-4 w-full bg-blue-600 text-white p-2 rounded-md"
+//         onClick={() => console.log("Article mis à jour:", selectedArticle)}
+//         disabled={!articleExists} // Désactive le bouton si l'article n'existe pas
+//       >
+//         Mettre à jour
+//       </button>
+//     </div>
+//   );
+// }
+

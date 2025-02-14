@@ -30,6 +30,7 @@ import FormArticleCreation from '@/app/components/form/FormArticleCreation';
 import { DataTableState } from '@/components/ui/DataTable/DataTableState';
 import { DataTableArticleUpdate } from '@/components/ui/DataTable/DataTableArticleUpdate';
 import { DataTableArticleState } from '@/components/ui/DataTable/DataTableArticleState';
+import FormTest from '@/app/components/form/FormTest';
 
 
 interface IFormInputs {
@@ -160,7 +161,9 @@ export default function Article() {
             {
                 isNewArticle ? (
                     <div>
-                        <FormArticleCreation/>
+                        {/* <FormArticleCreation/> */}
+
+                        <FormTest/>
 
                         {/* <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white rounded-xl" >
                             <DataTable columns={ArticleColumns} data={articles} needFilter={false} paginate={false} title=""/>

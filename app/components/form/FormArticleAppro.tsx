@@ -145,7 +145,7 @@ export default function FormArticleAppro() {
     );
 
     const packagingsFormated = useMemo(() => 
-        packagings.map((packaging) => ({ 
+        packagings.map((packaging:any) => ({ 
             value: packaging.id.toString(), // Convertir id en string
             label: packaging.name,
         })), 
