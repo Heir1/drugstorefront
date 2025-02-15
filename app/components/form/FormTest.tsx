@@ -320,8 +320,7 @@ export default function FormTest() {
 
   
     return (
-
-    <form onSubmit={handleSubmit(onSubmit)} >
+        <form onSubmit={handleSubmit(onSubmit)} >
         <Toaster />
         <div className="grid grid-cols-12  gap-x-5 p-5 " >
             <div className="col-span-6 bg-[#7288a5fd] border-2 border-white p-2  space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
@@ -823,150 +822,202 @@ export default function FormTest() {
             
         </div>  
 
-      </form>
+        </form>
     );
 }
 
 
 
-{/* <div className="col-span-6 bg-[#7288a5] border-2 border-white p-2 space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
-<div className="grid grid-cols-1 gap-5 ">
-    <div className=" flex items-center " >
-        <label className=" w-[12%] font-semibold text-sm text-white" htmlFor="">Fournisseur</label>
-        <div className=" w-[36%] " >
-            <Controller
-                name="supplier"
-                control={control}
-                render={({ field }) => (
-                    <Combobox value={field.value ?? ""} onChange={(value) => setValue("supplier", value ?? "")}>
-                    <div className="relative">
-                        <input
-                            {...field}
-                            className=" w-full border rounded-md p-2"
-                            placeholder="Saisir un emballage ..."
-                            onChange={(e) => {
-                                setSupplierQuery(e.target.value);
-                                setValue("supplier", e.target.value);
-                            }}
-                            onFocus={() => manageSupplierFocusHandler(suppliers)}
-                            onBlur={() => setTimeout(() => setIsSupplierDropdownOpen(false), 200)} // Ferme après 200ms pour éviter la fermeture avant le clic
-                        />
-                        {
-                            isSupplierDropdownOpen && (
-                                filteredSuppliers.length > 0 && (
-                                        <div className="absolute mt-1 w-full bg-white border rounded-md shadow-lg max-h-60 overflow-auto">
-                                            {filteredSuppliers.map((supplier:ISupplier) => (
-                                            <Combobox.Option
-                                                key={supplier.id}
-                                                value={supplier.name}
-                                                className="cursor-pointer p-2 hover:bg-gray-100"
-                                                onMouseDown={() => setIsSupplierDropdownOpen(false)}
-                                            >
-                                                {supplier.name}
-                                            </Combobox.Option>
-                                            ))}
-                                        </div>
-                                    )
-                            )
-                        }
-                    </div>
-                    </Combobox>
-                )}
-            />
-        </div>
-        <label className=" w-[12%] font-semibold text-sm text-white ml-9 " htmlFor="">Péremption</label>
-        <div className=" w-[36%] " >
-            <Controller
-                name="expirationDate"
-                control={control}
-                render={({ field }) => <input  className="w-full text-[14px] h-10 pl-4 pr-4 uppercase rounded-lg font-bold border-[1px] border-black" {...field} type="date" />}
-                rules={{ required: 'La date est requise' }}
-            />
-        </div>
-    </div>
-</div>
-<div className="grid grid-cols-8 gap-2 ">
-    <div className="" >
-        <label className=" font-semibold text-sm text-white" htmlFor="">Alerte</label>
-        <Controller
-            name="alert"
-            control={control}
-            render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4 " {...field} type="number" />}
-            rules={{ required: 'L alerte est requise' }}
-        />
-    </div>
-    <div className="" >
-        <label className=" font-semibold text-sm text-white" htmlFor="">Qté</label>
-        <Controller
-            name="quantity"
-            control={control}
-            render={({ field }) => <input  className="w-full text-[14px] bg-blue-500 h-10 pl-4 uppercase rounded-lg pr-4 " {...field} type="number" readOnly />}
-            rules={{ required: 'La quantité est requise' }}
-        />
-    </div>
-    <div className="col-span-2" >
-        <label className=" font-semibold text-sm text-white" htmlFor="">Devise</label>
-        <div className="flex justify-between  items-center pb-3 border-2 border-white " >
-            <Controller
-                name="currency"
-                control={control}
-                render={({ field }) => (
-                    <>
-                        <div className=" w-1/3 flex justify-between items-center">
-                            <input
-                                type="radio"
-                                id="USD"
-                                value={2}
-                                {...register('currency', { required: 'Vous devez choisir une devise' })}
-                            />
-                            <label className=' text-[12px]  text-sm font-semibold ' htmlFor="">USD</label>
-                        </div>
-                        <div className=" w-1/3 flex justify-between items-center">
-                            <input
-                                type="radio"
-                                id="CDF"
-                                value={1}
-                                {...register('currency', { required: 'Vous devez choisir une devise' })}
-                            />
-                            <label className=' text-[12px]  text-sm font-semibold ' htmlFor="">CDF</label>
-                        </div>
-                    </>
-                )}
-                rules={{ required: 'La monnaie est requise' }}
-            />
-        </div>
-    </div>
-    <div className=" col-span-3 flex " >
-        <div>
-            <label className=" font-semibold text-sm text-white" htmlFor="">P.A</label>
-            <Controller
-                name="purchase_price"
-                control={control}
-                render={({ field }) => <input  className="w-full text-[14px] text-center bg-[#F2F7FC] h-10 pl-[8px] uppercase rounded-lg pr-4 border-2 border-black" {...field} type="number" onChange={handleNumberChange} value={number} />}
-                rules={{ required: 'Le prix dachat est requis' }}
-            />
-        </div>
-        <div>
-            <label className=" font-semibold text-sm text-white" htmlFor="">P.V</label>
-            <Controller
-                name="selling_price"
-                control={control}
-                render={({ field }) => <input  className="w-full text-[14px] text-center bg-[#F2F7FC] h-10 pl-[8px] uppercase rounded-lg pr-4 border-2 border-black" {...field} type="number" value={result} readOnly />}
-                rules={{ required: 'Le prix de vente est requis' }}
-            />
-        </div>
-    </div>
-    <div className="" >
-        <label className=" font-semibold text-sm text-white" htmlFor="">TAUX MB</label>
-        <input className="w-full bg-blue-500 text-[14px] h-10 pl-4 uppercase rounded-lg pr-4 " value={1.25} type="number" name="" id="" readOnly/>
-    </div>
-</div>
-<div className="grid grid-cols-2 gap-5 pt-8 ">
-    <div className="" >
-        <button type="submit" className=" w-full text-center p-2 bg-[#4594ff] text-white transition duration-300 hover:bg-[#3386e0]  rounded-lg  text-[14px]  " >Modifier</button>
-    </div>
-    <div className=" " >
-    </div>
-</div>
+// import { useEffect, useState } from "react";
+// import { useForm, Controller } from "react-hook-form";
+// import { useDispatch } from "react-redux";
+// import { useRouter } from "next/router";
+// import { Combobox } from "@headlessui/react";
+// import toast, { Toaster } from "react-hot-toast";
+// import { getArticleById } from "@/app/redux/slices/articles/actions";
+// import { updateArticle } from "@/app/redux/slices/articles/actions";
+// import { usePlacementService } from "@/app/redux/slices/placements/usePlacementService";
+// import IPlacement from "@/app/interfaces/placement";
+// import IArticle from "@/app/interfaces/article";
 
-</div> */}
+// interface IFormInputs {
+//     barcode: string;
+//     location: string;
+//     description: string;
+//     expirationDate: string;
+//     quantity: number;
+//     purchase_price: number;
+//     selling_price: number;
+// }
+
+// export default function UpdateArticleForm({ articleId }: { articleId: string }) {
+//     const dispatch = useDispatch();
+//     const router = useRouter();
+//     const { register, handleSubmit, control, setValue, watch } = useForm<IFormInputs>();
+//     const { placements } = usePlacementService();
+
+//     const [displayedLocation, setDisplayedLocation] = useState("");
+//     const [filteredLocations, setFilteredLocations] = useState<IPlacement[]>([]);
+//     const [isLocationDropdownOpen, setIsLocationDropdownOpen] = useState(false);
+
+//     useEffect(() => {
+//         // Charger l'article à modifier
+//         const fetchArticle = async () => {
+//             try {
+//                 const article = await getArticleById(articleId);
+//                 setValue("barcode", article.barcode);
+//                 setValue("location", article.location);
+//                 setValue("description", article.description);
+//                 setValue("expirationDate", article.expirationDate);
+//                 setValue("quantity", article.quantity);
+//                 setValue("purchase_price", article.purchase_price);
+//                 setValue("selling_price", article.selling_price);
+
+//                 const selectedLocation = placements.find((p) => p.id === article.location);
+//                 setDisplayedLocation(selectedLocation?.name ?? article.location);
+//             } catch (error) {
+//                 console.error(error);
+//                 toast.error("Erreur lors du chargement de l'article.");
+//             }
+//         };
+
+//         fetchArticle();
+//     }, [articleId, placements, setValue]);
+
+//     const onSubmit = async (data: IFormInputs) => {
+//         try {
+//             const updatedData = {
+//                 ...data,
+//                 location: displayedLocation // Envoi de la valeur mise à jour
+//             };
+//             await dispatch(updateArticle(updatedData)).unwrap();
+//             toast.success("Article mis à jour avec succès !");
+//             router.push("/articles"); // Redirection après la mise à jour
+//         } catch (error) {
+//             console.error(error);
+//             toast.error("Erreur lors de la mise à jour.");
+//         }
+//     };
+
+//     return (
+//         <form onSubmit={handleSubmit(onSubmit)} className="p-5 bg-gray-100">
+//             <Toaster />
+//             <div className="grid grid-cols-2 gap-5">
+//                 <div>
+//                     <label className="block">Code barre</label>
+//                     <input
+//                         {...register("barcode")}
+//                         className="w-full border p-2 rounded-md"
+//                         type="text"
+//                         placeholder="Code barre"
+//                     />
+//                 </div>
+
+//                 {/* Localisation avec modification possible */}
+//                 <div>
+//                     <label className="block">Localisation</label>
+//                     <Combobox
+//                         value={watch("location")}
+//                         onChange={(selectedId) => {
+//                             const selectedLocation = placements.find((p) => p.id === selectedId);
+//                             setValue("location", selectedId ?? "");
+//                             setDisplayedLocation(selectedLocation?.name ?? "");
+//                         }}
+//                     >
+//                         <div className="relative">
+//                             <input
+//                                 className="w-full border p-2 rounded-md"
+//                                 placeholder="Saisir ou sélectionner..."
+//                                 value={displayedLocation}
+//                                 onChange={(e) => {
+//                                     setDisplayedLocation(e.target.value);
+//                                     setFilteredLocations(
+//                                         placements.filter((p) =>
+//                                             p.name.toLowerCase().includes(e.target.value.toLowerCase())
+//                                         )
+//                                     );
+//                                     setIsLocationDropdownOpen(true);
+//                                 }}
+//                                 onFocus={() => setIsLocationDropdownOpen(true)}
+//                                 onBlur={() => setTimeout(() => setIsLocationDropdownOpen(false), 200)}
+//                             />
+
+//                             {isLocationDropdownOpen && filteredLocations.length > 0 && (
+//                                 <div className="absolute bg-white border mt-1 w-full shadow-lg max-h-60 overflow-auto">
+//                                     {filteredLocations.map((location) => (
+//                                         <Combobox.Option
+//                                             key={location.id}
+//                                             value={location.id}
+//                                             className="cursor-pointer p-2 hover:bg-gray-100"
+//                                             onMouseDown={() => setDisplayedLocation(location.name)}
+//                                         >
+//                                             {location.name}
+//                                         </Combobox.Option>
+//                                     ))}
+//                                 </div>
+//                             )}
+//                         </div>
+//                     </Combobox>
+//                 </div>
+
+//                 <div>
+//                     <label className="block">Description</label>
+//                     <input
+//                         {...register("description")}
+//                         className="w-full border p-2 rounded-md"
+//                         type="text"
+//                         placeholder="Description"
+//                     />
+//                 </div>
+
+//                 <div>
+//                     <label className="block">Date d'expiration</label>
+//                     <input
+//                         {...register("expirationDate")}
+//                         className="w-full border p-2 rounded-md"
+//                         type="date"
+//                     />
+//                 </div>
+
+//                 <div>
+//                     <label className="block">Quantité</label>
+//                     <input
+//                         {...register("quantity")}
+//                         className="w-full border p-2 rounded-md"
+//                         type="number"
+//                         placeholder="Quantité"
+//                     />
+//                 </div>
+
+//                 <div>
+//                     <label className="block">Prix d'achat</label>
+//                     <input
+//                         {...register("purchase_price")}
+//                         className="w-full border p-2 rounded-md"
+//                         type="number"
+//                         placeholder="Prix d'achat"
+//                     />
+//                 </div>
+
+//                 <div>
+//                     <label className="block">Prix de vente</label>
+//                     <input
+//                         {...register("selling_price")}
+//                         className="w-full border p-2 rounded-md"
+//                         type="number"
+//                         placeholder="Prix de vente"
+//                     />
+//                 </div>
+//             </div>
+
+//             <div className="mt-5 flex justify-end gap-3">
+//                 <button type="button" className="px-4 py-2 border rounded-md text-gray-700">
+//                     Annuler
+//                 </button>
+//                 <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md">
+//                     Enregistrer
+//                 </button>
+//             </div>
+//         </form>
+//     );
+// }
