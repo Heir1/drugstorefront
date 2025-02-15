@@ -114,7 +114,7 @@ export default function FormArticleCreation() {
     const articlesFormated = useMemo(() => {
         if(articles.length){
             return(
-                articles.map((article) => ({ 
+                articles.map((article:any) => ({ 
                     value: article.id , // Convertir id en string
                     label: article.description ,
                 }))
@@ -214,29 +214,29 @@ export default function FormArticleCreation() {
         const { barcode, location, description, indication, molecule, packaging, category, supplier,alert, expirationDate, quantity, purchase_price, selling_price , currency  } = data
 
       
-    //   console.log(selectedArticle.value)
+        //   console.log(selectedArticle.value)
       
   
-      const articleData:IArticle = {
+        const articleData:IArticle = {
 
-        barcode: barcode,
-        placements : [Number(location?.value)],
-        description : selectedArticle.value ,
-        indications : [Number(indication?.value)],
-        molecules : [Number(molecule?.value)],
-        quantity : quantity ,
-        expiration_date: expirationDate,
-        category_id: Number(category?.value),
-        suppliers : [Number(supplier?.value)],
-        packaging_id: Number(packaging?.value),
-        purchase_price : Number(number),
-        selling_price : Number(result),
-        alert : Number(alert),
-        currency_id: Number(currency) ,
-        comment : "Pas encore disponible",
-        is_active : true,
+            barcode: barcode,
+            placements : [Number(location?.value)],
+            description : selectedArticle.value ,
+            indications : [Number(indication?.value)],
+            molecules : [Number(molecule?.value)],
+            quantity : quantity ,
+            expiration_date: expirationDate,
+            category_id: Number(category?.value),
+            suppliers : [Number(supplier?.value)],
+            packaging_id: Number(packaging?.value),
+            purchase_price : Number(number),
+            selling_price : Number(result),
+            alert : Number(alert),
+            currency_id: Number(currency) ,
+            comment : "Pas encore disponible",
+            is_active : true,
 
-      }
+        }
 
         const promise = dispatch(createArticle(articleData))
         .unwrap()
@@ -308,7 +308,6 @@ export default function FormArticleCreation() {
   return (
     <>
         <form onSubmit={handleSubmit(onSubmit)}>
-            <Toaster />
             <div className="grid grid-cols-11 mx-2  gap-x-5 p-5 -mt-5  " >
                 <div className="col-span-6  p-10 bg-[#7288a5d0]   rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
                     <div className="grid grid-cols-2 gap-5">
@@ -530,7 +529,7 @@ export default function FormArticleCreation() {
                                         onChange={(e) => field.onChange(Number(e.target.value))} // Update the value
                                         />
                                         <label className="text-[12px] text-sm font-semibold text-white" htmlFor="USD">
-                                        USD
+                                            USD
                                         </label>
                                     </div>
 

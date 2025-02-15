@@ -5,6 +5,7 @@ import { Provider } from "react-redux";
 import store, { persistor } from "./redux/store/store";
 import { PersistGate } from "redux-persist/integration/react";
 import Login from "./pages/login/Login";
+import { Toaster } from "react-hot-toast";
 
 export default function App() {
   const [isClient, setIsClient] = useState(false);
@@ -19,6 +20,7 @@ export default function App() {
 
   return (
     <Provider store={store}>
+      <Toaster />
       {/* Vérifie que persistor n'est pas null avant de l'utiliser */}
       {persistor ? (
         <PersistGate loading={null} persistor={persistor}>

@@ -359,7 +359,6 @@ export default function FormArticleAppro() {
     return (
         <>
             <div className="mx-2"  >
-                <Toaster />
                 <form onSubmit={handleSubmit(addToCart)}>
 
                     <div className=" grid grid-cols-12 border-[1px] border-white mx-4 gap-3 p-2 " >

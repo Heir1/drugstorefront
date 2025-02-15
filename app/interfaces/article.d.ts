@@ -20,8 +20,8 @@ export default interface IArticle {
     created_by?: string,
     updated_by?: string,
     currency_id?: number,
-    category_id?: number,
-    packaging_id?: number,
+    category_id?: string | number,
+    packaging_id?: string | number,
     // placement?: Array
     // indication?: Array,
     // molecule?: Array,

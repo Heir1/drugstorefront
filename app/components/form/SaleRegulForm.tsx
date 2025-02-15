@@ -216,9 +216,7 @@ export default function SaleRegulForm({content, setIsSaleRegulFormOpen}:ArticleF
     return (
         <>
             <div className=""  >
-                <Toaster />
                 <div className=" bg-[#7288a5fd] mx-8 border-2 border-white  ">
-                    <Toaster />
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className=" grid grid-cols-12 mx-4 gap-3 py-2 mt-2 " >
 

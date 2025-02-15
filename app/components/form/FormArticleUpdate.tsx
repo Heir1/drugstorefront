@@ -351,7 +351,6 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
             </div> */}
             {/* <div className=" fixed z-50 top-[15%] left-[0%] mx-5 "  > */}
             <div>
-                <Toaster />
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="grid grid-cols-12  gap-x-5 p-5 " >
                         <div className="col-span-6 bg-[#7288a5fd] border-2 border-white p-2  space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">

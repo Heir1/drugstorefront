@@ -117,7 +117,6 @@ export default function ArticleActivationForm({content, setActivationFormOpen}:A
         return (
             <>
                 <div className=" bg-[#7288a5fd] mx-5 border-2 border-white  ">
-                    <Toaster />
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className=" grid grid-cols-12 mx-4 gap-3 p-2 mt-2 " >
                             <div className=" col-span-4 " >
