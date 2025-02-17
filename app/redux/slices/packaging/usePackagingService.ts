@@ -11,7 +11,7 @@ export const usePackagingService = () => {
     const { packagings, packagingStatus, packagingError } = useSelector((state: RootState) => state.packagings )
 
     useEffect(() => {
-        packagingStatus !== "succeeded" && dispatch(fetchPackagings())
+        dispatch(fetchPackagings())
     }, [dispatch])
 
     return { packagings , packagingStatus, packagingError }

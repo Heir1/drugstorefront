@@ -40,6 +40,7 @@ import { Icon } from '@iconify/react';
 import IArticle from "@/app/interfaces/article";
 import FormArticleUpdate from "@/app/components/form/FormArticleUpdate";
 import FormArticleUpdateNull from "@/app/components/form/formupdate/FormArticleUpdateNull";
+import FormUpdateTest from "@/app/components/form/FormUpdateTest";
 
 
 
@@ -268,7 +269,8 @@ export function DataTableArticleUpdate<TData, TValue>({
 
         {
             isUpdateFormOpen ? (
-                <FormArticleUpdate  content={article} setIsUpdateFormOpen={setIsUpdateFormOpen} />
+                // <FormArticleUpdate  content={article} setIsUpdateFormOpen={setIsUpdateFormOpen} />
+                <FormUpdateTest content={article} setIsUpdateFormOpen={setIsUpdateFormOpen}/>
             )
             :
             (

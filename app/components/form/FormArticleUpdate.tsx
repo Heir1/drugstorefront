@@ -236,7 +236,6 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
 
         console.log(data);
         
-    
         const { barcode, location, description, indication, molecule, packaging, category, supplier,alert, expirationDate, quantity, purchase_price, selling_price , currency  } = data
 
         
