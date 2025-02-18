@@ -127,7 +127,7 @@ export function DataTable<TData, TValue>({
       {/* {
         isUpdateFormOpen &&  <FormArticleUpdate content={article} setIsUpdateFormOpen={setIsUpdateFormOpen}  />
       } */}
-      <div className="bg-transparent   rounded-2xl">
+      <div className="bg-[#7288a5fd]   rounded-2xl px-4 ">
         <div className="flex items-center justify-between  " >
 
           <div className="flex justify-end">
@@ -146,7 +146,7 @@ export function DataTable<TData, TValue>({
                         {headerGroup.headers.map((header, index) => {
                         return (
                             
-                            <TableHead className={` ${index == 0 ? 'rounded-tl-lg rounded-bl-lg' : ''  } ${index == (headerGroup.headers.length-1) ? 'rounded-tr-lg rounded-br-lg' : ''  }   px-10  bg-[#F2F7FC]  font-extrabold text-[12px] text-black`} key={header.id}>
+                            <TableHead className={` ${index == 0 ? '' : ''  } ${index == (headerGroup.headers.length-1) ? '' : ''  }   px-10  bg-[#F2F7FC]  font-extrabold text-[12px] text-black`} key={header.id}>
                                 {header.isPlaceholder
                                 ? null
                                 : flexRender(
@@ -167,7 +167,7 @@ export function DataTable<TData, TValue>({
                         table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
-                                  className=" hover:cursor-pointer font-bold uppercase  border-b-[1px] border-black text-black "
+                                  className=" bg-white hover:cursor-pointer font-bold uppercase  border-b-[1px] border-black text-black "
                                   key={row.id}
                                   data-state={row.getIsSelected() && "selected"}
                                   // onClick={() => redirectionPage(row.original)}

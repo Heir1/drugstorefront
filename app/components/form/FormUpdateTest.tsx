@@ -339,6 +339,33 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
         setIsLocationDropdownOpen(false)
     }
 
+    const indicationSelectHandler = (indication:IIndication) => {
+        setDisplayedIndication(indication.name)
+        setIsIndicationDropdownOpen(false)
+    }
+
+    const moleculeSelectHandler = (molecule:IMolecule) => {
+        setDisplayedMolecule(molecule.name)
+        setIsMoleculeDropdownOpen(false)
+    }
+
+    const packagingSelectHandler = (packaging:IPackaging) => {
+        setDisplayedPackaging(packaging.name)
+        setIsPackagingDropdownOpen(false)
+    }
+
+    const categorySelectHandler = (category:ICategory) => {
+        setDisplayedCategory(category.name)
+        setIsCategoryDropdownOpen(false)
+    }
+
+    const supplierSelectHandler = (supplier:ISupplier) => {
+        setDisplayedSupplier(supplier.name)
+        setIsSupplierDropdownOpen(false)
+    }
+
+    // onMouseDown={() => setDisplayedSupplier(supplier.name)}
+
 
     return (
         <div>
@@ -454,12 +481,13 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
                                                             key={indication.id}
                                                             value={indication.id}
                                                             className="uppercase cursor-pointer p-2 hover:bg-gray-100"
-                                                            onMouseDown={() => setDisplayedIndication(indication.name)}
+                                                            onMouseDown={() => indicationSelectHandler(indication)}
                                                         >
                                                             {indication.name}
                                                         </Combobox.Option>
                                                     ))}
                                                 </div>
+                                                
                                             )}
                                         </div>
                                     </Combobox>
@@ -505,7 +533,7 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
                                                                 key={molecule.id}
                                                                 value={molecule.id}
                                                                 className="uppercase cursor-pointer p-2 hover:bg-gray-100"
-                                                                onMouseDown={() => setDisplayedMolecule(molecule.name)}
+                                                                onMouseDown={() => moleculeSelectHandler(molecule)}
                                                             >
                                                                 {molecule.name}
                                                             </Combobox.Option>
@@ -524,7 +552,7 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
                                     <Combobox
                                         value={watch("packaging")}
                                         onChange={(selectedId) => {
-                                            const selectedPackaging = packagings.find((p) => p.id === selectedId);
+                                            const selectedPackaging = packagings.find((p:IPackaging) => p.id === selectedId);
                                             setValue("packaging", selectedId ?? "");
                                             setDisplayedPackaging(selectedPackaging?.name ?? "");
                                         }}
@@ -554,7 +582,7 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
                                                                 key={packaging.id}
                                                                 value={packaging.id}
                                                                 className="uppercase cursor-pointer p-2 hover:bg-gray-100"
-                                                                onMouseDown={() => setDisplayedPackaging(packaging.name)}
+                                                                onMouseDown={() => packagingSelectHandler(packaging)}
                                                             >
                                                                 {packaging.name}
                                                             </Combobox.Option>
@@ -600,7 +628,7 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
                                                             key={category.id}
                                                             value={category.id}
                                                             className="uppercase cursor-pointer p-2 hover:bg-gray-100"
-                                                            onMouseDown={() => setDisplayedCategory(category.name)}
+                                                            onMouseDown={() => categorySelectHandler(category)}
                                                         >
                                                             {category.name}
                                                         </Combobox.Option>
@@ -651,7 +679,7 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
                                                                     key={supplier.id}
                                                                     value={supplier.id}
                                                                     className="cursor-pointer uppercase p-2 hover:bg-gray-100"
-                                                                    onMouseDown={() => setDisplayedSupplier(supplier.name)}
+                                                                    onMouseDown={() => supplierSelectHandler(supplier)}
                                                                 >
                                                                     {supplier.name}
                                                                 </Combobox.Option>

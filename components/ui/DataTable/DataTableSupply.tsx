@@ -47,6 +47,8 @@ import { fetchMovements } from "@/app/redux/slices/movements/actions";
 import StockRegulForm from "@/app/components/form/StockRegulForm";
 import SaleRegulForm from "@/app/components/form/SaleRegulForm";
 import { fetchInvoices } from "@/app/redux/slices/invoices/actions";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import Invoice from "@/app/components/invoice/Invoice";
 
 
 
@@ -56,6 +58,10 @@ interface DataTableSupplyProps<TData, TValue> {
   needFilter: boolean;
   title: string;
   paginate: boolean;
+}
+
+interface IInvoice {
+  invoice : number
 }
 
 export function DataTableSupply<TData, TValue>({
@@ -91,9 +97,19 @@ export function DataTableSupply<TData, TValue>({
 
   const [startDate, setStartDate ] = React.useState(formattedDate);
   const [endDate, setEndDate ] = React.useState(formattedDate);
+
+  const { control, reset, register, handleSubmit, formState: { errors }, setValue } = useForm<IInvoice>({
+      defaultValues: {
+          invoice : 1,
+      }
+
+  });
+
   const dispatch = useDispatch<AppDispatch>();
 
-  const getDate = () => {
+  const onSubmit: SubmitHandler<IInvoice> = (data) => {
+
+    const { invoice } = data
 
       if(startDate && endDate){
 
@@ -101,7 +117,7 @@ export function DataTableSupply<TData, TValue>({
           dispatch(fetchMovements({ typeId: "1", firstrange: startDate, secondrange: endDate }))
         }
         else if(title=="Invoice"){
-          dispatch(fetchInvoices({ paymentModeId: "1", firstrange: startDate, secondrange: endDate }))
+          dispatch(fetchInvoices({ paymentModeId: "1", invoice : String(invoice), firstrange: startDate, secondrange: endDate }))
         }
           
       }
@@ -173,12 +189,80 @@ export function DataTableSupply<TData, TValue>({
           isSaleRegulFormOpen && <SaleRegulForm content={article} setIsSaleRegulFormOpen={setIsSaleRegulFormOpen}  />
         }
     
-      <div className="bg-transparent   rounded-2xl ">
+      <div className="  rounded-2xl ">
         <div className="flex items-center justify-between " >
+        {
+            title == "Movements" ? (
+              <div className="flex gap-5 " >
+                <div className="flex gap-4 items-center  " >
+                  <h1 className=" font-semibold text-sm italic text-white " >Du</h1>
+                  <input onChange={(e) => setStartDate(e.target.value) }  className="uppercase italic font-semibold border-[1px] py-[5px] px-2 rounded-2xl border-black " type="date" name="" id="" />
+                </div>
+                <div className="flex gap-4 items-center">
+                  <h1 className=" font-semibold text-sm italic text-white ">Au</h1>
+                  <input onChange={(e) => setEndDate(e.target.value) }  className="uppercase italic font-semibold  border-[1px] py-[5px] px-2 rounded-2xl border-black" type="date" name="" id="" />
+                </div>
+                <button onClick={handleSubmit(onSubmit)}  className=" px-4 text-sm rounded-lg text-white bg-slate-400 " >Filtrer</button>
+              </div>
+            )
+            :
+            (
+              title == "Invoice" && (
+                <div className="flex gap-5 " >
+                  <div className="flex gap-4 items-center  " >
+                    <h1 className=" font-semibold text-sm italic text-white " >Du</h1>
+                    <input onChange={(e) => setStartDate(e.target.value) }  className="uppercase italic font-semibold border-[1px] py-[5px] px-2 rounded-2xl border-black " type="date" name="" id="" />
+                  </div>
+                  <div className="flex gap-4 items-center">
+                    <h1 className=" font-semibold text-sm italic text-white ">Au</h1>
+                    <input onChange={(e) => setEndDate(e.target.value) }  className="uppercase italic font-semibold  border-[1px] py-[5px] px-2 rounded-2xl border-black" type="date" name="" id="" />
+                  </div>
+                  <div className=" w-full flex " >
+                    <form onSubmit={handleSubmit(onSubmit)} >
+                      <Controller
+                      name="invoice"
+                      control={control}
+                      render={({ field }) => (
+                          <div className=" flex items-center " >
+
+                              <div className=" flex items-center ml-2 gap-2 " >
+                                  <input
+                                      type="radio"
+                                      id="INVOICE"
+                                      value={1}
+                                      checked={field.value === 1} // Check if the value matches 2
+                                      onChange={(e) => field.onChange(Number(e.target.value))} // Update the value
+                                  />
+                                  <h6 className=" font-bold " >FACTURE</h6>
+                              </div>
+
+                              <div className=" flex items-center  ml-10 gap-2 " >
+                                  <input
+                                      type="radio"
+                                      id="PRO"
+                                      value={2}
+                                      checked={field.value === 2} // Check if the value matches 1
+                                      onChange={(e) => field.onChange(Number(e.target.value))} // Update the value 
+                                  />
+                                  <h6 className=" font-bold " >PRO FORMA</h6>
+                              </div>
+
+                          </div>
+                      )}
+                      rules={{ required: 'La monnaie est requise' }} // Validation rule
+                      />
+                    </form>
+                  </div>
+                  <button onClick={handleSubmit(onSubmit)} className=" px-4 text-sm rounded-lg text-white bg-slate-400 " >Filtrer</button>
+                </div>
+              )
+            )
+          }
+
           <div className="flex justify-end  ">
             {
               title == "Invoice" ? (
-                <input className=' w-[700px] px-6 py-2 my-3 border-[1px] border-black text-black rounded-3xl text-[14px] uppercase ' placeholder='Rechercher le produit pharmaceutique par sa description' type="text" value={(table.getColumn("invoices.invoice_number")?.getFilterValue() as string) ?? "" } onChange={(event) => table.getColumn("invoices.invoice_number")?.setFilterValue(event.target.value)}/>
+                <input className=' w-[500px] px-6 py-2 my-3 border-[1px] border-black text-black rounded-3xl text-[14px] uppercase ' placeholder='Rechercher le produit pharmaceutique par sa description' type="text" value={(table.getColumn("invoices.invoice_number")?.getFilterValue() as string) ?? "" } onChange={(event) => table.getColumn("invoices.invoice_number")?.setFilterValue(event.target.value)}/>
               )
               :
               (
@@ -194,37 +278,7 @@ export function DataTableSupply<TData, TValue>({
             }
 
           </div>
-          {
-            title == "Movements" ? (
-              <div className="flex gap-5 " >
-                <div className="flex gap-4 items-center  " >
-                  <h1 className=" font-semibold text-sm italic " >Du</h1>
-                  <input onChange={(e) => setStartDate(e.target.value) }  className="uppercase italic font-semibold border-[1px] py-[5px] px-2 rounded-2xl border-black " type="date" name="" id="" />
-                </div>
-                <div className="flex gap-4 items-center">
-                  <h1 className=" font-semibold text-sm italic ">Au</h1>
-                  <input onChange={(e) => setEndDate(e.target.value) }  className="uppercase italic font-semibold  border-[1px] py-[5px] px-2 rounded-2xl border-black" type="date" name="" id="" />
-                </div>
-                <button onClick={getDate}  className=" px-4 text-sm rounded-lg text-white bg-slate-400 " >Filtrer</button>
-              </div>
-            )
-            :
-            (
-              title == "Invoice" && (
-                <div className="flex gap-5 " >
-                  <div className="flex gap-4 items-center  " >
-                    <h1 className=" font-semibold text-sm italic " >Du</h1>
-                    <input onChange={(e) => setStartDate(e.target.value) }  className="uppercase italic font-semibold border-[1px] py-[5px] px-2 rounded-2xl border-black " type="date" name="" id="" />
-                  </div>
-                  <div className="flex gap-4 items-center">
-                    <h1 className=" font-semibold text-sm italic ">Au</h1>
-                    <input onChange={(e) => setEndDate(e.target.value) }  className="uppercase italic font-semibold  border-[1px] py-[5px] px-2 rounded-2xl border-black" type="date" name="" id="" />
-                  </div>
-                  <button onClick={getDate}  className=" px-4 text-sm rounded-lg text-white bg-slate-400 " >Filtrer</button>
-                </div>
-              )
-            )
-          }
+
         </div>
 
         <div className="rounded-md ">
@@ -237,7 +291,7 @@ export function DataTableSupply<TData, TValue>({
                         {headerGroup.headers.map((header, index) => {
                         return (
                             
-                            <TableHead className={` ${index == 0 ? 'rounded-tl-lg rounded-bl-lg' : ''  } ${index == (headerGroup.headers.length-1) ? 'rounded-tr-lg rounded-br-lg' : ''  } font-extrabold  px-10  bg-[#F2F7FC]   text-[12px] text-black`} key={header.id}>
+                            <TableHead className={` ${index == 0 ? '' : ''  } ${index == (headerGroup.headers.length-1) ? '' : ''  } font-extrabold  px-10  bg-[#F2F7FC]   text-[12px] text-black`} key={header.id}>
                                 {header.isPlaceholder
                                 ? null
                                 : flexRender(
@@ -258,14 +312,14 @@ export function DataTableSupply<TData, TValue>({
                         table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
-                                    className=" hover:cursor-pointer text-xs font-bold uppercase  border-b-[1px] border-black text-black "
+                                    className=" hover:cursor-pointer text-xs font-extrabold uppercase   border-b-[1px] border-black text-black bg-white "
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
                                     // onClick={() => redirectionPage(row.original)}
                                     onClick={() => getArticleInfo(row.original, title)}
                                 >
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell className="px-10"  key={cell.id}>
+                                        <TableCell className="px-10 border-r-[1px] border-black "  key={cell.id}>
                                         {flexRender(
                                             cell.column.columnDef.cell,
                                             cell.getContext()

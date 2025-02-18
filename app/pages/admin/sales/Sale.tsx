@@ -191,7 +191,7 @@ export default function Sale() {
                         <div>
 
                             {
-                                <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white h-[500px] rounded-xl" >
+                                <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-[#7288a5fd] h-[500px] rounded-xl" >
                                     <DataTable columns={ArticleColumns} data={articles} needFilter={false} paginate={true} title=""/>
                                 </div>
                             }
@@ -203,7 +203,7 @@ export default function Sale() {
                     (
                         isStateArticle ? (
                             <div>
-                                <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white rounded-xl" >
+                                <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-[#7288a5fd] rounded-xl" >
                                     <DataTableSupply columns={InvoiceColumns} data={invoices} needFilter={false} paginate={true} title="Invoice"/>
                                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-gray-50 p-6 rounded-lg shadow-lg">
                                     {/* Title Section */}

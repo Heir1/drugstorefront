@@ -5,6 +5,7 @@ import Iinvoice from '@/app/interfaces/invoice';
 import IInvoiceResponse from '@/app/interfaces/invoicenumber';
 
 interface FetchInvoicesParams {
+  invoice: string;
   paymentModeId: string;
   firstrange: string;
   secondrange: string;
@@ -14,10 +15,10 @@ interface FetchInvoicesParams {
 // Action pour récupérer tous les invoices
 export const fetchInvoices = createAsyncThunk<Iinvoice[], FetchInvoicesParams, { rejectValue: string }>(
     'invoices/fetchInvoices',
-    async ({ paymentModeId, firstrange, secondrange }, { rejectWithValue }) => {
+    async ({ paymentModeId, invoice, firstrange, secondrange }, { rejectWithValue }) => {
 
       try {
-        const response = await getRequest<Iinvoice[]>(`/invoices/mode/${paymentModeId}/${firstrange}/${secondrange}`); // Remplacez avec votre endpoint
+        const response = await getRequest<Iinvoice[]>(`/invoices/mode/${paymentModeId}/${invoice}/${firstrange}/${secondrange}`); // Remplacez avec votre endpoint
         if (response.error) {
           return rejectWithValue(response.error.message || 'An unknown error occurred');
         }

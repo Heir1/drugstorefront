@@ -214,12 +214,30 @@ export function DataTableStockSupply<TData, TValue>({
 
                     {
                         title == "Invoice" ? (
-                        <input className=' w-[700px] px-6 py-2 my-3 border-[1px] border-black text-black rounded-3xl text-[14px] uppercase ' placeholder='Rechercher le produit pharmaceutique par sa description' type="text" value={(table.getColumn("invoices.invoice_number")?.getFilterValue() as string) ?? "" } onChange={(event) => table.getColumn("invoices.invoice_number")?.setFilterValue(event.target.value)}/>
+                          <input
+                            className='w-[700px] px-6 py-2 my-3 border-[1px] border-black text-black rounded-3xl text-[14px] uppercase'
+                            placeholder='Rechercher le produit pharmaceutique par sa description'
+                            type="text"
+                            value={(table.getState().globalFilter as string) ?? ""}
+                            onChange={(event) => {
+                              const value = event.target.value;
+                              table.setGlobalFilter(value);
+                            }}
+                          />
                         )
                         :
                         (
                         title == "Movements" ? (
-                            <input className=' w-[700px] px-6 py-2 my-3 border-[1px] border-black text-black rounded-3xl text-[14px] uppercase ' placeholder='Rechercher le produit pharmaceutique par sa description' type="text" value={(table.getColumn("article.description")?.getFilterValue() as string) ?? "" } onChange={(event) => table.getColumn("article.description")?.setFilterValue(event.target.value)} />
+                          <input
+                            className='w-[700px] px-6 py-2 my-3 border-[1px] border-black text-black rounded-3xl text-[14px] uppercase'
+                            placeholder='Rechercher le produit pharmaceutique par sa description'
+                            type="text"
+                            value={(table.getState().globalFilter as string) ?? ""}
+                            onChange={(event) => {
+                              const value = event.target.value;
+                              table.setGlobalFilter(value);
+                            }}
+                          />
                         )
                         :
                         (

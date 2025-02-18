@@ -60,6 +60,7 @@ interface IFormInputs {
     expirationDate: string;
     alert: number;
     currency: number;
+    invoice: number;
     quantity: number;
     quantity1: number;
     quantityappro: number;
@@ -142,6 +143,7 @@ export default function FormArticleSale() {
             expirationDate : "",
             alert : 0,
             currency : 1,
+            invoice : 1,
             quantity : 0,
             quantity1: 1,
             quantityappro: 1,
@@ -237,9 +239,12 @@ export default function FormArticleSale() {
     useEffect(() => {
         const handleCreateInvoice = async () => {
             if (isInvoice) {
-                const { paymentmode } = submittedData;
+
+                const { paymentmode, invoice } = submittedData;
             
                 const cartDate: any = {
+                    client_name : clientName.trim().length ? clientName : "NOT SET" ,
+                    invoice,
                     paymentmode: paymentmode.value,
                     articles: cart1,
                 };
@@ -646,14 +651,40 @@ export default function FormArticleSale() {
                                             <div>
                                                 <h6 className="font-bold" >MODE</h6>
                                             </div>
-                                            <div className=" flex items-center  ml-10 gap-2 " >
-                                                <input type="radio" />
-                                                <h6 className=" font-bold " >FACTURE</h6>
-                                            </div>
-                                            <div className=" flex items-center ml-2 gap-2 " >
-                                                <input type="radio" />
-                                                <h6 className=" font-bold " >PROFORMA</h6>
-                                            </div>
+
+                                            <Controller
+                                            name="invoice"
+                                            control={control}
+                                            render={({ field }) => (
+                                                <>
+
+                                                    <div className=" flex items-center ml-2 gap-2 " >
+                                                        <input
+                                                            type="radio"
+                                                            id="INVOICE"
+                                                            value={1}
+                                                            checked={field.value === 1} // Check if the value matches 2
+                                                            onChange={(e) => field.onChange(Number(e.target.value))} // Update the value
+                                                        />
+                                                        <h6 className=" font-bold " >FACTURE</h6>
+                                                    </div>
+
+                                                    <div className=" flex items-center  ml-10 gap-2 " >
+                                                        <input
+                                                            type="radio"
+                                                            id="PRO"
+                                                            value={2}
+                                                            checked={field.value === 2} // Check if the value matches 1
+                                                            onChange={(e) => field.onChange(Number(e.target.value))} // Update the value 
+                                                        />
+                                                        <h6 className=" font-bold " >PRO FORMA</h6>
+                                                    </div>
+
+                                                </>
+                                            )}
+                                            rules={{ required: 'La monnaie est requise' }} // Validation rule
+                                            />
+
                                         </div>
 
                                         <div className=" w-full " >
@@ -667,15 +698,6 @@ export default function FormArticleSale() {
                                             </div>
                                         </div>
 
-                                        {/* <div className=" w-full  pl-[58px] " >
-                                            <div className=" w-1/2 flex items-center gap-2 " >
-                                                <button type="button" onClick={onSubmitProf} className="col-span-1 h-8 bg-[#4594ff] text-white rounded text-sm transition hover:bg-blue-500 px-4 " >
-                                                    Imprimer proforma
-                                                </button>
-                                            </div>
-                                        </div> */}
-                                        
-                                                            
                                     </div>
                                 </div>
 
@@ -916,7 +938,7 @@ export default function FormArticleSale() {
 
                                         <div className="col-start-6 col-span-4 ">
                                             <div className="grid grid-cols-5 gap-2">
-                                                <button type="button" onClick={handleSubmit(onSubmit)}  className="col-span-1 h-8 bg-[#4594ff] text-white rounded text-sm transition hover:bg-blue-500">
+                                                <button disabled={ cart.length === 0 } type="button" onClick={handleSubmit(onSubmit)}  className="col-span-1 h-8 bg-[#4594ff] text-white rounded text-sm transition hover:bg-blue-500">
                                                 Enregistrer
                                                 </button>
                                                 <button className="col-span-1 h-8 bg-red-600 text-white rounded text-sm transition hover:bg-red-500">
