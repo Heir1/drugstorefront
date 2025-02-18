@@ -18,6 +18,7 @@ import IMolecule from "@/app/interfaces/molecule";
 import { useCategoryService } from "@/app/redux/slices/category/useCategoryService";
 import ISupplier from "@/app/interfaces/supplier";
 import ICategory from "@/app/interfaces/category";
+import { AppDispatch } from "@/app/redux/store/store";
 
 
 interface IFormInputs {
@@ -44,8 +45,25 @@ interface ArticleFormUpdateprops {
 
 export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFormUpdateprops) {
 
-    const dispatch = useDispatch();
-    const { register, handleSubmit, control, setValue, watch } = useForm<IFormInputs>();
+    const dispatch = useDispatch<AppDispatch>();
+    const { register, handleSubmit, control, setValue, watch } = useForm<IFormInputs>(
+        {defaultValues: {
+            barcode : "",
+            location : "",
+            description : "",
+            indication : "",
+            molecule : "",
+            packaging : "",
+            category : "",
+            supplier : "",
+            expirationDate : "",
+            alert : 0,
+            currency : 1,
+            quantity : 0,
+            purchase_price : 0,
+            selling_price : 0,
+        }}
+    );
     const { placements, placementStatus, placementError } = usePlacementService();
     const { indications, indicationStatus, indicationError } = useIndicationService();
     const { packagings, packagingStatus, packagingError } = usePackagingService();
@@ -196,11 +214,11 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
             // alert("Vous avez fait une sélection")
             // console.log("Vous avez fait une sélection");
         }
-        else if(displayedPackaging == content.packagings[0].name){
+        else if(displayedPackaging == content.packaging.name){
             // alert("C'est nullable")
             // console.log("C'est nullable");
         }
-        else if(displayedPackaging !== content.packagings[0].name){
+        else if(displayedPackaging !== content.packaging.name){
             // alert("Tu as édité")
         }
 
@@ -209,7 +227,7 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
             // alert("Vous avez fait une sélection")
             // console.log("Vous avez fait une sélection");
         }
-        else if(displayedCategory == content.categories[0].name){
+        else if(displayedCategory == content.category.name){
             // alert("C'est nullable")
             // console.log("C'est nullable");
         }
@@ -233,16 +251,16 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
 
         const articleData:IArticle = {
             barcode: barcode,
-            placements : !isNaN(Number(location)) ? `${displayedLocation}§§${location}` : (displayedLocation !== content.placements[0].name) && `${displayedLocation}§§${content.placements[0].id}`,
+            placements : !isNaN(Number(location)) ? `${displayedLocation}§§${location}` : (displayedLocation !== content.placements[0].name) ? `${displayedLocation}§§${content.placements[0].id}` : "",
             description ,
             comment: content.comment ,
             is_active: content.is_active ,
-            indications : !isNaN(Number(indication)) ? `${displayedIndication}§§${indication}` : (displayedIndication !== content.indications[0].name) && `${displayedIndication}§§${content.indications[0].id}`,
-            molecules : !isNaN(Number(molecule)) ? `${displayedMolecule}§§${molecule}` : (displayedMolecule !== content.molecules[0].name) && `${displayedMolecule}§§${content.molecules[0].id}`,
+            indications : !isNaN(Number(indication)) ? `${displayedIndication}§§${indication}` : (displayedIndication !== content.indications[0].name) ? `${displayedIndication}§§${content.indications[0].id}` : "",
+            molecules : !isNaN(Number(molecule)) ? `${displayedMolecule}§§${molecule}` : (displayedMolecule !== content.molecules[0].name) ? `${displayedMolecule}§§${content.molecules[0].id}` : "",
             quantity : quantity ,
             expiration_date: expirationDate,
             category_id: !isNaN(Number(category)) ? `${displayedCategory}§§${category}` : (displayedCategory !== content.category.name) ? `${displayedCategory}§§${content.category_id}` : "",
-            suppliers : !isNaN(Number(supplier)) ? `${displayedSupplier}§§${supplier}` : (displayedSupplier !== content.suppliers[0].name) && `${displayedSupplier}§§${content.suppliers[0].id}`,
+            suppliers : !isNaN(Number(supplier)) ? `${displayedSupplier}§§${supplier}` : (displayedSupplier !== content.suppliers[0].name) ? `${displayedSupplier}§§${content.suppliers[0].id}` : "",
             packaging_id: !isNaN(Number(packaging)) ? `${displayedPackaging}§§${packaging}` : (displayedPackaging !== content.packaging.name) ? `${displayedPackaging}§§${content.packaging_id}` : "",
             purchase_price : Number(number),
             selling_price : Number(result),
@@ -250,22 +268,70 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
             currency_id: Number(currency) 
         }
 
-        // : (displayedCategory !== content.category.name) && `${displayedCategory}§§${content.category_id}`
+        // console.log("ARTICLE ", articleData);
 
-        // if(data.location)
-        
-        
-        // try {
-        //     const updatedData = {
-        //         ...data,
-        //         location: displayedLocation // Envoi de la valeur mise à jour
-        //     };
-        //     // await dispatch(updateArticle(updatedData)).unwrap();
-        //     toast.success("Article mis à jour avec succès !");
-        // } catch (error) {
-        //     console.error(error);
-        //     toast.error("Erreur lors de la mise à jour.");
-        // }
+        const updateArticlePromise = dispatch(updateArticle({ id: content.id, data: articleData })).unwrap().then(() => ({
+            status: "fulfilled",
+            message: "Article mis à jour avec succès !",
+        }))
+        .catch((err) => {
+            // Vérifier si err est un objet et récupérer le message
+            const errorMessage = typeof err === "string" ? err : err?.message || "Erreur inconnue lors de la mise à jour.";
+
+            return {
+                status: "rejected",
+                message: errorMessage,
+            };
+        })
+        .then((result) => {
+
+            if (result.status === "fulfilled") {
+                // Afficher un toast de succès
+                toast.custom((t: any) => (
+                    <div
+                        className={`${t.visible ? "animate-enter" : "animate-leave"
+                    } flex items-center w-full max-w-xs p-4 text-white bg-green-600 border border-green-900 rounded-lg shadow-lg`}
+                    >
+                        {/* Icône verte avec fond blanc */}
+                        <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">
+                            ✅
+                        </span>
+
+                        <div className="flex-1 text-center">
+                            <p className="text-sm">{result.message}</p>
+                        </div>
+                    </div>
+                ),{
+                    duration: 2000,  // Délai de 3 secondes (3000ms)
+                });
+
+                // Temporiser la fermeture du formulaire après l'affichage du toast
+                setTimeout(() => {
+                    setIsUpdateFormOpen(false);
+                }, 2500); // Attendre 2 secondes avant de fermer le formulaire
+
+            } else {
+                // Afficher un toast d'erreur
+                toast.custom((t: any) => (
+                    <div
+                    className={`${
+                        t.visible ? "animate-enter" : "animate-leave"
+                    } flex items-center w-full max-w-xs p-4 text-white bg-red-600 border border-red-900 rounded-lg shadow-lg`}
+                    >
+                        {/* Icône d'erreur avec fond blanc */}
+                        <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">
+                            ❌
+                        </span>
+
+                        <div className="flex-1 text-center">
+                            <p className="text-sm">{result.message}</p>
+                        </div>
+                    </div>
+                ));
+            }
+
+        });
+
     };
 
     const locationSelectHandler = (location:IPlacement) => {
@@ -276,6 +342,7 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
 
     return (
         <div>
+            <Toaster />
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="grid grid-cols-12  gap-x-5 p-5 " >
                     <div className="col-span-6 bg-[#7288a5fd] border-2 border-white p-2  space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
@@ -319,7 +386,7 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
                                         />
 
                                         {isLocationDropdownOpen && filteredLocations.length > 0 && (
-                                            <div className="absolute bg-white border mt-1 w-full shadow-lg max-h-60 overflow-auto">
+                                            <div className="absolute z-50 bg-white border mt-1 w-full shadow-lg max-h-60 overflow-auto">
                                                 {filteredLocations.map((location:IPlacement) => (
                                                     <Combobox.Option
                                                         key={location.id}
@@ -364,7 +431,7 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
                                     >
                                         <div className="relative">
                                             <input
-                                                className="w-full border p-2 rounded-md"
+                                                className="w-full uppercase border p-2 rounded-md"
                                                 placeholder="Saisir ou sélectionner..."
                                                 value={displayedIndication}
                                                 onChange={(e) => {
@@ -381,12 +448,12 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
                                             />
 
                                             {isIndicationDropdownOpen && filteredIndications.length > 0 && (
-                                                <div className="absolute bg-white border mt-1 w-full shadow-lg max-h-60 overflow-auto">
+                                                <div className=" absolute z-50 bg-white border mt-1 w-full shadow-lg max-h-60 overflow-auto">
                                                     {filteredIndications.map((indication) => (
                                                         <Combobox.Option
                                                             key={indication.id}
                                                             value={indication.id}
-                                                            className="cursor-pointer p-2 hover:bg-gray-100"
+                                                            className="uppercase cursor-pointer p-2 hover:bg-gray-100"
                                                             onMouseDown={() => setDisplayedIndication(indication.name)}
                                                         >
                                                             {indication.name}
@@ -415,7 +482,7 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
                                     >
                                             <div className="relative">
                                                 <input
-                                                    className="w-full border p-2 rounded-md"
+                                                    className="w-full uppercase border p-2 rounded-md"
                                                     placeholder="Saisir ou sélectionner..."
                                                     value={displayedMolecule}
                                                     onChange={(e) => {
@@ -437,7 +504,7 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
                                                             <Combobox.Option
                                                                 key={molecule.id}
                                                                 value={molecule.id}
-                                                                className="cursor-pointer p-2 hover:bg-gray-100"
+                                                                className="uppercase cursor-pointer p-2 hover:bg-gray-100"
                                                                 onMouseDown={() => setDisplayedMolecule(molecule.name)}
                                                             >
                                                                 {molecule.name}
@@ -481,12 +548,12 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
                                                 />
 
                                                 {isPackagingDropdownOpen && filteredPackagings.length > 0 && (
-                                                    <div className="absolute bg-white border mt-1 w-full shadow-lg max-h-60 overflow-auto">
+                                                    <div className="absolute z-50 bg-white border mt-1 w-full shadow-lg max-h-60 overflow-auto">
                                                         {filteredPackagings.map((packaging:IPackaging) => (
                                                             <Combobox.Option
                                                                 key={packaging.id}
                                                                 value={packaging.id}
-                                                                className="cursor-pointer p-2 hover:bg-gray-100"
+                                                                className="uppercase cursor-pointer p-2 hover:bg-gray-100"
                                                                 onMouseDown={() => setDisplayedPackaging(packaging.name)}
                                                             >
                                                                 {packaging.name}
@@ -510,7 +577,7 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
                                 >
                                         <div className="relative">
                                             <input
-                                                className="w-full border p-2 rounded-md"
+                                                className="w-full uppercase border p-2 rounded-md"
                                                 placeholder="Saisir ou sélectionner..."
                                                 value={displayedCategory}
                                                 onChange={(e) => {
@@ -527,12 +594,12 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
                                             />
 
                                             {isCategoryDropdownOpen && filteredCategories.length > 0 && (
-                                                <div className="absolute bg-white border mt-1 w-full shadow-lg max-h-60 overflow-auto">
+                                                <div className="absolute z-50 bg-white border mt-1 w-full shadow-lg max-h-60 overflow-auto">
                                                     {filteredCategories.map((category:ICategory) => (
                                                         <Combobox.Option
                                                             key={category.id}
                                                             value={category.id}
-                                                            className="cursor-pointer p-2 hover:bg-gray-100"
+                                                            className="uppercase cursor-pointer p-2 hover:bg-gray-100"
                                                             onMouseDown={() => setDisplayedCategory(category.name)}
                                                         >
                                                             {category.name}
@@ -578,12 +645,12 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
                                                     />
 
                                                     {isSupplierDropdownOpen && filteredSuppliers.length > 0 && (
-                                                        <div className="absolute bg-white border mt-1 w-full shadow-lg max-h-60 overflow-auto">
+                                                        <div className="absolute z-50 bg-white border mt-1 w-full shadow-lg max-h-60 overflow-auto">
                                                             {filteredSuppliers.map((supplier:ISupplier) => (
                                                                 <Combobox.Option
                                                                     key={supplier.id}
                                                                     value={supplier.id}
-                                                                    className="cursor-pointer p-2 hover:bg-gray-100"
+                                                                    className="cursor-pointer uppercase p-2 hover:bg-gray-100"
                                                                     onMouseDown={() => setDisplayedSupplier(supplier.name)}
                                                                 >
                                                                     {supplier.name}

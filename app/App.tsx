@@ -20,7 +20,7 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <Toaster />
+      {/* <Toaster /> */}
       {/* Vérifie que persistor n'est pas null avant de l'utiliser */}
       {persistor ? (
         <PersistGate loading={null} persistor={persistor}>

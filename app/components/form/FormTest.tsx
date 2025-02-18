@@ -43,14 +43,22 @@ interface IFormInputs {
 export default function FormTest() {
 
     const { register, handleSubmit, control, reset, setValue, watch } = useForm<IFormInputs>(
-        {
-            defaultValues: {
-                quantity : 0,
-                currency : 1,
-                purchase_price : 0,
-                selling_price : 0
-            }
-        }
+        {defaultValues: {
+            barcode : "",
+            location : "",
+            description : "",
+            indication : "",
+            molecule : "",
+            packaging : "",
+            category : "",
+            supplier : "",
+            expirationDate : "",
+            alert : 0,
+            currency : 1,
+            quantity : 0,
+            purchase_price : 0,
+            selling_price : 0,
+        }}
     );
     const [ query, setQuery] = useState<string>("");
     const [ locationQuery, setLocationQuery] = useState<string>("NOT SET");
@@ -369,12 +377,13 @@ export default function FormTest() {
                                             filteredLocations.length > 0 && (
                                                 <div className=" uppercase absolute z-50 mt-1 w-full bg-white border rounded-md shadow-lg max-h-60 overflow-auto">
                                                     {
-                                                        filteredLocations.map((location) => (
+                                                        filteredLocations
+                                                        .filter((location: IPlacement) => location.name !== "NOT SET") // Filter out "NOT SET"
+                                                        .map((location: IPlacement) => (
                                                             <Combobox.Option
                                                                 key={location.id}
                                                                 value={location.id}
                                                                 className="cursor-pointer p-2 hover:bg-gray-100"
-                                                                onMouseDown={() => setIsLocationDropdownOpen(false)}
                                                             >
                                                                 {location.name}
                                                             </Combobox.Option>
@@ -471,16 +480,20 @@ export default function FormTest() {
                                         {filteredIndications.length > 0 && (
                                             isIndicationDropdownOpen && (
                                                 <div className="absolute z-50 mt-1 w-full bg-white border rounded-md shadow-lg max-h-60 overflow-auto">
-                                                    {filteredIndications.map((indication) => (
-                                                    <Combobox.Option
-                                                        key={indication.id}
-                                                        value={indication.id}
-                                                        className="cursor-pointer p-2 hover:bg-gray-100"
-                                                        onMouseDown={() => setIsIndicationDropdownOpen(false)}
-                                                    >
-                                                        {indication.name}
-                                                    </Combobox.Option>
-                                                    ))}
+                                                    {
+                                                        filteredIndications
+                                                        .filter((indication) => indication.name !== "NOT SET") // Filter out "NOT SET"
+                                                        .map((indication) => (
+                                                            <Combobox.Option
+                                                                key={indication.id}
+                                                                value={indication.id}
+                                                                className=" uppercase cursor-pointer p-2 hover:bg-gray-100"
+                                                                onMouseDown={() => setIsIndicationDropdownOpen(false)}
+                                                            >
+                                                                {indication.name}
+                                                            </Combobox.Option>
+                                                        ))
+                                                    }
                                                 </div>
                                             )
                                         )}
@@ -526,16 +539,20 @@ export default function FormTest() {
                                             isMoleculeDropdownOpen && (
                                                 filteredMolecules.length > 0 && (
                                                     <div className="absolute uppercase z-50 mt-1 w-full bg-white border rounded-md shadow-lg max-h-60 overflow-auto">
-                                                        {filteredMolecules.map((molecule) => (
-                                                        <Combobox.Option
-                                                            key={molecule.id}
-                                                            value={molecule.id}
-                                                            className="cursor-pointer p-2 hover:bg-gray-100"
-                                                            onMouseDown={() => setIsMoleculeDropdownOpen(false)}
-                                                        >
-                                                            {molecule.name}
-                                                        </Combobox.Option>
-                                                        ))}
+                                                        {
+                                                            filteredMolecules
+                                                            .filter((molecule) => molecule.name !== "NOT SET") // Filter out "NOT SET"
+                                                            .map((molecule) => (
+                                                                <Combobox.Option
+                                                                    key={molecule.id}
+                                                                    value={molecule.id}
+                                                                    className=" uppercase cursor-pointer p-2 hover:bg-gray-100"
+                                                                    onMouseDown={() => setIsMoleculeDropdownOpen(false)}
+                                                                >
+                                                                    {molecule.name}
+                                                                </Combobox.Option>
+                                                            ))
+                                                        }
                                                     </div>
                                                 )
                                             )
@@ -582,16 +599,20 @@ export default function FormTest() {
                                             isPackagingDropdownOpen && (
                                                 filteredPackagings.length > 0 && (
                                                     <div className="absolute mt-1 w-full bg-white border rounded-md shadow-lg max-h-60 overflow-auto">
-                                                        {filteredPackagings.map((packaging:IPackaging) => (
-                                                        <Combobox.Option
-                                                            key={packaging.id}
-                                                            value={packaging.id}
-                                                            className="cursor-pointer p-2 hover:bg-gray-100"
-                                                            onMouseDown={() => setIsPackagingDropdownOpen(false)}
-                                                        >
-                                                            {packaging.name}
-                                                        </Combobox.Option>
-                                                        ))}
+                                                        {
+                                                            filteredPackagings
+                                                            .filter((packaging: IPackaging) => packaging.name !== "NOT SET") // Filter out "NOT SET"
+                                                            .map((packaging: IPackaging) => (
+                                                                <Combobox.Option
+                                                                    key={packaging.id}
+                                                                    value={packaging.id}
+                                                                    className=" uppercase cursor-pointer p-2 hover:bg-gray-100"
+                                                                    onMouseDown={() => setIsPackagingDropdownOpen(false)}
+                                                                >
+                                                                    {packaging.name}
+                                                                </Combobox.Option>
+                                                            ))
+                                                        }
                                                     </div>
                                                 )
                                             )
@@ -634,11 +655,12 @@ export default function FormTest() {
                                             <div className="absolute mt-1 w-full bg-white border rounded-md shadow-lg max-h-60 overflow-auto">
                                                 {
                                                     isCategoryDropdownOpen && (
-                                                        filteredCategories.map((category:ICategory) => (
+                                                        filteredCategories.filter((category: ICategory) => category.name !== "NOT SET") // Filter out "NOT SET"
+                                                        .map((category: ICategory) => (
                                                             <Combobox.Option
                                                                 key={category.id}
                                                                 value={category.id}
-                                                                className="cursor-pointer p-2 hover:bg-gray-100"
+                                                                className=" uppercase cursor-pointer p-2 hover:bg-gray-100"
                                                                 onMouseDown={() => setIsCategoryDropdownOpen(false)}
                                                             >
                                                                 {category.name}
@@ -693,16 +715,20 @@ export default function FormTest() {
                                             isSupplierDropdownOpen && (
                                                 filteredSuppliers.length > 0 && (
                                                         <div className="absolute mt-1 w-full bg-white border rounded-md shadow-lg max-h-60 overflow-auto">
-                                                            {filteredSuppliers.map((supplier:ISupplier) => (
-                                                            <Combobox.Option
-                                                                key={supplier.id}
-                                                                value={supplier.id}
-                                                                className="cursor-pointer p-2 hover:bg-gray-100"
-                                                                onMouseDown={() => setIsSupplierDropdownOpen(false)}
-                                                            >
-                                                                {supplier.name}
-                                                            </Combobox.Option>
-                                                            ))}
+                                                            {
+                                                                filteredSuppliers
+                                                                .filter((supplier: ISupplier) => supplier.name !== "NOT SET") // Filter out "NOT SET"
+                                                                .map((supplier: ISupplier) => (
+                                                                    <Combobox.Option
+                                                                        key={supplier.id}
+                                                                        value={supplier.id}
+                                                                        className=" uppercase cursor-pointer p-2 hover:bg-gray-100"
+                                                                        onMouseDown={() => setIsSupplierDropdownOpen(false)}
+                                                                    >
+                                                                        {supplier.name}
+                                                                    </Combobox.Option>
+                                                                ))
+                                                            }
                                                         </div>
                                                     )
                                             )

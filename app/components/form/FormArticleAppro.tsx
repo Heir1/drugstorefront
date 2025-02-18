@@ -359,6 +359,7 @@ export default function FormArticleAppro() {
     return (
         <>
             <div className="mx-2"  >
+                <Toaster />
                 <form onSubmit={handleSubmit(addToCart)}>
 
                     <div className=" grid grid-cols-12 border-[1px] border-white mx-4 gap-3 p-2 " >
@@ -409,7 +410,7 @@ export default function FormArticleAppro() {
                                 <Controller
                                     name="description"
                                     control={control}
-                                    // defaultValue=""
+                                    defaultValue=""
                                     render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="text" readOnly />}
                                     rules={{ required: 'Le code barre est requis' }}
                                 />
@@ -423,7 +424,7 @@ export default function FormArticleAppro() {
                                 <Controller
                                     name="packaging1"
                                     control={control}
-                                    // defaultValue=""
+                                    defaultValue=""
                                     render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="text" readOnly   />}
                                     rules={{ required: 'Le code barre est requis' }}
                                 />
@@ -437,7 +438,7 @@ export default function FormArticleAppro() {
                                 <Controller
                                     name="category1"
                                     control={control}
-                                    // defaultValue=""
+                                    defaultValue=""
                                     render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="text" readOnly   />}
                                     rules={{ required: 'Le code barre est requis' }}
                                 />
@@ -451,7 +452,7 @@ export default function FormArticleAppro() {
                                 <Controller
                                     name="supplier1"
                                     control={control}
-                                    // defaultValue=""
+                                    defaultValue=""
                                     render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="text" readOnly   />}
                                     rules={{ required: 'Le code barre est requis' }}
                                 />
@@ -465,7 +466,7 @@ export default function FormArticleAppro() {
                                 <Controller
                                     name="barcode"
                                     control={control}
-                                    // defaultValue=""
+                                    defaultValue=""
                                     render={({ field }) => <input {...field} className="w-full text-[12px] bg-[#F2F7FC] pl-4 uppercase " type="text" readOnly   />}
                                     rules={{ required: 'Le code barre est requis' }}
                                 />
@@ -479,7 +480,7 @@ export default function FormArticleAppro() {
                                 <Controller
                                     name="location1"
                                     control={control}
-                                    // defaultValue=""
+                                    defaultValue=""
                                     render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="text" readOnly   />}
                                     rules={{ required: 'Le code barre est requis' }}
                                 />
@@ -493,8 +494,8 @@ export default function FormArticleAppro() {
                                 <Controller
                                     name="quantity"
                                     control={control}
-                                    // defaultValue=""
-                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="number"   />}
+                                    defaultValue={1}
+                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="number"  readOnly  />}
                                     rules={{ required: 'Le code barre est requis' }}
                                 />
                             </div>
@@ -508,7 +509,7 @@ export default function FormArticleAppro() {
                                 <Controller
                                     name="quantityappro"
                                     control={control}
-                                    // defaultValue=""
+                                    defaultValue={1}
                                     render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="number"   />}
                                     rules={{ required: 'Le code barre est requis' }}
                                 />
@@ -518,6 +519,7 @@ export default function FormArticleAppro() {
                             <Controller
                                 name="currency"
                                 control={control}
+                                defaultValue={1}
                                 render={({ field }) => (
                                     <div className=" flex justify-between items-center" >
                                         <div className=" w-1/3 flex justify-between items-center">
@@ -553,7 +555,7 @@ export default function FormArticleAppro() {
                                     name="purchase_price"
                                     control={control}
                                     
-                                    // defaultValue=""
+                                    defaultValue={1}
                                     render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="number" onChange={handleNumberChange} value={number} />}
                                     rules={{ required: 'Le code barre est requis' }}
                                 />
@@ -568,7 +570,7 @@ export default function FormArticleAppro() {
                                 <Controller
                                     name="selling_price"
                                     control={control}
-                                    // defaultValue=""
+                                    defaultValue={1}
                                     render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="number" value={result}  readOnly />}
                                     rules={{ required: 'Le code barre est requis' }}
                                 />
@@ -590,6 +592,7 @@ export default function FormArticleAppro() {
                             </div>
                             <div>
                                 <Controller
+                                    defaultValue=""
                                     name="expirationDate"
                                     control={control}
                                     render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC]  pl-4 pr-4 uppercase rounded-lg " {...field} type="date" readOnly />}
@@ -665,7 +668,7 @@ export default function FormArticleAppro() {
                             <div className=" ml-4 flex items-center ">
                                 <div className=" ml-2 flex justify-center w-full border-2 border-black " >
                                     <select className=" w-full "  name="" id="">
-                                        <option className=" " value="" disabled selected>Type d'appro</option>
+                                        <option className=" " value="" >Type d'appro</option>
                                         <option value="">NORMAL</option>
                                         <option value="">REGUL STOCK</option>
                                     </select>

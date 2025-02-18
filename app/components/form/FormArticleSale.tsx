@@ -113,8 +113,8 @@ export default function FormArticleSale() {
     const [ isInvoice, setIsInvoice ] = useState(false);
     const [ clientName, setClientName ] = useState("NOT SET");
 
-    const [ cdfPaidAmount, setCdfPaidAmount ] = useState(0)
-    const [ usdPaidAmount, setUsdPaidAmount ] = useState(0)
+    const [cdfPaidAmount, setCdfPaidAmount] = useState<number | undefined>(); 
+    const [ usdPaidAmount, setUsdPaidAmount ] = useState<number | undefined>();
     const [ currency, setCurrency ] = useState(false);
 
     const { rates } = useRateService()
@@ -250,9 +250,9 @@ export default function FormArticleSale() {
             
                     // Si la création de la facture a réussi, exécutez onSubmitProf()
                     if (result.meta.requestStatus === 'fulfilled') {
-                    onSubmitProf();
+                        onSubmitProf();
                     } else {
-                    console.error('Erreur lors de la création de la facture');
+                        console.error('Erreur lors de la création de la facture');
                     }
                 } catch (error) {
                     console.error('Erreur dans la création de la facture', error);
@@ -448,188 +448,6 @@ export default function FormArticleSale() {
                 <div className="block print:hidden" >
                     <div className="mx-2"  >
 
-                        {/* <form onSubmit={handleSubmit(onSubmit1)}>
-                            <div className="grid grid-cols-11  gap-x-5 px-5 bg-gray-600 mx-5 my-2  rounded-xl space-y-2 shadow-[0px_4px_8px_0px_#00000026]" >
-                                <div className="col-span-8 ">
-                                    <div className="grid grid-cols-4 gap-5">
-
-                                        <div className="space-y-1" >
-                                            <label className=" font-semibold text-sm  text-white" htmlFor="">Code barre</label>
-                                            <Controller
-                                                name="barcode"
-                                                control={control}
-                                                render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg " type="text" readOnly />}
-                                                rules={{ required: 'Le code barre est requis' }}
-                                            />
-                                        </div>
-
-                                        <div className="space-y-1" >
-                                            <label className=" font-semibold text-sm text-white" htmlFor="">Localisation</label>
-                                            <Controller
-                                                name="location"
-                                                control={control}
-                                                
-                                                render={({ field }) => (
-                                                <Select
-                                                    id="location"
-                                                    {...field}
-                                                    options={placementsFormated}
-                                                    isClearable
-                                                    isDisabled
-                                                />
-                                                )}
-                                                rules={{ required: 'La localisation est requise' }}
-                                            />
-                                        </div>
-
-                                        <div className="space-y-1" >
-                                            <label className=" font-semibold text-sm text-white" htmlFor="">Indication</label>
-                                            <Controller
-                                                name="indication"
-                                                control={control}
-                                                render={({ field }) => (
-                                                    <Select
-                                                        {...field}
-                                                        options={indicationsFormated}
-                                                        isClearable
-                                                        isDisabled
-                                                    />
-                                                )}
-                                                rules={{ required: 'L indication est requise' }}
-                                            />
-                                        </div>
-
-                                        <div className="space-y-1" >
-                                            <label className=" font-semibold text-sm text-white" htmlFor="">Emballage</label>
-                                            <Controller
-                                                name="packaging"
-                                                control={control}
-                                                render={({ field }) => (
-                                                    <Select
-                                                        {...field}
-                                                        options={packagingsFormated}
-                                                        isClearable
-                                                        isDisabled
-                                                    />
-                                                )}
-                                                rules={{ required: 'L emballage est requis' }}
-                                            />
-                                        </div>
-                                        
-                                        <div className="space-y-1" >
-                                            <label className=" font-semibold text-sm text-white" htmlFor="">Catégorie</label>
-                                            <Controller
-                                                name="category"
-                                                control={control}
-                                                render={({ field }) => (
-                                                    <Select
-                                                        {...field}
-                                                        options={categoriesFormated}
-                                                        isClearable
-                                                        isDisabled
-                                                    />
-                                                )}
-                                                rules={{ required: 'La catégorie est requise' }}
-                                            />
-                                        </div>
-    
-
-                                        <div className="space-y-1" >
-                                            <div className="grid grid-cols-2 gap-2 ">
-                                                <div>
-                                                    <label className=" font-semibold text-sm text-white" htmlFor="">PU USD</label>
-                                                    <Controller
-                                                        name="selling_price"
-                                                        control={control}
-                                                        render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4" {...field} type="number" readOnly />}
-                                                        rules={{ required: 'La quantité est requise' }}
-                                                    />
-                                                </div>
-                                                <div>
-                                                    <label className=" font-semibold text-sm text-white" htmlFor="">PU CDF</label>
-                                                    <Controller
-                                                        name="selling_price"
-                                                        control={control}
-                                                        render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4" {...field} type="number"readOnly />}
-                                                        rules={{ required: 'La quantité est requise' }}
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="space-y-1" >
-                                            <div className="grid grid-cols-2 gap-2 ">
-                                                <div>
-                                                    <label className=" font-semibold text-sm text-white" htmlFor="">STOCK</label>
-                                                    <Controller
-                                                        name="quantity"
-                                                        control={control}
-                                                        render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4" {...field} type="number"readOnly />}
-                                                        rules={{ required: 'La quantité est requise' }}
-                                                    />
-                                                </div>
-                                                <div>
-                                                    <label className=" font-semibold text-sm text-white" htmlFor="">VENTE</label>
-                                                    <Controller
-                                                        name="quantity1"
-                                                        control={control}
-                                                        render={({ field }) => <input min={1} max={article?.value?.quantity}  className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg pr-4" {...field} type="number" />}
-                                                        rules={{ required: 'La quantité est requise' }}
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="space-y-1" >
-                                            <div className="grid grid-cols-3 gap-2 ">
-                                                <div className="col-span-2" >
-                                                    <label className=" font-semibold text-sm text-white" htmlFor="">Péremption</label>
-                                                    <Controller
-                                                        name="expirationDate"
-                                                        control={control}
-                                                        render={({ field }) => <input  className="w-full text-[14px] h-10 pl-4 pr-4 uppercase rounded-lg font-bold border-[1px] border-black" {...field} type="date" />}
-                                                        rules={{ required: 'La date est requise' }}
-                                                    />
-                                                </div>
-                                                <div className="flex flex-col justify-end " >
-                                                    <button  
-                                                        type='submit'
-                                                        className=" w-full text-center p-[10px] bg-[#4594ff] text-white transition duration-300 hover:bg-[#3386e0]  rounded-lg  text-[14px]  " >Ajouter</button>
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-                                    </div>
-
-                                </div>
-
-                                <div className=" col-span-3 space-y-2 " >
-                                    
-                                    <div className=" w-full  flex " >
-                                        <div className=" w-1/2 flex items-center gap-2 " >
-                                            <label htmlFor="" className=" font-bold text-white" >Client</label>
-                                            <input className=" rounded-sm border-[1px] border-gray-700 py-[2px] px-[2px] text-sm "  type="text" onChange={ (e) => setClientName(e.target.value) } />
-                                        </div>
-                                        <div className=" w-1/2 flex items-center gap-2 " >
-                                            <label htmlFor="" className=" font-bold text-white" >Num : {invoiceNumber.data} </label>
-                                        </div>
-                                    </div>
-
-                                    <div className=" w-full  pl-[58px] " >
-                                        <div className=" w-1/2 flex items-center gap-2 " >
-                                            <button type="button" onClick={onSubmitProf} className="col-span-1 h-8 bg-[#4594ff] text-white rounded text-sm transition hover:bg-blue-500 px-4 " >
-                                                Imprimer proforma
-                                            </button>
-                                        </div>
-                                    </div>
-                                    
-                                                        
-                                </div>
-                                
-                            </div>  
-                        </form> */}
-
                         <form onSubmit={handleSubmit(onSubmit1)}>
         
                             <div className=" grid grid-cols-12 border-[1px] border-white mx-4 gap-3 p-2 " >
@@ -641,7 +459,7 @@ export default function FormArticleSale() {
                                         <Controller
                                             name="barcode"
                                             control={control}
-                                            // defaultValue=""
+                                            defaultValue=""
                                             render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase " type="text" readOnly />}
                                             rules={{ required: 'Le code barre est requis' }}
                                         />
@@ -655,6 +473,7 @@ export default function FormArticleSale() {
                                         <Controller
                                             name="description1"
                                             control={control}
+                                            defaultValue=""
                                             render={({ field }) => (
                                                 <Select
                                                     {...field}
@@ -682,7 +501,7 @@ export default function FormArticleSale() {
                                                 <Controller
                                                     name="location1"
                                                     control={control}
-                                                    // defaultValue=""
+                                                    defaultValue=""
                                                     render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#4594ff] pl-4 uppercase font-bold  " type="text" readOnly   />}
                                                     rules={{ required: 'Le code barre est requis' }}
                                                 />
@@ -696,7 +515,7 @@ export default function FormArticleSale() {
                                                 <Controller
                                                     name="molecule1"
                                                     control={control}
-                                                    // defaultValue=""
+                                                    defaultValue=""
                                                     render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#4594ff] pl-4 font-bold  uppercase " type="text" readOnly   />}
                                                     rules={{ required: 'Le code barre est requis' }}
                                                 />
@@ -710,7 +529,7 @@ export default function FormArticleSale() {
                                                 <Controller
                                                     name="indication1"
                                                     control={control}
-                                                    // defaultValue=""
+                                                    defaultValue=""
                                                     render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#4594ff] pl-4 font-bold uppercase " type="text" readOnly   />}
                                                     rules={{ required: 'Le code barre est requis' }}
                                                 />
@@ -724,7 +543,7 @@ export default function FormArticleSale() {
                                                 <Controller
                                                     name="category1"
                                                     control={control}
-                                                    // defaultValue=""
+                                                    defaultValue=""
                                                     render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#4594ff] pl-4 font-bold uppercase " type="text" readOnly   />}
                                                     rules={{ required: 'Le code barre est requis' }}
                                                 />
@@ -738,7 +557,7 @@ export default function FormArticleSale() {
                                                 <Controller
                                                     name="packaging1"
                                                     control={control}
-                                                    // defaultValue=""
+                                                    defaultValue=""
                                                     render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#4594ff] font-bold pl-4 uppercase " type="text" readOnly   />}
                                                     rules={{ required: 'Le code barre est requis' }}
                                                 />
@@ -752,6 +571,7 @@ export default function FormArticleSale() {
                                                 <Controller
                                                     name="expirationDate"
                                                     control={control}
+                                                    defaultValue=""
                                                     render={({ field }) => <input  className="w-full text-[14px] bg-[#4594ff] font-bold  pl-4 pr-4 uppercase rounded-lg " {...field} type="date" readOnly />}
                                                     rules={{ required: 'La date est requise' }}
                                                 />
@@ -763,7 +583,7 @@ export default function FormArticleSale() {
                                                 <Controller
                                                     name="selling_price"
                                                     control={control}
-                                                    // defaultValue=""
+                                                    defaultValue={1}
                                                     render={({ field }) => <input {...field} className="w-full text-[14px] bg-yellow-400 pl-4 font-extrabold uppercase " type="number"  readOnly />}
                                                     rules={{ required: 'Le code barre est requis' }}
                                                 />
@@ -775,7 +595,7 @@ export default function FormArticleSale() {
                                                 <Controller
                                                     name="purchase_price"
                                                     control={control}
-                                                    // defaultValue=""
+                                                    defaultValue={1}
                                                     render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#4594ff] pl-4 font-extrabold uppercase " type="number"  readOnly />}
                                                     rules={{ required: 'Le code barre est requis' }}
                                                 />
@@ -787,8 +607,8 @@ export default function FormArticleSale() {
                                                 <Controller
                                                     name="quantity"
                                                     control={control}
-                                                    // defaultValue=""
-                                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="number"   />}
+                                                    defaultValue={1}
+                                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="number" readOnly  />}
                                                     rules={{ required: 'Le code barre est requis' }}
                                                 />
                                             </div>
@@ -802,7 +622,7 @@ export default function FormArticleSale() {
                                                     <Controller
                                                         name="quantity1"
                                                         control={control}
-                                                        // defaultValue=""
+                                                        defaultValue={1}
                                                         render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="number"  max={article?.value?.quantity} />}
                                                         rules={{ required: 'Le code barre est requis' }}
                                                     />
@@ -986,7 +806,7 @@ export default function FormArticleSale() {
                                                 <div className="text-right">
                                                     <input
                                                         type="number"
-                                                        value={cdfPaidAmount}
+                                                        // value={cdfPaidAmount}
                                                         className="w-full text-red-800 font-bold bg-green-700 h-8 py-4 border border-gray-300 mb-2 rounded text-center text-sm"
                                                         onChange={(event) => changeCdfHandler(event) }
                                                     />
@@ -1009,7 +829,7 @@ export default function FormArticleSale() {
                                                 <div className="text-right mb-2 ">
                                                     <input
                                                         type="number"
-                                                        value={usdPaidAmount}
+                                                        // value={usdPaidAmount}
                                                         onChange={(event) => changeDollarHandler(event) }
                                                         className="w-full h-8 p-1 bg-yellow-400  border border-gray-300 rounded text-center text-sm"
                                                     />
@@ -1029,11 +849,11 @@ export default function FormArticleSale() {
                                                 <div className="bg-green-700 mb-2 p-1 ">
                                                     <h1 className="text-center font-bold text-gray-800">
                                                         { 
-                                                            (cdfPaidAmount > 0 || usdPaidAmount > 0) ? (
-                                                                ` ${ !currency ? ((cdfPaidAmount-getTotalPrice()).toFixed(2)) : ((usdPaidAmount*rate-getTotalPrice()).toFixed(2)) } ` 
-                                                            )
-                                                            :
-                                                            (
+                                                            ((cdfPaidAmount ?? 0) > 0 || (usdPaidAmount ?? 0) > 0) ? (
+                                                                `${ !currency 
+                                                                    ? (( (cdfPaidAmount ?? 0) - getTotalPrice() ).toFixed(2)) 
+                                                                    : (( (usdPaidAmount ?? 0) * rate - getTotalPrice() ).toFixed(2)) }`
+                                                            ) : (
                                                                 (0).toFixed(2)
                                                             )
                                                         }
@@ -1042,11 +862,11 @@ export default function FormArticleSale() {
                                                 <div className="bg-green-700 p-1">
                                                     <h1 className="text-center font-bold text-gray-800">
                                                         { 
-                                                            (cdfPaidAmount > 0 || usdPaidAmount > 0) ? (
-                                                                ` ${ !currency ? (((cdfPaidAmount-getTotalPrice())/rate).toFixed(2)) : ((usdPaidAmount-getTotalPrice()/rate).toFixed(2)) } ` 
-                                                            )
-                                                            :
-                                                            (
+                                                            ((cdfPaidAmount ?? 0) > 0 || (usdPaidAmount ?? 0) > 0) ? (
+                                                                ` ${ !currency 
+                                                                    ? ((( (cdfPaidAmount ?? 0) - getTotalPrice()) / rate).toFixed(2)) 
+                                                                    : (((usdPaidAmount ?? 0) - (getTotalPrice() / rate)).toFixed(2)) } ` 
+                                                            ) : (
                                                                 (0).toFixed(2)
                                                             )
                                                         }

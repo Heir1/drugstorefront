@@ -103,7 +103,7 @@ export const LowStockColumns: ColumnDef<IArticle>[] = [
         accessorKey: "expiration_date",
         header: "PEREMPETION",
         cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("expiration_date")}</div>
+        <div className="capitalize">{String(row.getValue("expiration_date")).split("-").reverse().join("-")}</div>
         ),
     },
 

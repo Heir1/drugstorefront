@@ -11,7 +11,8 @@ export const useSupplierService = () => {
     const { suppliers, supplierStatus , supplierError } = useSelector((state: RootState) => state.suppliers )
 
     useEffect(() => {
-        supplierStatus !== "succeeded" && dispatch(fetchSuppliers())
+        // supplierStatus !== "succeeded" && dispatch(fetchSuppliers())
+        dispatch(fetchSuppliers())
     }, [dispatch])
 
     return { suppliers , supplierStatus, supplierError }

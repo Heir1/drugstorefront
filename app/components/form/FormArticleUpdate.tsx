@@ -258,8 +258,7 @@ export default function FormArticleUpdate({content, setIsUpdateFormOpen}:Article
             currency_id: Number(currency) 
         }
 
-        const updateArticlePromise = dispatch(updateArticle({ id: content.id, data: articleData }))
-        .unwrap().then(() => ({
+        const updateArticlePromise = dispatch(updateArticle({ id: content.id, data: articleData })).unwrap().then(() => ({
             status: "fulfilled",
             message: "Article mis à jour avec succès !",
         }))

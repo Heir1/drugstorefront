@@ -129,12 +129,12 @@ export const ArticleApproColumns: ColumnDef<IMovement>[] = [
     //     cell: ({ row }) => (
     //     <div className="capitalize">{row.getValue("selling_price")}</div>
     //     ),
-    // },
+    // },String(content?.created_at).split("T")[0].split("-").reverse().join("-")
 
     {
         accessorKey: "article.expiration_date",
         header: "PEREMPETION",
-        cell: ({ row } : { row : any} ) => row.original.article?.expiration_date || "No purchase_price",
+        cell: ({ row } : { row : any} ) => String(row.original.article?.expiration_date).split("-").reverse().join("-") || "No expiration_date",
     },
 
     {

@@ -36,8 +36,8 @@ export const InvoiceColumns: ColumnDef<Iinvoice>[] = [
     {
         accessorKey: "invoices.invoice_date",
         header: "DATE",
-        cell: ({ row } : { row : any} ) => String(row.original?.invoices?.invoice_date).split(" ")[0] || "No Date",
-    },
+        cell: ({ row } : { row : any} ) => String(row.original?.invoices?.invoice_date).split(" ")[0].split("-").reverse().join("-") || "No Date",
+    }, 
 
     {
         accessorKey: "articles.description",

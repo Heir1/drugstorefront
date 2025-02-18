@@ -11,7 +11,8 @@ export const usePlacementService = () => {
     const { placements, placementStatus, placementError } = useSelector((state: RootState) => state.placements )
 
     useEffect(() => {
-        placementStatus !== "succeeded" && dispatch(fetchPlacements())
+        // placementStatus !== "succeeded" && dispatch(fetchPlacements())
+        dispatch(fetchPlacements())
     }, [dispatch])
 
     return { placements, placementStatus, placementError }
