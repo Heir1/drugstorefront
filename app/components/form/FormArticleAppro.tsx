@@ -270,7 +270,8 @@ export default function FormArticleAppro() {
         })
         .then((result) => {
             if (result.status === "fulfilled") {
-            toast.custom((t:any) => (
+                setCart([]);
+                toast.custom((t:any) => (
                 <div className={`${
                     t.visible ? "animate-enter" : "animate-leave"
                 } flex items-center w-full max-w-xs p-4 text-white bg-green-600 border border-green-900 rounded-lg shadow-lg`}
@@ -595,7 +596,7 @@ export default function FormArticleAppro() {
                                     defaultValue=""
                                     name="expirationDate"
                                     control={control}
-                                    render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC]  pl-4 pr-4 uppercase rounded-lg " {...field} type="date" readOnly />}
+                                    render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC]  pl-4 pr-4 uppercase rounded-lg " {...field} type="date" />}
                                     rules={{ required: 'La date est requise' }}
                                 />
                             </div>

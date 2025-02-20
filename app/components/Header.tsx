@@ -95,6 +95,12 @@ export default function Header() {
                                                             <span className=" text-sm "> Ventes </span>
                                                         </Link>
                                                     </div>
+                                                    <hr />
+                                                    <div className="  pl-6 py-2 ">
+                                                        <Link className="flex items-center space-x-2" href={`/pages/admin/users`} onClick={() => setDataDropdown(!dateDropdown) }>
+                                                            <span className=" text-sm "> Utilisateurs </span>
+                                                        </Link>
+                                                    </div>
                                                 </div>
                                             )
                                         }

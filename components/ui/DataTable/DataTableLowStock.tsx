@@ -154,7 +154,7 @@ export function DataTableLowStock<TData, TValue>({
                         {headerGroup.headers.map((header, index) => {
                         return (
                             
-                            <TableHead className={` ${index == 0 ? 'rounded-tl-lg rounded-bl-lg' : ''  } ${index == (headerGroup.headers.length-1) ? 'rounded-tr-lg rounded-br-lg' : ''  }   px-10  bg-[#F2F7FC]  font-light text-[12px] text-black`} key={header.id}>
+                            <TableHead className={` ${index == 0 ? 'rounded-tl-lg rounded-bl-lg' : ''  } ${index == (headerGroup.headers.length-1) ? 'rounded-tr-lg rounded-br-lg' : ''  }   px-10  bg-[#F2F7FC]  font-extrabold text-[12px] text-black`} key={header.id}>
                                 {header.isPlaceholder
                                 ? null
                                 : flexRender(
@@ -175,12 +175,12 @@ export function DataTableLowStock<TData, TValue>({
                         table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
-                                  className=" hover:cursor-pointer text-xs  border-b-[1px] border-black text-black "
+                                  className=" hover:cursor-pointer  border-b-[1px] border-black text-black "
                                   key={row.id}
                                   data-state={row.getIsSelected() && "selected"}
                                 >
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell className="px-10"  key={cell.id}>
+                                        <TableCell className="px-10 font-extrabold text-[12px] "  key={cell.id}>
                                         {flexRender(
                                             cell.column.columnDef.cell,
                                             cell.getContext()

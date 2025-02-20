@@ -971,11 +971,7 @@ export default function FormArticleSale() {
                             </div>
                         </div>
 
-                    </div>
-
-
-
-                    
+                    </div>   
                 </div>
 
             </>

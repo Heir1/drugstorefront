@@ -24,8 +24,7 @@ const CellComponent = ({ row }: { row: any }) => {
 
     return (
         <>
-            <div className="flex justify-start " >
-                {/* <div className="text-white py-1 px-4 rounded-lg bg-[#4594ff] mr-3 "  >Activer</div> */}
+            {/* <div className="flex justify-start " >
                 {
                     articleRow.is_active ? (
                         <div className="bg-[#ff604e] py-1 px-4 rounded-lg text-center text-white w-24" onClick={()=> setUnActivation(articleRow) }>Desactiver</div>
@@ -35,7 +34,7 @@ const CellComponent = ({ row }: { row: any }) => {
                         <div className="bg-[#4594ff] py-1 px-4 rounded-lg text-center text-white w-24 " onClick={()=> setUnActivation(articleRow) }>Activer</div>
                     )
                 }
-            </div>
+            </div> */}
         </>
     );
 
@@ -132,12 +131,12 @@ export const LowStockColumns: ColumnDef<IArticle>[] = [
         ,
     },
 
-    {
-        id: "actions",
-        header: "Actions",
-        enableHiding: false,
-        cell: CellComponent,
-    }
+    // {
+    //     id: "actions",
+    //     header: "Actions",
+    //     enableHiding: false,
+    //     cell: CellComponent,
+    // }
 
         
 ];

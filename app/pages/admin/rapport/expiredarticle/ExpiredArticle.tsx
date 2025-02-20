@@ -8,7 +8,7 @@ import { useRateService } from "@/app/redux/slices/rates/useRateService";
 
 export default function ExpiredArticle() {
 
-    const { articles, articleStatus, error } = useExpirederticlesService();
+    const { allEpiredArticles , expired_status, expired_FetchError } = useExpirederticlesService();
 
     const { rates } = useRateService()
 
@@ -16,8 +16,8 @@ export default function ExpiredArticle() {
 
     let totalPrices = { totalPurchasePrice: 0, totalSellingPrice: 0 };
 
-    if (Array.isArray(articles) && articles.length > 0) {
-        totalPrices = articles.reduce(
+    if (Array.isArray(allEpiredArticles) && allEpiredArticles.length > 0) {
+        totalPrices = allEpiredArticles.reduce(
             (totals, article) => {
                 totals.totalPurchasePrice += article.purchase_price * article.quantity;
                 totals.totalSellingPrice += article.selling_price * article.quantity;
@@ -32,24 +32,24 @@ export default function ExpiredArticle() {
         <div>
 
             <div className="hidden print:block" >
-                <PrintFile articles={articles} totalPurchase={Number(totalPrices.totalPurchasePrice/rate)} totalSelling={Number(totalPrices.totalSellingPrice/rate)} />
+                <PrintFile articles={allEpiredArticles} totalPurchase={Number(totalPrices.totalPurchasePrice/rate)} totalSelling={Number(totalPrices.totalSellingPrice/rate)} />
             </div>
 
             <div className="block print:hidden">
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4 ">
                     <div className="col-start-2 border-2 rounded-lg shadow-md">
-                        <div className="text-center font-bold text-sm text-gray-700 py-2 rounded-t-lg ">
+                        <div className="text-center font-bold text-sm text-white py-2 rounded-t-lg ">
                             <h1>ALERTE DE PEREMPTION</h1>
                         </div>
                     </div>
                 </div>
 
                 {
-                    (articleStatus == "loading" ) && <Loading />
+                    (expired_status == "loading" ) && <Loading />
                 }
                 <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white h-[500px] rounded-xl" >
-                    <DataTableLowStock columns={LowStockColumns} data={articles} needFilter={false} paginate={true} title="lowstock"/>
+                    <DataTableLowStock columns={LowStockColumns} data={allEpiredArticles} needFilter={false} paginate={true} title="lowstock"/>
                 </div>
             </div>
             

@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import { Icon } from '@iconify/react'; // Import Iconify's Icon component
 import Link from 'next/link';
 import Image from 'next/image';
-import { useArticleService, useLowStockArticleService } from '@/app/redux/slices/articles/useArticleService';
+import { useArticleService, useExpirederticlesService, useLowStockArticleService } from '@/app/redux/slices/articles/useArticleService';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/app/redux/store/store';
 import { useRouter } from 'next/navigation'
@@ -11,12 +11,14 @@ import { useRouter } from 'next/navigation'
 
 export default function Dashboard() {
 
-    const { articles, articleStatus } = useLowStockArticleService();
+
+    const {allEpiredArticles , expired_status, expired_FetchError} = useExpirederticlesService();
+    const { articles, articleStatus, error } = useLowStockArticleService();
     // const { articles, articleStatus, error } = useArticleService();
     const router = useRouter()
 
 
-    const { user, loading, error } = useSelector((state: RootState) => state.login);
+    const { user, loading } = useSelector((state: RootState) => state.login);
 
 
     useEffect(() => {
@@ -146,7 +148,7 @@ export default function Dashboard() {
                                             <Icon icon="fluent:alert-on-24-regular" width="24" height="24" />
                                         </div>
                                         <div>
-                                            <h1 className="text-[#FE6212] text-[18px] font-bold " >{articles.length}</h1>
+                                            {/* <h1 className="text-[#FE6212] text-[18px] font-bold " >8</h1> */}
                                         </div>
                                     </div>
                                     <div>
@@ -161,12 +163,12 @@ export default function Dashboard() {
                                             <Icon icon="lsicon:sales-return-outline" width="16" height="16" />
                                         </div>
                                         <div>
-                                            <h1 className="text-[#FE6212] text-[18px] font-bold " >154</h1>
+                                            {/* <h1 className="text-[#FE6212] text-[18px] font-bold " >{articles.length}</h1> */}
                                         </div>
                                     </div>
                                     <div>
                                         <p className="text-sm" >
-                                            Vente stock
+                                            Stock faible
                                         </p>
                                     </div>
                                 </Link>    

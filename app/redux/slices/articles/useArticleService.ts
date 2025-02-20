@@ -40,13 +40,18 @@ export const useExpirederticlesService = () => {
 
     const dispatch = useDispatch<AppDispatch>();
 
-    const { articles, articleStatus, error } = useSelector((state: RootState) => state.articles )
+    const { 
+        articles: allEpiredArticles, 
+        articleStatus: expired_status, 
+        error: expired_FetchError 
+    } = useSelector((state: RootState) => state.articles);
+
 
     useEffect(() => {
         // articleStatus !== "succeeded" && dispatch(fetchArticles())
         dispatch(fetchExpirederticles())
     }, [dispatch])
 
-    return { articles , articleStatus, error }
+    return { allEpiredArticles , expired_status, expired_FetchError }
 
 }
