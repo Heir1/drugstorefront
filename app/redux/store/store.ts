@@ -13,6 +13,7 @@ import invoicesReducer from '../slices/invoices/invoicesSlice'
 import rateReducer from '../slices/rates/ratesSlice'
 import paymentModeReducer from '../slices/paymentmodes/paymentmodesSlice'
 import loginReducer from '../slices/login/loginSlice'
+import userReducer from '../slices/users/userSlice'
 import { persistStore, persistReducer } from "redux-persist";
 import storageSession from "redux-persist/lib/storage/session"; // Utilisation de sessionStorage
 
@@ -41,6 +42,7 @@ const store = configureStore({
     movements: movementsReducer,
     invoices: invoicesReducer,
     rates: rateReducer,
+    users: userReducer,
     paymentmodes: paymentModeReducer,
     login: persistedLoginReducer
   },
