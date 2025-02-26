@@ -42,7 +42,7 @@ export const createUser = createAsyncThunk<IUser, IUser>(
             const response = await postRequest<IUser>('register', userData);
             if (response.error) {
                 return rejectWithValue(response.error);
-            }
+            }            
             return response.data as IUser;
         } catch (error: any) {
             return rejectWithValue(error.message || 'Échec de la création');

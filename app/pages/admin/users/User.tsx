@@ -10,7 +10,12 @@ import IUser from "@/app/interfaces/user";
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/app/redux/store/store';
 import { createUser, deleteUser, updateUser } from '@/app/redux/slices/users/actions';
-import toast, { Toaster } from 'react-hot-toast'
+import toast, { Toaster } from 'react-hot-toast';
+import Loading from '@/app/components/loading';
+import TableLoading from '@/app/components/TableLoading';
+import FormUserCreation from '@/app/components/form/FormUserCreation';
+import FormUserUpdate from '@/app/components/form/FormUserUpdate';
+import FormUserAutorisation from '@/app/components/form/FormUserAutorisation';
 
 const schema = yup.object().shape({
     // id: yup.string().required("ID is required"),
@@ -285,144 +290,23 @@ export default function User() {
             </div>
 
             <div className=" h-[80vh]" >
-                <div className=" mx-4" >
-                    <Toaster />
-                {/* selectedUser ? handleUpdate :  */}
-                    <form onSubmit={handleSubmit(selectedUser ? handleUpdate : handleCreate)} className="max-w-full mx-auto p-6 bg-[#7288a5d0] shadow-lg rounded-lg space-y-4">
-
-                        <div className=" grid grid-cols-12 gap-2 " >
-                            <div className=" col-start-2 col-span-4 space-y-3 border-2 border-white py-2 px-3   " >
-                                <div className=" flex items-center w-full gap-4 ">
-                                    <label className=" w-1/3 block text-sm text-white uppercase font-extrabold ">Name</label>
-                                    <input type="text" {...register("name")} className={` ${errors.name && 'border-2 border-red-500 ' }  w-full `} 
-                                    />
-                                </div>
-                                <div className=" flex items-center gap-4 ">
-                                    <label className=" w-1/3 block text-sm text-white uppercase font-extrabold ">telephone</label>
-                                    <input type="text" {...register("telephone")} className={` ${errors.telephone && 'border-2 border-red-500 ' } w-full`} />
-                                </div>
-                                <div className=" flex items-center gap-4 ">
-                                    <label className=" w-1/3 block text-sm text-white uppercase font-extrabold ">E-mail</label>
-                                    <input type="text" {...register("email")} className={` ${errors.email && 'border-2 border-red-500 ' } w-full`} />
-                                </div>
-                                <div className=" flex items-center gap-4 ">
-                                    <label className=" w-1/3 block text-sm text-white uppercase font-extrabold ">Adresse</label>
-                                    {/* <textarea {...register("address")} className={` ${errors.address && 'border-2 border-red-500 ' } w-full `} name="" id=""></textarea>
-                                    {errors?.address?.message} */}
-                                    <input type="text" {...register("address")} className={` ${errors.address && 'border-2 border-red-500 ' } w-full `}  />
-                                </div>
-                                <div className=" flex items-center gap-4 ">
-                                    <label className=" w-1/3 block text-sm text-white uppercase font-extrabold ">ROLE</label>
-                                    <input type="text" {...register("role")} className={` ${errors.role && 'border-2 border-red-500 ' }  w-full `} />
-                                </div>
-                                <div className=" flex items-center " >
-                                    <label className=" w-1/3 block text-sm text-white uppercase font-extrabold">Etat session</label>
-                                    <div className="mt-1 space-x-4">
-                                        <label className="uppercase font-extrabold text-white " ><input type="radio" value="active" {...register("session_state")} /> Actif</label>
-                                        <label className="uppercase font-extrabold text-white " ><input type="radio" value="inactive" {...register("session_state")} /> Non Actif</label>
-                                    </div>
-                                    {errors.session_state && <p className="text-red-500 text-xs mt-1">{errors.session_state.message}</p>}
-                                </div>
-                            </div>
-                            <div className=" col-span-3 space-y-3 border-2 border-white py-2 px-3   " >
-                                <div className="w-full gap-4 ">
-                                    <label className="block text-sm text-white uppercase font-extrabold ">IDENTIFIANT</label>
-                                    <input type="text" {...register("username")} className={` ${errors.username && 'border-2 border-red-500 ' }  w-full `} />
-                                </div>
-                                <div className="gap-4 ">
-                                    <label className="block text-sm text-white uppercase font-extrabold ">MOT DE PASSE</label>
-                                    <input type="password" {...register("password")} className={` ${errors.password && 'border-2 border-red-500 ' } w-full`} />
-                                </div>
-                                <div className="gap-4 ">
-                                    <label className="block text-sm text-white uppercase font-extrabold ">RESAISIR LE MOT DE PASSE</label>
-                                    <input type="password" {...register("password_confirmation")} className={` ${errors.role && 'border-2 border-red-500 ' }  w-full `} />
-                                </div>
-                            </div>
-                            <div className=" col-span-3 flex flex-col justify-center space-y-4 border-2 border-white py-2 px-3   " >
-                                <div className="w-full flex justify-center">
-                                    <button type="submit" className=" w-1/2  bg-gray-400   font-extrabold p-[4px] " >
-                                        NOUVEAU
-                                    </button>
-                                </div>
-                                <div  className="w-full flex justify-center">
-                                    <button type="submit" className=" w-1/2  bg-gray-400 font-extrabold p-[4px] ">
-                                        MODIFIER
-                                    </button>
-                                </div>
-                                <div className="w-full flex justify-center">
-                                    <button onClick={ () => handleDelete(String(selectedUser?.id)) }   className=" w-1/2   bg-gray-400 font-extrabold p-[4px] ">
-                                        SUPPRIMER
-                                    </button>
-                                </div>
-                                <div  className="w-full flex justify-center">
-                                    <button className=" w-1/2  bg-gray-400 font-extrabold p-[4px]  ">
-                                        ANNULER
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    
-                    </form>
-                </div>
-
-                <div className="p-4 ">
-                    <div className="overflow-x-auto flex flex-col justify-between  h-[calc(100vh-28rem)] border-2 border-white bg-[#7288a5d0] ">
-                        
-                        <div className=" h-[calc(100vh-25rem)] border-2 border-green-700 overflow-y-scroll " >
-                            <table className="w-full uppercase border border-gray-300">
-                                <thead>
-                                {/* bg-gray-700 */}
-                                    <tr className="bg-white uppercase">
-                                        <th className=" border border-gray-500 text-left pl-1 ">NOM COMPLET</th>
-                                        <th className=" border border-gray-500 text-left pl-1 ">IDENTIFIANT</th>
-                                        <th className=" border border-gray-500 text-left pl-1 ">ROLE</th>
-                                        <th className=" border border-gray-500 text-left pl-1 ">TELEPHONE</th>
-                                        <th className=" border border-gray-500 text-left pl-1 ">E-MAIL</th>
-                                        <th className=" border border-gray-500 text-left pl-1 ">ADRESSE PHYSIQUE</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                        userStatus == 'loading' ? (
-                                            <tr>
-                                                <td colSpan={6} className="text-center py-4">Loading users...</td>
-                                            </tr>
-                                        )
-                                        :
-                                        (
-                                            users.map((user: IUser) => (
-                                                <tr key={user.id} className="border bg-white border-gray-500 hover:cursor-pointer " onClick={()=> handleEdit(user)} >
-                                                    <td className="border border-gray-500 pl-1">{user.name}</td>
-                                                    <td className="border border-gray-500 pl-1">{user.username}</td>
-                                                    <td className="border border-gray-500 pl-1">{user.role}</td>
-                                                    <td className="border border-gray-500 pl-1">{user.telephone}</td>
-                                                    <td className="border border-gray-500 pl-1">{user.email}</td>
-                                                    <td className="border border-gray-500 pl-1">{user.address}</td>
-                                                </tr>
-                                            ))
-                                        )
-                                    }
-                                </tbody>
-
-                            </table>
-                        </div>
-
-                        <div className="px-4 bg-[#7288a5d0] shadow-lg">
-                        {/* Header Section */}
-
-                            <div className="grid grid-cols-9   ">
-                                <div className="col-span-8  ">
-                                    <h1 className="text-sm font-extrabold ">Total</h1>
-                                </div>
-                                <div className="col-span-1 text-left ">
-                                    <h1 className="text-sm font-extrabold ">Différence</h1>
-                                </div>
-                            </div>
-                            
-                        </div>
-
-                    </div>
-                </div>
+                {
+                    isNewArticle ? (
+                        <FormUserCreation/>
+                    )
+                    :
+                    (
+                        isUpdateArticle ? (
+                            <FormUserUpdate/>
+                        )
+                        :
+                        (
+                            isStateArticle && (
+                                <FormUserAutorisation/>
+                            )
+                        )
+                    )
+                }
             </div>
 
 
