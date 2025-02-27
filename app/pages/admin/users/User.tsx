@@ -54,24 +54,6 @@ export default function User() {
     const [isReportArticle, setIsReportArticle] = useState(false);
     const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
     
-    const dispatch = useDispatch<AppDispatch>();
-
-    const { users, userStatus, error } = useUserService();
-
-    const {
-        register,
-        handleSubmit,
-        setValue,
-        reset,
-        formState: { errors },
-    } = useForm<IFormInputs>({
-        resolver: yupResolver(schema),
-        defaultValues: {
-            session_state: "active",
-        },
-    });
-
-
     const setActivation = (tab:string) => {
         if(tab == "new"){
             setIsNewArticle(true) 
@@ -96,166 +78,7 @@ export default function User() {
         }
     }
 
-    // const onSubmit = (data: IFormInputs) => {
-    //     console.log("Form Submitted", data);
-    //   };
 
-    // }
-
-    const handleCreate = async (data: IFormInputs) => {
-        
-        const createUserPromise = dispatch(createUser(data)).unwrap()
-        .then(() => ({
-            status: "fulfilled",
-            message: "Utilisateur créé avec succès !",
-        }))
-        .catch((err) => {
-            const errorMessage = typeof err === "string" ? err : err?.message || "Erreur inconnue lors de la création.";
-            return {
-            status: "rejected",
-            message: errorMessage,
-            };
-        })
-        .then((result) => {
-            if (result.status === "fulfilled") {
-                toast.custom((t:any) => (
-                    <div className={`${
-                        t.visible ? "animate-enter" : "animate-leave"
-                    } flex items-center w-full max-w-xs p-4 text-white bg-green-600 border border-green-900 rounded-lg shadow-lg`}
-                    >
-                        <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">✅</span>
-                        <div className="flex-1 text-center">
-                            <p className="text-sm">L'utilisateur a été créé avec succès</p>
-                        </div>
-                    </div>
-                ), { duration: 2000 });
-                reset();
-            } else {
-                toast.custom((t:any) => (
-                    <div className={`${
-                        t.visible ? "animate-enter" : "animate-leave"
-                    } flex items-center w-full max-w-xs p-4 text-white bg-red-600 border border-red-900 rounded-lg shadow-lg`}
-                    >
-                        <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">❌</span>
-                        <div className="flex-1 text-center">
-                            <p className="text-sm">{result.message}</p>
-                        </div>
-                    </div>
-                ));
-            }
-        });
-
-    };
-
-    const handleEdit = (user: any) => {
-        setSelectedUser(user);
-        setValue("telephone", user?.telephone);
-        setValue("name", user?.name);
-        setValue("email", user?.email);
-        setValue("address", user?.address);
-        setValue("role", user?.role);
-        setValue("username", user?.username);
-        setValue("password", user?.password);
-        setValue("password_confirmation", user?.password_confirmation);
-    };
-
-    const handleUpdate = async (data: IFormInputs) => {
-
-        const updateUserPromise = dispatch(updateUser({ id:selectedUser?.id, ...data })).unwrap()
-        .then(() => ({
-            status: "fulfilled",
-            message: "Utilisateur modifié avec succès !",
-        }))
-        .catch((err) => {
-            const errorMessage = typeof err === "string" ? err : err?.message || "Erreur inconnue lors de la création.";
-            return {
-            status: "rejected",
-            message: errorMessage,
-            };
-        })
-        .then((result) => {
-            if (result.status === "fulfilled") {
-                toast.custom((t:any) => (
-                    <div className={`${
-                        t.visible ? "animate-enter" : "animate-leave"
-                    } flex items-center w-full max-w-xs p-4 text-white bg-green-600 border border-green-900 rounded-lg shadow-lg`}
-                    >
-                        <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">✅</span>
-                        <div className="flex-1 text-center">
-                            <p className="text-sm">L'utilisateur a été modifié avec succès</p>
-                        </div>
-                    </div>
-                ), { duration: 2000 });
-                reset();
-            } else {
-                toast.custom((t:any) => (
-                    <div className={`${
-                        t.visible ? "animate-enter" : "animate-leave"
-                    } flex items-center w-full max-w-xs p-4 text-white bg-red-600 border border-red-900 rounded-lg shadow-lg`}
-                    >
-                        <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">❌</span>
-                        <div className="flex-1 text-center">
-                            <p className="text-sm">{result.message}</p>
-                        </div>
-                    </div>
-                ));
-            }
-        });
-
-    };
-    
-    const handleDelete = async (id: string) => {
-
-        const deleteUserPromise = dispatch(deleteUser(id)).unwrap()
-        .then(() => ({
-            status: "fulfilled",
-            message: "Utilisateur supprimé avec succès !",
-        }))
-        .catch((err) => {
-            const errorMessage = typeof err === "string" ? err : err?.message || "Erreur inconnue lors de la création.";
-            return {
-            status: "rejected",
-            message: errorMessage,
-            };
-        })
-        .then((result) => {
-            if (result.status === "fulfilled") {
-                toast.custom((t:any) => (
-                    <div className={`${
-                        t.visible ? "animate-enter" : "animate-leave"
-                    } flex items-center w-full max-w-xs p-4 text-white bg-green-600 border border-green-900 rounded-lg shadow-lg`}
-                    >
-                        <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">✅</span>
-                        <div className="flex-1 text-center">
-                            <p className="text-sm">L'utilisateur a été supprimé avec succès</p>
-                        </div>
-                    </div>
-                ), { duration: 2000 });
-                reset();
-            } else {
-                toast.custom((t:any) => (
-                    <div className={`${
-                        t.visible ? "animate-enter" : "animate-leave"
-                    } flex items-center w-full max-w-xs p-4 text-white bg-red-600 border border-red-900 rounded-lg shadow-lg`}
-                    >
-                        <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">❌</span>
-                        <div className="flex-1 text-center">
-                            <p className="text-sm">{result.message}</p>
-                        </div>
-                    </div>
-                ));
-            }
-        });
-
-        // try {
-        //     const actionResult = await dispatch(deleteUser(id));
-        //     unwrapResult(actionResult);
-        //     // Actions à effectuer en cas de succès, par exemple, rediriger l'utilisateur
-        // } catch (error) {
-        //     // Gérer l'erreur ici
-        //     console.error('Échec de la suppression de l\'utilisateur :', error);
-        // }
-    };
 
 
     return (
@@ -308,8 +131,6 @@ export default function User() {
                     )
                 }
             </div>
-
-
         </div>
     )
 
