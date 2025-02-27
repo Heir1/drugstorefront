@@ -91,8 +91,9 @@ export default function FormUserAutorisation() {
             };
         })
         .then((result) => {
+            setSelectedUser(null);
             if (result.status === "fulfilled") {
-                toast.success("L'utilisateur a été modifié avec succès");
+                toast.success( role1 == "user" ? "Le droit d'administrateur vient d'etre rétiré de l'utilisateur" : "Le droit d'administrateur vient d'etre assigné à l'utilisateur" );
                 reset();
             } else {
                 toast.error(result.message);
@@ -107,7 +108,14 @@ export default function FormUserAutorisation() {
             <div className="mx-7">
                 <div className="overflow-x-auto pt-10 h-[calc(80vh)] border-2 border-white bg-[#7288a5d0]">
                     <form onSubmit={handleSubmit(handleUpdate)}  action="">
-
+                        <div className="grid grid-cols-7">
+                            <div className=" col-start-2 col-span-2 " >
+                                <h1 className=" text-white font-bold uppercase " >Listes des utilisateurs</h1>
+                            </div>
+                            <div className=" col-start-5 ml-2 col-span-2 " >
+                                <h1 className=" text-white font-bold uppercase " >Utilisateurs avec autorisations spéciales</h1>
+                            </div>
+                        </div>
                         <div className="grid grid-cols-7 gap-3">
 
                             <div className=" col-start-2  border-2 col-span-2 border-gray-400 p-2 " >
@@ -128,7 +136,7 @@ export default function FormUserAutorisation() {
                                                     users
                                                     .filter((user: IUser) => user.role === "user") // Filtre les utilisateurs avec le rôle "admin"
                                                     .map((user: IUser) => (
-                                                        <tr key={user.id} className="border bg-gray-100 border-gray-500 hover:cursor-pointer" onClick={() => handleEdit(user)}>
+                                                        <tr key={user.id} className={` border ${ selectedUser?.id == user?.id ? 'bg-blue-700 text-white ' : 'bg-gray-100' }  border-gray-500 hover:cursor-pointer `} onClick={() => handleEdit(user)}>
                                                             <td className="border border-gray-500 pl-1">{user.name}</td>
                                                         </tr>
                                                     ))
@@ -144,12 +152,12 @@ export default function FormUserAutorisation() {
                                 <div className="max-w-full mx-auto p-6 bg-[#7288a5d0] shadow-lg rounded-lg space-y-4">
                                     <div className=" space-y-4 " >
                                         <div className=" w-full " >
-                                            <button type="submit" className=" w-full  bg-gray-400   font-extrabold p-[4px] " >
+                                            <button disabled={ selectedUser?.role == "admin" ? true : !selectedUser ? true :  false }  type="submit" className=" w-full  bg-gray-400   font-extrabold p-[4px] " >
                                                 AJOUTER
                                             </button>
                                         </div>
                                         <div>
-                                            <button type="submit" className=" w-full  bg-gray-400 font-extrabold p-[4px]  ">
+                                            <button disabled={ selectedUser?.role == "user" ? true : !selectedUser ? true : false } type="submit" className=" w-full  bg-gray-400 font-extrabold p-[4px]  ">
                                                 RETIRER
                                             </button>
                                         </div>
@@ -196,7 +204,7 @@ export default function FormUserAutorisation() {
                                                     users
                                                     .filter((user: IUser) => user.role === "admin") // Filtre les utilisateurs avec le rôle "admin"
                                                     .map((user: IUser) => (
-                                                        <tr key={user.id} className="border bg-gray-100 border-gray-500 hover:cursor-pointer" onClick={() => handleEdit(user)}>
+                                                        <tr key={user.id} className={` border ${ selectedUser?.id == user?.id ? 'bg-blue-700 text-white ' : 'bg-gray-100' }  border-gray-500 hover:cursor-pointer `} onClick={() => handleEdit(user)}>
                                                             <td className="border border-gray-500 pl-1">{user.name}</td>
                                                         </tr>
                                                     ))

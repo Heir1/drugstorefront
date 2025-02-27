@@ -205,7 +205,7 @@ export default function FormUserCreation() {
 
     return (
         <div>
-            <div className=" mx-4" >
+            <div className=" mx-7" >
                 <Toaster />
             {/* selectedUser ? handleUpdate :  */}
                 <form onSubmit={handleSubmit(selectedUser ? handleUpdate : handleCreate)} className="max-w-full mx-auto p-6 bg-[#7288a5d0] shadow-lg rounded-lg space-y-4">
@@ -285,7 +285,7 @@ export default function FormUserCreation() {
                 </form>
             </div>
 
-            <div className="p-4 ">
+            <div className="p-4 mx-3">
                 <div className="overflow-x-auto flex flex-col justify-between  h-[calc(100vh-28rem)] border-2 border-white bg-[#7288a5d0] ">
                     
                     <div className=" h-[calc(100vh-25rem)] border-2 border-green-700 overflow-y-scroll " >
@@ -309,7 +309,7 @@ export default function FormUserCreation() {
                                     :
                                     (
                                         users.map((user: IUser) => (
-                                            <tr key={user.id} className="border bg-white border-gray-500 hover:cursor-pointer " onClick={()=> handleEdit(user)} >
+                                            <tr key={user.id} className={` border ${ selectedUser?.id == user?.id ? 'bg-blue-700 text-white ' : 'bg-gray-100' }  border-gray-500 hover:cursor-pointer `} onClick={()=> handleEdit(user)} >
                                                 <td className="border border-gray-500 pl-1">{user.name}</td>
                                                 <td className="border border-gray-500 pl-1">{user.username}</td>
                                                 <td className="border border-gray-500 pl-1">{user.role}</td>

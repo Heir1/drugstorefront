@@ -114,7 +114,7 @@ export default function FormUserUpdate() {
                                                 :
                                                 (
                                                     users.map((user: IUser) => (
-                                                        <tr key={user.id} className="border bg-gray-100 border-gray-500 hover:cursor-pointer " onClick={()=> handleEdit(user)} >
+                                                        <tr key={user.id} className={` border ${ selectedUser?.id == user?.id ? 'bg-blue-700 text-white ' : 'bg-gray-100' }  border-gray-500 hover:cursor-pointer `} onClick={()=> handleEdit(user)} >
                                                             <td className="border border-gray-500 pl-1">{user.name}</td>
                                                         </tr>
                                                     ))
