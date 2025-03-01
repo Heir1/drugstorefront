@@ -14,6 +14,7 @@ import rateReducer from '../slices/rates/ratesSlice'
 import paymentModeReducer from '../slices/paymentmodes/paymentmodesSlice'
 import loginReducer from '../slices/login/loginSlice'
 import userReducer from '../slices/users/userSlice'
+import TransactionReducer from '../slices/cash/cashesSlice'
 import { persistStore, persistReducer } from "redux-persist";
 import storageSession from "redux-persist/lib/storage/session"; // Utilisation de sessionStorage
 
@@ -44,7 +45,8 @@ const store = configureStore({
     rates: rateReducer,
     users: userReducer,
     paymentmodes: paymentModeReducer,
-    login: persistedLoginReducer
+    login: persistedLoginReducer,
+    transaction: TransactionReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
