@@ -33,7 +33,8 @@ export const loginUser = createAsyncThunk<IUser, LoginCredentials>(
                 }
 
                 // If login is successful, return user data
-                console.log(response.data);
+                // console.log(response.data);
+                localStorage.setItem('user', JSON.stringify(response.data));
                 return response.data as IUser; // Return user data from backend
 
         } catch (error: any) {

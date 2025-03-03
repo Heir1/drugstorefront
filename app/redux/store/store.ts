@@ -45,7 +45,8 @@ const store = configureStore({
     rates: rateReducer,
     users: userReducer,
     paymentmodes: paymentModeReducer,
-    login: persistedLoginReducer,
+    // login: persistedLoginReducer,
+    login: loginReducer,
     transaction: TransactionReducer,
   },
   middleware: (getDefaultMiddleware) =>

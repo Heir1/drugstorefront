@@ -20,14 +20,16 @@ export default function Dashboard() {
 
     const { user, loading } = useSelector((state: RootState) => state.login);
 
+    const userJSON = localStorage.getItem('user');
+
 
     useEffect(() => {
-        if (!user) {
+        if (!userJSON) {
           router.push('/');
         }
-    }, [user, router]); // ✅ Déclenché uniquement quand `user` change
+    }, [userJSON, router]); // ✅ Déclenché uniquement quand `user` change
 
-    if(user){
+    if(userJSON){
         return (
             <>
                     

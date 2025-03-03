@@ -31,6 +31,8 @@ import { log } from 'console';
 import toast, { Toaster } from 'react-hot-toast'
 // Dynamically import React Select without SSR
 import { Combobox } from "@headlessui/react";
+import User from '@/app/pages/admin/users/User';
+import IUser from '@/app/interfaces/user';
 
 const Select = dynamic(() => import('react-select'), { ssr: false });
 
@@ -88,6 +90,7 @@ export default function FormArticleCreation() {
 
     const [number, setNumber] = useState<number | ''>(''); // Utiliser une chaîne vide au départ
     const [result, setResult] = useState<number | ''>(''); // Même chose pour le résultat
+    const [user, setUser] = useState<IUser | null>(null);
 
     const [selectedOption, setSelectedOption] = useState<ArticleOption | null>(null);
   
@@ -109,6 +112,15 @@ export default function FormArticleCreation() {
             selling_price : 0,
         }
     });
+
+    
+    useEffect(()=>{
+        const userJSON = localStorage.getItem('user');
+        if (userJSON) {
+            const user = JSON.parse(userJSON);
+            setUser(user);
+        }
+    },[])
 
  
     const articlesFormated = useMemo(() => {
@@ -308,6 +320,7 @@ export default function FormArticleCreation() {
   return (
     <>
         <form onSubmit={handleSubmit(onSubmit)}>
+        <div>USER : {user?.name} </div>
             <div className="grid grid-cols-11 mx-2  gap-x-5 p-5 -mt-5  " >
                 <div className="col-span-6  p-10 bg-[#7288a5d0]   rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
                     <div className="grid grid-cols-2 gap-5">

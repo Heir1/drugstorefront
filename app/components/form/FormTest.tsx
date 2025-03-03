@@ -19,6 +19,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import toast, { Toaster } from 'react-hot-toast'
+import IUser from "@/app/interfaces/user";
 
 
 interface IFormInputs {
@@ -100,6 +101,8 @@ export default function FormTest() {
     const [ displayedPackaging, setDisplayedPackaging ] = useState("");
     const [ displayedCategory, setDisplayedCategory ] = useState("");
     const [ displayedSupply, setDisplayedSupply ] = useState("");
+    const [user, setUser] = useState<IUser | null>(null);
+
 
     const [number, setNumber] = useState<number | ''>(''); // Utiliser une chaîne vide au départ
     const [result, setResult] = useState<number | ''>(''); // Même chose pour le résultat   
@@ -177,6 +180,14 @@ export default function FormTest() {
     }, [locationQuery, descriptionQuery, indicationQuery, moleculeQuery, packagingQuery, categoryQuery, supplierQuery ]);
   
 
+    useEffect(()=>{
+        const userJSON = localStorage.getItem('user');
+        if (userJSON) {
+            const user = JSON.parse(userJSON);
+            setUser(user);
+        }
+    },[])
+
     const onSubmit = (data:IFormInputs) => {
         // console.log("ARTICLE ", data);
 
@@ -198,6 +209,7 @@ export default function FormTest() {
             selling_price : Number(result),
             alert : Number(alert),
             currency_id: Number(currency) ,
+            created_by: user?.name,
             comment : "Pas encore disponible",
             is_active : true,
 
@@ -576,7 +588,7 @@ export default function FormTest() {
                                         value={field.value ?? ""} 
                                         // onChange={(value) => setValue("packaging", value ?? "")}
                                         onChange={(selectedId) => {
-                                            const selectedPackaging = packagings.find((packaging) => packaging.id === selectedId);
+                                            const selectedPackaging = packagings.find((packaging:IPackaging) => packaging.id === selectedId);
                                             setValue("packaging", selectedId ?? "");  // Stocke l'ID
                                             setDisplayedPackaging(selectedPackaging?.name ?? "");  // Affiche le Nom
                                         }}

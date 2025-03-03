@@ -12,7 +12,10 @@ export default function Header() {
 
     const [ dateDropdown, setDataDropdown ] = useState(false);
     const { user, loading, error } = useSelector((state: RootState) => state.login);
-    
+
+
+
+    const userJSON = localStorage.getItem('user');
 
     const dispatch = useDispatch<AppDispatch>();
 
@@ -22,6 +25,7 @@ export default function Header() {
     const handleLogout = async () => {
         try {
             await dispatch(logoutUser()).unwrap();
+            localStorage.removeItem('user');
             router.push('/'); // Redirection après logout
         } catch (error) {
             console.error("Erreur de déconnexion:", error);
@@ -35,7 +39,7 @@ export default function Header() {
         // }, [user, router]); // ✅ Déclenché uniquement quand `user` change
 
 
-    if(user){
+    if(userJSON){
         return (
             <>
                 {

@@ -7,6 +7,7 @@ import { AppDispatch } from '@/app/redux/store/store';
 import IArticle from '@/app/interfaces/article';
 import { createArticle, updateArticle } from '@/app/redux/slices/articles/actions';
 import toast, { Toaster } from 'react-hot-toast'
+import FormAuth from './FormAuth';
 
 interface IFormInputs {
     description : string,
@@ -30,6 +31,9 @@ interface ArticleFormActivationprops {
 
 export default function ArticleActivationForm({content, setActivationFormOpen}:ArticleFormActivationprops) {
 
+
+    const [ isAuth, setIsAuth ] = useState(false);
+    const [ submittedData, setSubmittedData ] = useState<IFormInputs | null>(null); 
     const { control,setValue, register, handleSubmit, formState: { errors } } = useForm<IFormInputs>({
         defaultValues: {
             description : "",
@@ -60,28 +64,38 @@ export default function ArticleActivationForm({content, setActivationFormOpen}:A
 
         }
     }, [content,setValue]);
-
     
-    
-        const onSubmit = async (data: IFormInputs) => {
+    const onSubmit = async (data: IFormInputs) => {
 
-          const { description, packaging, comment, category , alert, expirationDate, quantity, purchase_price, selling_price , currency  } = data
-    
-          const articleData:IArticle = {
-            barcode: content.barcode,
-            description ,
-            quantity ,
-            comment,
-            is_active: !content.is_active,
-            expiration_date: content.expiration_date,
-            category_id: Number(content.category.id),
-            packaging_id: Number(content.packaging.id),
-            selling_price:  Number(content.selling_price),
-            purchase_price: Number(content.purchase_price),
-            alert : Number(alert),
-            currency_id: Number(currency) 
-          }
+        setIsAuth(true);
+        setSubmittedData(data);
 
+    };
+
+    useEffect(()=>{
+
+        // const { description, packaging, comment, category , alert, expirationDate, quantity, purchase_price, selling_price , currency  } = submittedData
+
+        if(!isAuth){
+            const description = submittedData?.description ? submittedData?.description : ""
+            const quantity = submittedData?.quantity ? submittedData?.quantity : 0
+            const comment = submittedData?.comment ? submittedData?.comment : ""
+            const currency = submittedData?.currency ? submittedData?.currency : 0
+        
+            const articleData:IArticle = {
+                barcode: content.barcode,
+                description ,
+                quantity ,
+                comment,
+                is_active: !content.is_active,
+                expiration_date: content.expiration_date,
+                category_id: Number(content.category.id),
+                packaging_id: Number(content.packaging.id),
+                selling_price:  Number(content.selling_price),
+                purchase_price: Number(content.purchase_price),
+                alert : Number(alert),
+                currency_id: Number(currency) 
+            }
 
             dispatch(updateArticle({ id: content.id, data: articleData }))
             .unwrap()
@@ -111,11 +125,16 @@ export default function ArticleActivationForm({content, setActivationFormOpen}:A
             .catch((err) => {
                 setActivationFormOpen(false);
             });
-    
-        };
+        }
+
+
+    }, [isAuth, submittedData])
 
         return (
             <>
+                {
+                    isAuth && <FormAuth setIsAuth={setIsAuth} />
+                }  
                 <div className=" bg-[#7288a5fd] mx-5 border-2 border-white  ">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className=" grid grid-cols-12 mx-4 gap-3 p-2 mt-2 " >
