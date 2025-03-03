@@ -72,9 +72,14 @@ const transactionsSlice = createSlice({
             .addCase(updateTransaction.fulfilled, (state, action: PayloadAction<ITransaction>) => {
                 state.transactionStatus = 'succeeded';
                 const updatedTransaction = action.payload;
+                console.log("LOG DATA ",action.payload);
+                
                 const index = state.transactions.findIndex((t) => t.id === updatedTransaction.id);
                 if (index !== -1) {
                     state.transactions[index] = updatedTransaction;
+                }
+                else{
+                    alert("NON")
                 }
             })
             .addCase(updateTransaction.rejected, (state, action) => {

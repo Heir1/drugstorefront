@@ -1,7 +1,7 @@
 'use client'
 import TableLoading from '@/app/components/TableLoading';
 import ITransaction from '@/app/interfaces/transaction';
-import { createTransaction, fetchTransactions } from '@/app/redux/slices/cash/actions';
+import { createTransaction, fetchTransactions, updateTransaction } from '@/app/redux/slices/cash/actions';
 import { AppDispatch, RootState } from '@/app/redux/store/store';
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
@@ -13,6 +13,7 @@ import toast, { Toaster } from 'react-hot-toast';
 
 // Définir le schéma de validation avec Yup
 const schema = yup.object().shape({
+    transaction_date: yup.string().required('La date de transaction est requise'),
     transaction_type: yup.string().required('Le type de transaction est requis'),
     description: yup.string().required('La description est requise'),
     currency_id: yup.string().required('La devise est requise'),
@@ -26,23 +27,8 @@ const schema = yup.object().shape({
 
 export default function Cash() {
 
-    const {
-        control,
-        handleSubmit,
-        reset,
-        setValue,
-        formState: { errors },
-      } = useForm({
-        resolver: yupResolver(schema),
-        defaultValues: {
-          transaction_type: '',
-          description: '',
-          currency_id: '',
-          amount: 0,
-          guichet: '',
-        },
-      });
-    
+    const today = new Date().toISOString().split('T')[0];
+
 
     const [isNewArticle, setIsNewArticle] = useState(true);
     const [isUpdateArticle, setIsUpdateArticle] = useState(false);
@@ -56,7 +42,25 @@ export default function Cash() {
     const [selectedTransaction, setSelectedTransaction] = useState<ITransaction | null>(null);
 
     const { transactions, transactionStatus , transactionError } = useSelector((state: RootState) => state.transaction )
-    
+
+    const {
+        control,
+        handleSubmit,
+        reset,
+        setValue,
+        formState: { errors },
+    } = useForm({
+    resolver: yupResolver(schema),
+        defaultValues: {
+            transaction_date: today,
+            transaction_type: '',
+            description: '',
+            currency_id: '',
+            amount: 0,
+            guichet: '',
+        },
+    });
+
     const setActivation = (tab:string) => {
         if(tab == "new"){
             setIsNewArticle(true) 
@@ -81,8 +85,6 @@ export default function Cash() {
         }
     }
 
-    
-
     const handleSubmitSearch = (e: React.FormEvent) => {
         e.preventDefault(); // Empêcher le rechargement de la page
         dispatch(fetchTransactions({ startDate, endDate }));
@@ -91,6 +93,8 @@ export default function Cash() {
     const onSubmit = (data:ITransaction) => {
         // console.log('Données du formulaire :', data);
 
+        // transaction_date
+
         const transaction_type = data.transaction_type == "Recette" ? "income" : "expense";
         const currency_id = data.currency_id == "CDF" ? "1" : "2";
 
@@ -98,8 +102,12 @@ export default function Cash() {
             transaction_type,
             amount: data.amount,
             description: data.description,
-            currency_id
+            currency_id,
+            transaction_date : data.transaction_date
         }
+
+        // console.log(transactionData);
+        
 
         const createUserPromise = dispatch(createTransaction(transactionData)).unwrap()
         .then(() => ({
@@ -163,8 +171,60 @@ export default function Cash() {
         setSelectedTransaction(transaction);
     }
 
-    const onSubmitUpdate = (transaction:ITransaction) => {
+    const onSubmitUpdate = (data:ITransaction) => {
 
+        const transaction_type = data.transaction_type == "Recette" ? "income" : "expense";
+        const currency_id = data.currency_id == "CDF" ? "1" : "2";
+
+        const transactionData:ITransaction = {
+            id: selectedTransaction?.id,
+            transaction_type,
+            amount: data.amount,
+            description: data.description,
+            currency_id
+        }
+
+        const createUserPromise = dispatch(updateTransaction(transactionData)).unwrap()
+        .then(() => ({
+            status: "fulfilled",
+            message: "Transaction modifiée avec succès !",
+        }))
+        .catch((err) => {
+            const errorMessage = typeof err === "string" ? err : err?.message || "Erreur inconnue lors de la création.";
+            return {
+            status: "rejected",
+            message: errorMessage,
+            };
+        })
+        .then((result) => {
+            if (result.status === "fulfilled") {
+                toast.custom((t:any) => (
+                    <div className={`${
+                        t.visible ? "animate-enter" : "animate-leave"
+                    } flex items-center w-full max-w-xs p-4 text-white bg-green-600 border border-green-900 rounded-lg shadow-lg`}
+                    >
+                        <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">✅</span>
+                        <div className="flex-1 text-center">
+                            <p className="text-sm">La transaction a été modifiée avec succès</p>
+                        </div>
+                    </div>
+                ), { duration: 2000 });
+                reset();
+                setSelectedTransaction(null)
+            } else {
+                toast.custom((t:any) => (
+                    <div className={`${
+                        t.visible ? "animate-enter" : "animate-leave"
+                    } flex items-center w-full max-w-xs p-4 text-white bg-red-600 border border-red-900 rounded-lg shadow-lg`}
+                    >
+                        <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">❌</span>
+                        <div className="flex-1 text-center">
+                            <p className="text-sm">{result.message}</p>
+                        </div>
+                    </div>
+                ));
+            }
+        });
     }
 
     return (
@@ -211,7 +271,18 @@ export default function Cash() {
                                         <h1 className="font-extrabold uppercase text-[12px] " >Date Trans</h1>
                                     </div>
                                     <div>
-                                        <input className=" px-2 " type="date" name="" id="" />
+                                        {/* <input className=" px-2 " type="date" name="" id="" /> */}
+                                        <Controller
+                                            name="transaction_date"
+                                            control={control}
+                                            render={({ field }) => (
+                                                <input
+                                                {...field}
+                                                type="date"
+                                                id="date"
+                                                />
+                                            )}
+                                        />
                                     </div>
                                     <div>
                                         <input type="checkbox" name="" id="" />
@@ -471,7 +542,9 @@ export default function Cash() {
                                             className="w-full bg-gray-400 uppercase font-bold"
                                             type="submit"
                                         >
-                                            Enregistrer
+                                            {
+                                                selectedTransaction ? 'Modifier' : 'Enregistrer'
+                                            } 
                                         </button>
                                         </div>
                                         <div className="w-[40%] border-2">
@@ -512,7 +585,11 @@ export default function Cash() {
                                                         
                                                         onClick={()=> handleEdit(transacion)} 
                                                         >
-                                                            <td className="border border-gray-500 pl-1">{transacion.transaction_type}</td>
+                                                            <td className="border border-gray-500 pl-1">
+                                                                {
+                                                                    transacion.transaction_type == "expense" ? "Dépense" : "Recette"
+                                                                }
+                                                            </td>
                                                             <td className="border border-gray-500 pl-1">{transacion.amount}</td>
                                                             <td className="border border-gray-500 pl-1">{transacion.description}</td>
                                                             <td className="border border-gray-500 pl-1">{transacion.currency?.name}</td>
