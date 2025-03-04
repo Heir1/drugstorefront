@@ -113,9 +113,11 @@ export default function Header() {
                                         <Icon icon="material-symbols:settings-rounded" width="18" height="18" style={{color: '#000000'}} />
                                         <h1>Paramètres</h1>
                                     </div>
-                                    <div className=" flex justify-center items-center hover:cursor-pointer  col-span-2 space-x-2" >
-                                        <Icon icon="lsicon:report-filled" width="18" height="18" style={{color: '#FE6212'}} />
-                                        <h1 className=" text-[#FE6212] " >Rapports</h1>
+                                    <div >
+                                        <Link href={`/pages/admin/report`} className=" flex justify-center items-center hover:cursor-pointer  col-span-2 space-x-2">
+                                            <Icon icon="lsicon:report-filled" width="18" height="18" style={{color: '#FE6212'}} />
+                                            <h1 className=" text-[#FE6212] " >Rapports</h1>
+                                        </Link>
                                     </div>
                                     <div className=" flex justify-center items-center hover:cursor-pointer  col-span-2 space-x-2" >
                                         <Icon icon="material-symbols:help-outline-rounded" width="18" height="18" style={{color: '#000000'}} />
