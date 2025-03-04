@@ -66,74 +66,131 @@ export default function ArticleActivationForm({content, setActivationFormOpen}:A
     }, [content,setValue]);
     
     const onSubmit = async (data: IFormInputs) => {
-
         setIsAuth(true);
         setSubmittedData(data);
 
     };
 
-    useEffect(()=>{
+    const updateProductState = async () => {
 
-        // const { description, packaging, comment, category , alert, expirationDate, quantity, purchase_price, selling_price , currency  } = submittedData
-
-        if(!isAuth){
-            const description = submittedData?.description ? submittedData?.description : ""
-            const quantity = submittedData?.quantity ? submittedData?.quantity : 0
-            const comment = submittedData?.comment ? submittedData?.comment : ""
-            const currency = submittedData?.currency ? submittedData?.currency : 0
-        
-            const articleData:IArticle = {
-                barcode: content.barcode,
-                description ,
-                quantity ,
-                comment,
-                is_active: !content.is_active,
-                expiration_date: content.expiration_date,
-                category_id: Number(content.category.id),
-                packaging_id: Number(content.packaging.id),
-                selling_price:  Number(content.selling_price),
-                purchase_price: Number(content.purchase_price),
-                alert : Number(alert),
-                currency_id: Number(currency) 
-            }
-
-            dispatch(updateArticle({ id: content.id, data: articleData }))
-            .unwrap()
-            .then(() => {
-
-                toast.custom(
-                    (t: any) => (
-                        <div
-                            className={`${
-                                t.visible ? "animate-enter" : "animate-leave"
-                            } flex items-center w-full max-w-xs p-4 text-white bg-green-600 border border-green-900 rounded-lg shadow-lg`}
-                        >
-                            <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">✅</span>
-                            <div className="flex-1 text-center">
-                                <p className="text-sm">Article mis à jour avec succès !</p>
-                            </div>
-                        </div>
-                    ),
-                    { duration: 2000 } // Toast visible pendant 2 secondes
-                );
-
-                setTimeout(() => {
-                    setActivationFormOpen(false);
-                }, 2500);
-
-            })
-            .catch((err) => {
-                setActivationFormOpen(false);
-            });
+        const description = submittedData?.description ? submittedData?.description : ""
+        const quantity = submittedData?.quantity ? submittedData?.quantity : 0
+        const comment = submittedData?.comment ? submittedData?.comment : ""
+        const currency = submittedData?.currency ? submittedData?.currency : 0
+    
+        const articleData:IArticle = {
+            barcode: content.barcode,
+            description ,
+            quantity ,
+            comment,
+            is_active: !content.is_active,
+            expiration_date: content.expiration_date,
+            // category_id: Number(content.category.id),
+            // packaging_id: Number(content.packaging.id),
+            selling_price:  Number(content.selling_price),
+            purchase_price: Number(content.purchase_price),
+            alert : Number(content.alert),
+            currency_id: Number(currency) 
         }
 
+        console.log("SEE ", articleData);
+        
 
-    }, [isAuth, submittedData])
+        dispatch(updateArticle({ id: content.id, data: articleData }))
+        .unwrap()
+        .then(() => {
+
+            toast.custom(
+                (t: any) => (
+                    <div
+                        className={`${
+                            t.visible ? "animate-enter" : "animate-leave"
+                        } flex items-center w-full max-w-xs p-4 text-white bg-green-600 border border-green-900 rounded-lg shadow-lg`}
+                    >
+                        <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">✅</span>
+                        <div className="flex-1 text-center">
+                            <p className="text-sm">Article mis à jour avec succès !</p>
+                        </div>
+                    </div>
+                ),
+                { duration: 2000 } // Toast visible pendant 2 secondes
+            );
+
+            setTimeout(() => {
+                setActivationFormOpen(false);
+            }, 2500);
+
+        })
+        .catch((err) => {
+            setActivationFormOpen(false);
+        });
+    }
+
+    // useEffect( () => {
+
+    //     console.log(("ACTIVE"));
+
+    //     // const { description, packaging, comment, category , alert, expirationDate, quantity, purchase_price, selling_price , currency  } = submittedData
+
+    //     if(!isAuth){
+
+    //         const description = submittedData?.description ? submittedData?.description : ""
+    //         const quantity = submittedData?.quantity ? submittedData?.quantity : 0
+    //         const comment = submittedData?.comment ? submittedData?.comment : ""
+    //         const currency = submittedData?.currency ? submittedData?.currency : 0
+        
+    //         const articleData:IArticle = {
+    //             barcode: content.barcode,
+    //             description ,
+    //             quantity ,
+    //             comment,
+    //             is_active: !content.is_active,
+    //             expiration_date: content.expiration_date,
+    //             category_id: Number(content.category.id),
+    //             packaging_id: Number(content.packaging.id),
+    //             selling_price:  Number(content.selling_price),
+    //             purchase_price: Number(content.purchase_price),
+    //             alert : Number(alert),
+    //             currency_id: Number(currency) 
+    //         }
+
+    //         dispatch(updateArticle({ id: content.id, data: articleData }))
+    //         .unwrap()
+    //         .then(() => {
+
+    //             toast.custom(
+    //                 (t: any) => (
+    //                     <div
+    //                         className={`${
+    //                             t.visible ? "animate-enter" : "animate-leave"
+    //                         } flex items-center w-full max-w-xs p-4 text-white bg-green-600 border border-green-900 rounded-lg shadow-lg`}
+    //                     >
+    //                         <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">✅</span>
+    //                         <div className="flex-1 text-center">
+    //                             <p className="text-sm">Article mis à jour avec succès !</p>
+    //                         </div>
+    //                     </div>
+    //                 ),
+    //                 { duration: 2000 } // Toast visible pendant 2 secondes
+    //             );
+
+    //             setTimeout(() => {
+    //                 setActivationFormOpen(false);
+    //             }, 2500);
+
+    //         })
+    //         .catch((err) => {
+    //             setActivationFormOpen(false);
+    //         });
+    //     }
+
+
+    // }, [isAuth, submittedData])
 
         return (
             <>
                 {
-                    isAuth && <FormAuth setIsAuth={setIsAuth} />
+                    isAuth && <FormAuth updateProductState={updateProductState}  setIsAuth={setIsAuth} />
                 }  
                 <div className=" bg-[#7288a5fd] mx-5 border-2 border-white  ">
                     <form onSubmit={handleSubmit(onSubmit)}>

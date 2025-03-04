@@ -169,7 +169,7 @@ export function DataTableArticleState<TData, TValue>({
                                 table.getRowModel().rows?.length ? (
                                     table.getRowModel().rows.map((row) => (
                                         <TableRow
-                                        className=" hover:cursor-pointer text-sm bg-white font-bold  border-b-[1px] border-black text-black "
+                                        className={` ${ article == row.original ? 'bg-blue-500' : "hover:cursor-pointer text-sm bg-white font-bold  border-b-[1px] border-black text-black" } `}
                                         key={row.id}
                                         data-state={row.getIsSelected() && "selected"}
                                         // onClick={() => redirectionPage(row.original)}

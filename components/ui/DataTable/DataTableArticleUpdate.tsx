@@ -166,11 +166,11 @@ export function DataTableArticleUpdate<TData, TValue>({
                           table.getRowModel().rows?.length ? (
                               table.getRowModel().rows.map((row) => (
                                   <TableRow
-                                  className=" hover:cursor-pointer text-sm bg-white font-bold  border-b-[1px] border-black text-black "
-                                  key={row.id}
-                                  data-state={row.getIsSelected() && "selected"}
-                                  // onClick={() => redirectionPage(row.original)}
-                                  onClick={() => getArticleInfo(row.original)}
+                                    className={` ${ article == row.original ? 'bg-blue-500 hover:cursor-pointer text-sm font-bold  border-b-[1px] border-black text-black' : "hover:cursor-pointer text-sm bg-white font-bold  border-b-[1px] border-black text-black" } `}
+                                    key={row.id}
+                                    data-state={row.getIsSelected() && "selected"}
+                                    // onClick={() => redirectionPage(row.original)}
+                                    onClick={() => getArticleInfo(row.original)}
                                   >
                                       {row.getVisibleCells().map((cell) => (
                                           <TableCell className="px-10 uppercase border-r-[1px] border-black "  key={cell.id}>
