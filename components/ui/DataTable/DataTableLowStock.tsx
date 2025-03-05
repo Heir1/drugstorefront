@@ -39,6 +39,10 @@ import {
 import { Icon } from '@iconify/react';
 import IArticle from "@/app/interfaces/article";
 import FormArticleUpdate from "@/app/components/form/FormArticleUpdate";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/app/redux/store/store";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { fetchLowStockArticles } from "@/app/redux/slices/articles/actions";
 
 
 
@@ -76,6 +80,17 @@ export function DataTableLowStock<TData, TValue>({
   const [redirection, setRedirection] = React.useState(false);
   const [ isUpdateFormOpen, setIsUpdateFormOpen ] = React.useState(false);
   const [article, setArticle] = React.useState<IArticle[]>([]);
+
+  const today = new Date();
+  const formattedDate:string = today.toISOString().split('T')[0];
+  
+  const [startDate, setStartDate ] = React.useState(formattedDate);
+  const [endDate, setEndDate ] = React.useState(formattedDate);
+
+    const { control, reset, register, handleSubmit, formState: { errors }, setValue } = useForm<IArticle>({
+        defaultValues: {
+        }
+    });
 
   const table = useReactTable({
     data,
@@ -126,16 +141,41 @@ export function DataTableLowStock<TData, TValue>({
     window.print();
   }
 
+  const dispatch = useDispatch<AppDispatch>();
+
+  const onSubmit: SubmitHandler<IArticle> = (data) => {    
+
+      if(startDate && endDate){
+          dispatch(fetchLowStockArticles({firstrange : startDate, secondrange : endDate}))          
+      }
+  }
+  
   return (
     <>
       {
         isUpdateFormOpen &&  <FormArticleUpdate content={article} setIsUpdateFormOpen={setIsUpdateFormOpen}  />
       }
       <div className="bg-transparent   rounded-2xl">
+
         <div className="flex items-center justify-between  " >
 
-          <div className="flex justify-end">
-            <input className=' w-[700px] px-6 py-2 my-3 border-[1px] border-black text-black rounded-3xl text-[14px] uppercase ' placeholder='Rechercher le produit pharmaceutique par sa description' type="text"value={(table.getColumn("description")?.getFilterValue() as string) ?? "" } onChange={(event) => table.getColumn("description")?.setFilterValue(event.target.value)} />
+          <div className="flex justify-between w-[70%]  ">
+            <div className="flex gap-5 " >
+              <div className="flex gap-4 items-center  " >
+                <h1 className=" font-semibold text-sm italic text-white " >Du</h1>
+                <input onChange={(e) => setStartDate(e.target.value) }  className="uppercase italic font-semibold border-[1px] py-[5px] px-2 rounded-2xl border-black " type="date" name="" id="" />
+              </div>
+              <div className="flex gap-4 items-center">
+                <h1 className=" font-semibold text-sm italic text-white ">Au</h1>
+                <input onChange={(e) => setEndDate(e.target.value) }  className="uppercase italic font-semibold  border-[1px] py-[5px] px-2 rounded-2xl border-black" type="date" name="" id="" />
+              </div>
+              <div className=" flex items-center " >
+                <button onClick={handleSubmit(onSubmit)}  className=" px-4 py-2 text-sm rounded-lg text-white bg-slate-400 " >Filtrer</button>
+              </div>
+            </div>
+            <div>
+              <input className=' w-[400px] px-6 py-2 my-3 border-[1px] border-black text-black rounded-3xl text-[14px] uppercase ' placeholder='Rechercher le produit pharmaceutique par sa description' type="text"value={(table.getColumn("description")?.getFilterValue() as string) ?? "" } onChange={(event) => table.getColumn("description")?.setFilterValue(event.target.value)} />
+            </div>
           </div>
 
           <div>
@@ -175,7 +215,7 @@ export function DataTableLowStock<TData, TValue>({
                         table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
-                                  className=" hover:cursor-pointer  border-b-[1px] border-black text-black "
+                                  className=" hover:cursor-pointer bg-gray-200  border-b-[1px] border-black text-black "
                                   key={row.id}
                                   data-state={row.getIsSelected() && "selected"}
                                 >
@@ -190,7 +230,7 @@ export function DataTableLowStock<TData, TValue>({
                                 </TableRow>
                             ))
                         ) : (
-                        <TableRow>
+                        <TableRow className=" bg-gray-200 " >
                             <TableCell colSpan={columns.length}>No results.</TableCell>
                         </TableRow>
                         )

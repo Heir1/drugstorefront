@@ -175,12 +175,12 @@ export function DataTableStock<TData, TValue>({
                         table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
-                                  className=" hover:cursor-pointer text-xs  border-b-[1px] border-black text-black "
+                                  className=" hover:cursor-pointer bg-gray-100 text-xs font-extrabold  border-b-[1px] border-black text-black "
                                   key={row.id}
                                   data-state={row.getIsSelected() && "selected"}
                                 >
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell className="px-10"  key={cell.id}>
+                                        <TableCell className="px-10 uppercase"  key={cell.id}>
                                         {flexRender(
                                             cell.column.columnDef.cell,
                                             cell.getContext()
@@ -190,7 +190,7 @@ export function DataTableStock<TData, TValue>({
                                 </TableRow>
                             ))
                         ) : (
-                        <TableRow>
+                        <TableRow className="bg-gray-100" >
                             <TableCell colSpan={columns.length}>No results.</TableCell>
                         </TableRow>
                         )

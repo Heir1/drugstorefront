@@ -194,7 +194,6 @@ export default function Supply() {
                                     <div className=" flex mt-2 " >
                                         <div className=" w-1/2 text-center border-2 border-emerald-500 " >
                                             {(formatNumberWithSpaces(totalMovement/rates[0].value))} USD
-                                            
                                         </div>
                                         <div className=" w-1/2 text-center border-2 border-emerald-500 " >
                                             {formatNumberWithSpaces(totalMovement)} CDF

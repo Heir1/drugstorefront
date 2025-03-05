@@ -10,7 +10,7 @@ import PrintFile from "./printFile/PrintFile";
 
 export default function LowStock() {
 
-    const { articles, articleStatus, error } = useLowStockArticleService();
+    const { articles, articleStatus, error } = useLowStockArticleService("", "");
     
     const { rates } = useRateService()
     const rate = rates[0]?.value
@@ -59,7 +59,7 @@ export default function LowStock() {
                 {
                     (articleStatus == "loading" ) && <Loading />
                 }
-                <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white h-[500px] rounded-xl" >
+                <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-[#7288a5d0] h-[500px] rounded-xl" >
                     <DataTableLowStock columns={LowStockColumns} data={articles} needFilter={false} paginate={true} title="lowstock"/>
                 </div>
             </div>

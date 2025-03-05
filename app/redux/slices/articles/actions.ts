@@ -3,6 +3,10 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ApiErrorResponse, deleteRequest, getRequest, postRequest, putRequest } from '@/app/helpers/api/verbes';
 import IArticle from '@/app/interfaces/article';
 
+interface FetchLowStocksParams {
+  firstrange: string;
+  secondrange: string;
+}
 
 // Action pour récupérer tous les articles
 export const fetchArticles = createAsyncThunk<IArticle[]>(
@@ -24,14 +28,14 @@ export const fetchArticles = createAsyncThunk<IArticle[]>(
 );
 
 // Action pour récupérer tous les lowstockarticles
-export const fetchLowStockArticles = createAsyncThunk<IArticle[]>(
+export const fetchLowStockArticles = createAsyncThunk<IArticle[],FetchLowStocksParams, { rejectValue: string } >(
   'articles/fetchLowStockArticles',
-  async (_, { rejectWithValue }) => {
+  async ({ firstrange, secondrange }, { rejectWithValue }) => {
 
     try {
-      const response = await getRequest<IArticle[]>('lowstockarticles'); // Remplacez avec votre endpoint
+      const response = await getRequest<IArticle[]>(`lowstockarticles/${firstrange}/${secondrange}`); // Remplacez avec votre endpoint
       if (response.error) {
-        return rejectWithValue(response.error);
+        return rejectWithValue(response.error.message);
       }
       console.log(response.data);
       return response.data as IArticle[] ;
@@ -41,7 +45,6 @@ export const fetchLowStockArticles = createAsyncThunk<IArticle[]>(
     }
   }
 );
-
 
 // Action pour récupérer tous les expirederticles
 export const fetchExpirederticles = createAsyncThunk<IArticle[]>(

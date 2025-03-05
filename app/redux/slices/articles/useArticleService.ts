@@ -20,15 +20,27 @@ export const useArticleService = () => {
 }
 
 
-export const useLowStockArticleService = () => {
+export const useLowStockArticleService = (selectedFirstrange:string, selectedSecondrange:string) => {
+
+    const today = new Date();
+    const formattedDate:string = today.toISOString().split('T')[0];
+    let firstrange:string, secondrange:string = "";
+
+    if(selectedFirstrange && selectedSecondrange){
+        firstrange = selectedFirstrange;
+        secondrange = selectedSecondrange;
+    }
+    else{
+        firstrange = formattedDate;
+        secondrange = formattedDate;
+    }
 
     const dispatch = useDispatch<AppDispatch>();
 
     const { articles, articleStatus, error } = useSelector((state: RootState) => state.articles )
 
     useEffect(() => {
-        // articleStatus !== "succeeded" && dispatch(fetchArticles())
-        dispatch(fetchLowStockArticles())
+        dispatch(fetchLowStockArticles({firstrange, secondrange}))
     }, [dispatch])
 
     return { articles , articleStatus, error }

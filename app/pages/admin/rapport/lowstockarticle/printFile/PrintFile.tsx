@@ -92,7 +92,7 @@ export default function PrintFile({articles}:Articleprops) {
                     </div>
                 </div>
                 {
-                    articles.map((article:IArticle) => (
+                    articles?.map((article:IArticle) => (
                         <div key={article.id} className="grid grid-cols-9 border-b-[1px] border-gray-500" >
                             <div className="w-full" >
                                 <h1 className=" text-[10px] uppercase " >{article.placements[0].name}</h1>
