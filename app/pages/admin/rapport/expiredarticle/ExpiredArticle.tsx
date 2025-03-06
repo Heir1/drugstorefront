@@ -8,7 +8,7 @@ import { useRateService } from "@/app/redux/slices/rates/useRateService";
 
 export default function ExpiredArticle() {
 
-    const { allEpiredArticles , expired_status, expired_FetchError } = useExpirederticlesService();
+    const { allEpiredArticles , expired_status, expired_FetchError } = useExpirederticlesService("", "");
 
     const { rates } = useRateService()
 
@@ -48,8 +48,8 @@ export default function ExpiredArticle() {
                 {
                     (expired_status == "loading" ) && <Loading />
                 }
-                <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white h-[500px] rounded-xl" >
-                    <DataTableLowStock columns={LowStockColumns} data={allEpiredArticles} needFilter={false} paginate={true} title="lowstock"/>
+                <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-[#7288a5d0] h-[500px] rounded-xl" >
+                    <DataTableLowStock columns={LowStockColumns} data={allEpiredArticles} needFilter={false} paginate={true} title="expiredStock"/> lowstock
                 </div>
             </div>
             

@@ -17,8 +17,8 @@ export default interface ITransaction {
     amount?: number;
     description?: string;
     currency_id?: string;
-    created_by?: string | null;
-    updated_by?: string | null;
+    created_by?: created_by | null;
+    updated_by?: created_by | null;
     created_at?: string;
     updated_at?: string;
     currency?: Currency;

@@ -10,6 +10,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import toast, { Toaster } from 'react-hot-toast';
+import IUser from '@/app/interfaces/user';
 
 // Définir le schéma de validation avec Yup
 const schema = yup.object().shape({
@@ -22,7 +23,6 @@ const schema = yup.object().shape({
       .typeError('Le montant doit être un nombre')
       .required('Le montant est requis')
       .positive('Le montant doit être positif'),
-    guichet: yup.string().required('Le guichet est requis'),
   });
 
 export default function Cash() {
@@ -40,6 +40,7 @@ export default function Cash() {
     const [startDate, setStartDate] = useState<string>('');
     const [endDate, setEndDate] = useState<string>('');
     const [selectedTransaction, setSelectedTransaction] = useState<ITransaction | null>(null);
+    const [user, setUser] = useState<IUser | null>(null);
 
     const { transactions, transactionStatus , transactionError } = useSelector((state: RootState) => state.transaction )
 
@@ -57,7 +58,6 @@ export default function Cash() {
             description: '',
             currency_id: '',
             amount: 0,
-            guichet: '',
         },
     });
 
@@ -102,6 +102,7 @@ export default function Cash() {
             transaction_type,
             amount: data.amount,
             description: data.description,
+            created_by: user?.id,
             currency_id,
             transaction_date : data.transaction_date
         }
@@ -165,6 +166,15 @@ export default function Cash() {
             setValue("currency_id", currency_id);
         }
     }, [selectedTransaction])
+
+    
+    useEffect(()=>{
+        const userJSON = localStorage.getItem('user');
+        if (userJSON) {
+            const user = JSON.parse(userJSON);
+            setUser(user);
+        }
+    },[])
 
     const handleEdit = (transaction:ITransaction) => {
 
@@ -519,20 +529,9 @@ export default function Cash() {
                                         <label htmlFor="guichet" className="font-extrabold text-[13px]">
                                         GUICHET
                                         </label>
-                                        <Controller
-                                        name="guichet"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <select {...field} className="w-full p-1">
-                                            <option value="">Sélectionner le guichet</option>
-                                            <option value="Archange">Archange</option>
-                                            <option value="Merveille">Merveille</option>
-                                            </select>
-                                        )}
-                                        />
-                                        {errors.guichet && (
-                                        <p className="text-red-500 text-sm">{errors.guichet.message}</p>
-                                        )}
+                                        <select className="w-full p-1">
+                                        <option value="">{user?.name}</option>
+                                        </select>
                                     </div>
 
                                     {/* Boutons Enregistrer et Annuler */}
@@ -551,7 +550,7 @@ export default function Cash() {
                                         <button
                                             className="w-full bg-gray-400 uppercase font-bold"
                                             type="button"
-                                            onClick={() => console.log('Annuler')}
+                                            onClick={() => setSelectedTransaction(null) }
                                         >
                                             Annuler
                                         </button>

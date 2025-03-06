@@ -42,7 +42,7 @@ import FormArticleUpdate from "@/app/components/form/FormArticleUpdate";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/app/redux/store/store";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { fetchLowStockArticles } from "@/app/redux/slices/articles/actions";
+import { fetchExpirederticles, fetchLowStockArticles } from "@/app/redux/slices/articles/actions";
 
 
 
@@ -144,9 +144,14 @@ export function DataTableLowStock<TData, TValue>({
   const dispatch = useDispatch<AppDispatch>();
 
   const onSubmit: SubmitHandler<IArticle> = (data) => {    
-
+  
       if(startDate && endDate){
+        if(title == "lowstock"){
           dispatch(fetchLowStockArticles({firstrange : startDate, secondrange : endDate}))          
+        }
+        else if(title == "expiredStock"){
+          dispatch(fetchExpirederticles({firstrange : startDate, secondrange : endDate}))
+        }
       }
   }
   

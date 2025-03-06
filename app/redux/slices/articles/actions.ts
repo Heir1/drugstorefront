@@ -47,14 +47,14 @@ export const fetchLowStockArticles = createAsyncThunk<IArticle[],FetchLowStocksP
 );
 
 // Action pour récupérer tous les expirederticles
-export const fetchExpirederticles = createAsyncThunk<IArticle[]>(
+export const fetchExpirederticles = createAsyncThunk<IArticle[],FetchLowStocksParams, { rejectValue: string } >(
   'articles/fetchExpirederticles',
-  async (_, { rejectWithValue }) => {
+  async ({ firstrange, secondrange }, { rejectWithValue }) => {
 
     try {
-      const response = await getRequest<IArticle[]>('expirederticles'); // Remplacez avec votre endpoint
+      const response = await getRequest<IArticle[]>(`expirederticles/${firstrange}/${secondrange}`); // Remplacez avec votre endpoint
       if (response.error) {
-        return rejectWithValue(response.error);
+        return rejectWithValue(response.error.message);
       }
       console.log(response.data);
       return response.data as IArticle[] ;
