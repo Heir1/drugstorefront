@@ -22,102 +22,136 @@ export default function Cash({transactions, totalPurchase, totalSelling}:Article
     }
 
     return (
-        <div className="flex flex-col items-center space-y-2 pt-4 ">
-            <div className="text-center font-bold text-lg ">
-                <h1>ARSUE PHARMA</h1>
-            </div>
-            <div className=" w-full px-4 " >
-                <div className="text-center text-[12px] text-gray-700 font-semibold bg-white w-full border-b-2 border-gray-700 pb-4 ">
-                    <h1>RCCM 17-A-00178/ IDN : 01-93-N17135U/ IMPORT: A1703348J</h1>
-                    <h1>+243 997 845 319</h1>
-                    <h1>suzanoah@yahoo.fr</h1>
-                    <h1>AV/ DE LA FOIRE N°1. Q/SALONGO, C/LEMBA</h1>
-                    <h1>KINSHASA</h1>
+        <div className=" space-y-2 pt-4 flex justify-center">
+            <div className=" flex flex-col bg-white items-start w-[70%] py-3 px-2 " >
+                <div className=" font-bold text-lg">
+                    <h1>JOURNAL DE CAISSE</h1>
                 </div>
-            </div>
-            <div className="w-full px-4" >
-                <div className="grid grid-cols-6 border-b-2 border-gray-700 pb-2" >
-                    <div className="w-full flex flex-col justify-center items-center" >
-                        <h1>Localisation</h1>
-                        <h1>TOUS</h1>
+                <div className="w-full" >
+
+                    <div className="grid grid-cols-7 border-b-2 border-gray-700" >
+                        <div className="w-full" >
+                            <h1 className="font-bold text-red-800 " >DATE</h1>
+                        </div>
+                        <div className="w-full" >
+                            <h1 className="font-bold text-red-800 ">TYPE OP</h1>
+                        </div>
+                        <div className="w-full" >
+                            <h1 className="font-bold text-red-800 ">MONTANT</h1>
+                        </div>
+                        <div className="w-full col-span-2" >
+                            <h1 className="font-bold text-red-800 ">DATE / HEURE</h1>
+                        </div>
+                        <div className="w-full" >
+                            <h1 className="font-bold text-red-800 ">OPERATEUR</h1>
+                        </div>
                     </div>
-                    <div className="w-full flex flex-col justify-center items-center" >
-                        <h1>Catégorie</h1>
-                        <h1>TOUS</h1>
+
+                    <div className=" py-4 border-b-2 border-black " >
                     </div>
-                    <div className="w-full flex flex-col justify-center items-center" >
-                        <h1>Fournisseur</h1>
-                        <h1>TOUS</h1>
+
+                    <div className="grid grid-cols-7 pt-2 ">
+                        <div>
+                            <h1>18/02/2025</h1>
+                        </div>
+                        <div>
+                            <h1 className="text-red-600" >GUICHET</h1>
+                        </div>
+                        <div>
+                            <h1>RUTH</h1>
+                        </div>
                     </div>
-                    <div className="w-full flex flex-col justify-center items-center" >
-                        <h1>Cout PA</h1>
-                        <h1>{`${formatNumberWithSpaces(totalPurchase)} USD`}</h1>
-                    </div>
-                    <div className="w-full flex flex-col justify-center items-center" >
-                        <h1>Cout PV</h1>
-                        <h1>{`${formatNumberWithSpaces(totalSelling)} USD`}</h1>
-                    </div>
-                    <div className="w-full flex flex-col justify-center items-center" >
-                        <h1>Nbr Produit</h1>
-                        <h1>{articles.length}</h1>
-                    </div>
-                </div>
-            </div>
-            <div className="w-full px-4" >
-                <div className=" flex justify-center mt-2 " >
-                    <h1 className="font-bold">RAPPORT STOCK ACTUEL en USD</h1>
-                </div>
-                <div className="grid grid-cols-7 border-t-2 border-b-2 border-gray-700" >
-                    <div className="w-full" >
-                        <h1 className="font-bold" >LOC</h1>
-                    </div>
-                    <div className="w-full" >
-                        <h1 className="font-bold">PRODUIT</h1>
-                    </div>
-                    <div className="w-full" >
-                        <h1 className="font-bold">ACTUEL</h1>
-                    </div>
-                    <div className="w-full" >
-                        <h1 className="font-bold">SUPPORT</h1>
-                    </div>
-                    <div className="w-full" >
-                        <h1 className="font-bold">PA</h1>
-                    </div>
-                    <div className="w-full" >
-                        <h1 className="font-bold">PV</h1>
-                    </div>
-                    <div className="w-full" >
-                        <h1 className="font-bold">CATEGORIE</h1>
-                    </div>
-                </div>
-                {
-                    articles.map((article:IArticle) => (
-                        <div key={article.id} className="grid grid-cols-7 border-b-[1px] border-gray-500" >
-                            <div className="w-full" >
-                                <h1 className=" text-[10px] uppercase " >{article.placements[0].name}</h1>
+
+                    <div className="grid grid-cols-7 pt-2 ">
+                        <div className=" col-start-2 col-span-6" >
+                            <div className="grid grid-cols-6 border-b-2 border-black mb-2 pb-8 ">
+                                <div>
+                                    <h1>DEPENSE</h1>
+                                </div>
+                                <div>
+                                    <h1>475 USD</h1>
+                                </div>
+                                <div className=" col-span-2 " >
+                                    <h1>18/02/2025 20:42:08</h1>
+                                </div>
+                                <div>
+                                    <h1>CHERUBIN</h1>
+                                </div>
+                                <div className="col-span-6 " >
+                                    <p>STOCK - REGUL NON JUSTIFIE/FACT-840403</p>
+                                </div>
                             </div>
-                            <div className="w-full" >
-                                <h1 className="text-[10px] uppercase">{article.description}</h1>
-                            </div>
-                            <div className="w-full" >
-                                <h1 className="text-[10px] uppercase">{article.quantity}</h1>
-                            </div>
-                            <div className="w-full" >
-                                <h1 className="text-[10px] uppercase">{article.packaging?.name}</h1>
-                            </div>
-                            <div className="w-full" >
-                                <h1 className="text-[10px] uppercase">{`${formatNumberWithSpaces(article.purchase_price/rate)}`}</h1>
-                            </div>
-                            <div className="w-full" >
-                                <h1 className="text-[10px] uppercase">{`${formatNumberWithSpaces(article.selling_price/rate)}`}</h1>
-                            </div>
-                            <div className="w-full" >
-                                <h1 className="text-[10px] uppercase">{article.category?.name}</h1>
+
+                            <div className="grid grid-cols-2 gap-14 ">
+                                <div className=" border-2 border-black " >
+                                    <div className="grid grid-cols-2 ">
+
+                                        <div className=" p-2 " >
+                                            <div className=" flex justify-between " >
+                                                <h1>Recette</h1>
+                                                <span>(CDF)</span>
+                                            </div>
+                                            <div className=" flex justify-between " >
+                                                <h1>Dépense</h1>
+                                                <span>(CDF)</span>
+                                            </div>
+                                            <div className=" flex justify-between " >
+                                                <h1>Recette</h1>
+                                                <span>(CDF)</span>
+                                            </div>
+                                        </div>
+
+                                        <div className=" flex flex-col justify-center items-end pr-4 " >
+                                            <div>
+                                                <h1>13.400</h1>
+                                            </div>
+                                            <div>
+                                                <h1>13.400</h1>
+                                            </div>
+                                            <div>
+                                                <h1>13.400</h1>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div className=" border-2 border-black ">
+                                    <div className="grid grid-cols-2 ">
+
+                                        <div className=" p-2 " >
+                                            <div className=" flex justify-between " >
+                                                <h1>Recette</h1>
+                                                <span>(USD)</span>
+                                            </div>
+                                            <div className=" flex justify-between " >
+                                                <h1>Dépense</h1>
+                                                <span>(USD)</span>
+                                            </div>
+                                            <div className=" flex justify-between " >
+                                                <h1>Recette</h1>
+                                                <span>(USD)</span>
+                                            </div>
+                                        </div>
+
+                                        <div className=" flex flex-col justify-center items-end pr-4 " >
+                                            <div>
+                                                <h1>13.400</h1>
+                                            </div>
+                                            <div>
+                                                <h1>13.400</h1>
+                                            </div>
+                                            <div>
+                                                <h1>13.400</h1>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    ))
-                }
+                    </div>
 
+                </div>
             </div>
         </div>
     )
