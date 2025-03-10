@@ -30,17 +30,17 @@ export const fetchTransactions = createAsyncThunk<ITransaction[], FetchTransacti
 );
 
 // Modifier l'action pour accepter les paramètres de date
-export const fetchDetailedTransactions = createAsyncThunk<CreatedByTransactions[], FetchTransactionsParams>(
+export const fetchDetailedTransactions = createAsyncThunk<TransactionsByDate[], FetchTransactionsParams>(
     'transactions/fetchDetailedTransactions',
     async ({ startDate, endDate, transactionType, createdBy }, { rejectWithValue }) => {
         try {
             // Faire la requête à l'API
-            const response = await getRequest<CreatedByTransactions[]>(`cashjournal/detail-filter/${startDate}/${endDate}/${transactionType}/${createdBy}`);
+            const response = await getRequest<TransactionsByDate[]>(`cashjournal/detail-filter/${startDate}/${endDate}/${transactionType}/${createdBy}`);
             if (response.error) {
                 return rejectWithValue(response.error);
             }
             console.log(response.data)
-            return response.data as CreatedByTransactions[];
+            return response.data as TransactionsByDate[];
 
         } catch (error: any) {
             return rejectWithValue(error.message || 'Erreur lors du chargement des transactions');

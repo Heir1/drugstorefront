@@ -13,7 +13,7 @@ import ITransaction from '@/app/interfaces/transaction';
 
 interface TransactionsState {
     transactions: ITransaction[];
-    detailedTransactions: CreatedByTransactions[]; // Nouvel état pour les transactions détaillées
+    detailedTransactions: TransactionsByDate[]; // Nouvel état pour les transactions détaillées
     currentTransaction: ITransaction | null;
     transactionStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
     detailedTransactionStatus: 'idle' | 'loading' | 'succeeded' | 'failed'; // Statut pour les transactions détaillées
@@ -55,7 +55,7 @@ const transactionsSlice = createSlice({
                 state.detailedTransactionStatus = 'loading';
                 state.detailedTransactionError = null; // Réinitialiser l'erreur
             })
-            .addCase(fetchDetailedTransactions.fulfilled, (state, action: PayloadAction<CreatedByTransactions[]>) => {
+            .addCase(fetchDetailedTransactions.fulfilled, (state, action: PayloadAction<TransactionsByDate[]>) => {
                 state.detailedTransactionStatus = 'succeeded';
                 state.detailedTransactions = action.payload; // Stocker les données détaillées
             })
