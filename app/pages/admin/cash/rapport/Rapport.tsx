@@ -18,7 +18,9 @@ export default function Rapport() {
     const [ createdBy, setCreatedBy ] = useState("all");
     const [ transactionType, setTransactionType ] = useState("all");
     const [ isDisplayed, setIsDisplayed ] = useState(false);
-    const { transactions, transactionStatus , transactionError } = useSelector((state: RootState) => state.transaction )
+    const { detailedTransactions, detailedTransactionStatus, detailedTransactionError } = useSelector(
+        (state: RootState) => state.transaction
+    );
     const [user, setUser] = useState<IUser | null>(null);
     const { rates } = useRateService()
     const rate = rates[0]?.value
@@ -32,18 +34,26 @@ export default function Rapport() {
     // };
 
     const handleSubmitSearch = async (e: React.FormEvent) => {
+
         e.preventDefault(); // Empêcher le rechargement de la page
 
         try {
-            // Dispatch l'action et attendre qu'elle soit terminée
-            await dispatch(fetchDetailedTransactions({ startDate, endDate, transactionType, createdBy }));
+                // Dispatch l'action et utilise .then() pour logger la réponse
+                dispatch(fetchDetailedTransactions({ startDate, endDate, transactionType, createdBy }))
+                .then((response) => {
+                    console.log('Réponse reçue:', response.payload); // Log la réponse
+                    // console.log(transactions)
+                    window.print(); // Déclenche l'impression
+                })
+                .catch((error) => {
+                    console.error('Erreur lors de la récupération des transactions:', error);
+                });
 
-            // Exécuter window.print() après le succès de l'action
-            window.print();
         } catch (error) {
             // Gérer les erreurs si nécessaire
             console.error("Erreur lors de la récupération des transactions :", error);
         }
+
     };
 
     
@@ -59,7 +69,9 @@ export default function Rapport() {
         <div>
 
             <div className="hidden print:block" >
-                <Cash transactions={transactions} totalPurchase={100} totalSelling={100} />
+                {
+                    detailedTransactions && <Cash transactiondetails={detailedTransactions} totalPurchase={100} totalSelling={100} />
+                }
             </div>
 
             <div className="block print:hidden" >

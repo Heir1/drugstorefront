@@ -6,22 +6,29 @@ import {
     createTransaction,
     updateTransaction,
     deleteTransaction,
+    fetchDetailedTransactions,
 } from './actions';
 
 import ITransaction from '@/app/interfaces/transaction';
 
 interface TransactionsState {
     transactions: ITransaction[];
+    detailedTransactions: CreatedByTransactions[]; // Nouvel état pour les transactions détaillées
     currentTransaction: ITransaction | null;
     transactionStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
+    detailedTransactionStatus: 'idle' | 'loading' | 'succeeded' | 'failed'; // Statut pour les transactions détaillées
     transactionError: string | null;
+    detailedTransactionError: string | null; // Erreur pour les transactions détaillées
 }
 
 const initialState: TransactionsState = {
     transactions: [],
+    detailedTransactions: [], // Initialisé comme un tableau vide
     currentTransaction: null,
     transactionStatus: 'idle',
+    detailedTransactionStatus: 'idle', // Initialisé comme 'idle'
     transactionError: null,
+    detailedTransactionError: null, // Initialisé comme null
 };
 
 const transactionsSlice = createSlice({
@@ -42,6 +49,19 @@ const transactionsSlice = createSlice({
             .addCase(fetchTransactions.rejected, (state, action) => {
                 state.transactionStatus = 'failed';
                 state.transactionError = action.error.message || 'Erreur inconnue';
+            })
+            // fetchDetailedTransactions
+            .addCase(fetchDetailedTransactions.pending, (state) => {
+                state.detailedTransactionStatus = 'loading';
+                state.detailedTransactionError = null; // Réinitialiser l'erreur
+            })
+            .addCase(fetchDetailedTransactions.fulfilled, (state, action: PayloadAction<CreatedByTransactions[]>) => {
+                state.detailedTransactionStatus = 'succeeded';
+                state.detailedTransactions = action.payload; // Stocker les données détaillées
+            })
+            .addCase(fetchDetailedTransactions.rejected, (state, action) => {
+                state.detailedTransactionStatus = 'failed';
+                state.detailedTransactionError = typeof action.payload === 'string' ? action.payload : 'Erreur inconnue';
             })
             .addCase(getTransactionById.pending, (state) => {
                 state.transactionStatus = 'loading';
