@@ -54,7 +54,7 @@ interface IFormInputs {
     alert: number;
     currency: number;
     quantity: number;
-    quantityappro: number;
+    quantityappro: number | null  ;
     purchase_price: number;
     selling_price: number;
   }
@@ -106,7 +106,7 @@ export default function FormArticleAppro() {
             alert : 0,
             currency : 1,
             quantity : 0,
-            quantityappro: 1,
+            quantityappro: null,
             purchase_price : 0,
             selling_price : 0,
         }
@@ -303,8 +303,9 @@ export default function FormArticleAppro() {
     setCart(cart.filter((_, i) => i !== index));
     };
 
-    const totalPurchase = cart.reduce((sum, item) => sum + item.purchase_price * item.quantityappro, 0);
-    const totalSelling = cart.reduce((sum, item) => sum + item.selling_price * item.quantityappro, 0);
+    // const totalPurchase = cart.reduce((sum, item) => sum + item.purchase_price * item.quantityappro, 0);
+    const totalPurchase = cart.reduce((sum, item) => sum + item.purchase_price * (item.quantityappro ?? 0), 0);
+    const totalSelling = cart.reduce((sum, item) => sum + item.selling_price * (item.quantityappro ?? 0), 0);
     
     
     //   const totalAmount = cart.reduce((sum, item) => sum + item.selling_price * item.quantity, 0);
@@ -510,8 +511,8 @@ export default function FormArticleAppro() {
                                 <Controller
                                     name="quantityappro"
                                     control={control}
-                                    defaultValue={1}
-                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="number"   />}
+                                    // defaultValue={1}
+                                    render={({ field }) => <input {...field} value={field.value ?? ""}  className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="number" required  />}
                                     rules={{ required: 'Le code barre est requis' }}
                                 />
                             </div>
@@ -596,9 +597,24 @@ export default function FormArticleAppro() {
                                     defaultValue=""
                                     name="expirationDate"
                                     control={control}
-                                    render={({ field }) => <input  className="w-full text-[14px] bg-[#F2F7FC]  pl-4 pr-4 uppercase rounded-lg " {...field} type="date" />}
-                                    rules={{ required: 'La date est requise' }}
+                                    render={({ field }) => <input  className={`w-full text-[14px] ${errors.expirationDate ? 'bg-red-800' : 'bg-[#F2F7FC]' }   pl-4 pr-4 uppercase rounded-lg `} {...field} type="date" />}
+                                    rules={{
+                                        required: 'La date est requise',
+                                        validate: (value) => {
+                                          const selectedDate = new Date(value);
+                                          const today = new Date();
+                                          today.setHours(0, 0, 0, 0); // Remove time part to compare only dates
+                                          return selectedDate >= today || "Elle doit être dans le futur";
+                                        },
+                                    }}
                                 />
+                            </div>
+                            <div>
+                                {errors.expirationDate && (
+                                    <p className="text-red-500 text-sm mt-1">
+                                        {errors.expirationDate.message}
+                                    </p>
+                                )}
                             </div>
                         </div>
                         <div className="" >

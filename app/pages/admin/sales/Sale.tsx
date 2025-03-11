@@ -191,11 +191,10 @@ export default function Sale() {
                         <div>
 
                             {
-                                <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-[#7288a5fd] h-[500px] rounded-xl" >
+                                <div className="mx-7 h-[75vh] p-10 shadow-[0px_4px_8px_0px_#00000026] bg-[#7288a5fd] rounded-xl" >
                                     <DataTable columns={ArticleColumns} data={articles} needFilter={false} paginate={true} title=""/>
                                 </div>
                             }
-
 
                         </div>
                     )
