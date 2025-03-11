@@ -7,6 +7,10 @@ import { LowStockColumns } from "@/components/ui/DataTable/articles/LowStockColu
 import { DataTableLowStock } from "@/components/ui/DataTable/DataTableLowStock";
 import { useRateService } from "@/app/redux/slices/rates/useRateService";
 import PrintFile from "./printFile/PrintFile";
+import { useState } from "react";
+import { AppDispatch } from "@/app/redux/store/store";
+import { useDispatch } from "react-redux";
+import { fetchLowStockArticles } from "@/app/redux/slices/articles/actions";
 
 export default function LowStock() {
 
@@ -15,55 +19,105 @@ export default function LowStock() {
     const { rates } = useRateService()
     const rate = rates[0]?.value
 
+    const [ startDate, setStartDate ] = useState<string>('');
+    const [ endDate, setEndDate ] = useState<string>('');
+    
+    const dispatch = useDispatch<AppDispatch>();
+
+        //   if(startDate && endDate){
+        //     if(title == "lowstock"){
+        //       dispatch(fetchLowStockArticles({firstrange : startDate, secondrange : endDate}))          
+        //     }
+        //     else if(title == "expiredStock"){
+        //       dispatch(fetchExpirederticles({firstrange : startDate, secondrange : endDate}))
+        //     }
+        //   }
+
+    const handleSubmitSearch = async (e: React.FormEvent) => {
+
+        e.preventDefault(); // Empêcher le rechargement de la page
+
+        try {
+                // Dispatch l'action et utilise .then() pour logger la réponse
+                dispatch(fetchLowStockArticles({firstrange : startDate, secondrange : endDate}))
+                .then((response) => {
+                    console.log('Réponse reçue:', response.payload); // Log la réponse
+                    // console.log(transactions)
+                    window.print(); // Déclenche l'impression
+                })
+                .catch((error) => {
+                    console.error('Erreur lors de la récupération des stocks:', error);
+                });
+
+        } catch (error) {
+            // Gérer les erreurs si nécessaire
+            console.error("Erreur lors de la récupération des transactions :", error);
+        }
+
+    };
+
     return (
         <div>
 
             <div className="hidden print:block" >
-                <PrintFile articles={articles} />
+                {
+                    articles && <PrintFile articles={articles} />
+                }
             </div>
 
             <div className="block print:hidden">
+                <div className=" ml-[23%] w-[54%] flex justify-center col-span-3 border-2 bg-gray-400  mx-7 mt-20  ">
+                    <div className=' w-[98%] ' >
+                        <form onSubmit={handleSubmitSearch}>
+                            <div className="flex">
+                                <div className="space-y-4 mt-2 w-full pb-2">
+                                {/* Champ : Date de début */}
+                                <div className="bg-[#7288a5d0] px-4 py-4 space-y-4 shadow-[0px_4px_8px_0px_#00000026] border-2 border-gray-300">
+                                    <div>
+                                    <h1 className="uppercase font-extrabold text-[12px]">Saisir date début :</h1>
+                                    </div>
+                                    <div>
+                                    <input
+                                        className="px-2 w-1/3"
+                                        type="date"
+                                        value={startDate}
+                                        onChange={(e) => setStartDate(e.target.value)}
+                                        required
+                                    />
+                                    </div>
+                                </div>
 
-                {/* <div className="grid grid-cols-3 md:grid-cols-3 gap-6 mb-2  ">
-                    <div className=" col-start-2   flex flex-col items-center space-y-2">
-                        <div className="text-center font-bold text-xl text-white bg-[#007A3D] py-2 px-4 rounded-lg shadow-lg w-full">
-                            <h1>ARSUE PHARMA</h1>
-                        </div>
-                        <div className="text-center text-sm text-gray-700 bg-white py-2 px-4 rounded-lg shadow-md w-full">
-                            <h1>RCCM 17-A-00178/ IDN : 01-93-N17135U/ IMPORT: A1703348J</h1>
-                            <h1>+243 997 845 319</h1>
-                            <h1>suzanoah@yahoo.fr</h1>
-                            <h1>AV/ DE LA FOIRE N°1. Q/SALONGO, C/LEMBA</h1>
-                            <h1>KINSHASA</h1>
-                        </div>
+                                {/* Champ : Date de fin */}
+                                <div className="bg-[#7288a5d0] px-4 py-4 space-y-4 shadow-[0px_4px_8px_0px_#00000026] border-2 border-gray-300">
+                                    <div>
+                                    <h1 className="uppercase font-extrabold text-[12px]">Saisir date fin :</h1>
+                                    </div>
+                                    <div>
+                                    <input
+                                        className="px-2 w-1/3"
+                                        type="date"
+                                        value={endDate}
+                                        onChange={(e) => setEndDate(e.target.value)}
+                                        required
+                                    />
+                                    </div>
+                                </div>
+
+                                {/* Bouton de recherche */}
+                                <div>
+                                    <button
+                                    type="submit"
+                                    className="w-full font-extrabold border-2 border-gray-500 bg-slate-200 text-[14px] uppercase"
+                                    >
+                                    Recherche
+                                    </button>
+                                </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-2">
-                    <div className="col-start-2 border-2 border-[#007A3D] rounded-lg shadow-md">
-                        <div className="text-center font-bold text-sm text-white bg-[#007A3D] py-2 rounded-t-lg">
-                            <h1>TAUX DE CHANGE : {rate}</h1>
-                        </div>
-                    </div>
-                </div> */}
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4 ">
-                    <div className="col-start-2 border-2 rounded-lg shadow-md">
-                        <div className="text-center font-bold text-sm text-white py-2 rounded-t-lg ">
-                            <h1>RAPPORT DE REQUISITION</h1>
-                        </div>
-                    </div>
-                </div>
-
-
-                {
-                    (articleStatus == "loading" ) && <Loading />
-                }
-                <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-[#7288a5d0] h-[500px] rounded-xl" >
-                    <DataTableLowStock columns={LowStockColumns} data={articles} needFilter={false} paginate={true} title="lowstock"/>
                 </div>
             </div>
-
 
         </div>
     )
