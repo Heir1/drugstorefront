@@ -166,9 +166,6 @@ export default function Supply() {
                 isNewArticle ? (
                     <div>
                          <FormArticleAppro/>
-                        {/* <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white h-[650px] rounded-xl" >
-                            <DataTableSupply columns={ArticleApproColumns} data={movements} needFilter={false} paginate={true} title=""/>
-                        </div> */}
                     </div>
                 )
                 :
@@ -177,11 +174,10 @@ export default function Supply() {
                         <div>
 
                             {
-                                <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white h-[500px] rounded-xl" >
+                                <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-[#7288a5fd] h-[68vh] rounded-xl" >
                                     <DataTable columns={ArticleColumns} data={articles} needFilter={false} paginate={true} title=""/>
                                 </div>
                             }
-
 
                         </div>
                     )
@@ -189,13 +185,13 @@ export default function Supply() {
                     (
                         isStateArticle ? (
                             <div>
-                                <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] h-[700px] bg-white rounded-xl" >
+                                <div className=" flex flex-col justify-between mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] h-[68vh] bg-[#7288a5fd] rounded-xl" >
                                     <DataTableSupply columns={ArticleApproColumns} data={movements} needFilter={false} paginate={true} title="Movements"/>
                                     <div className=" flex mt-2 " >
-                                        <div className=" w-1/2 text-center border-2 border-emerald-500 " >
+                                        <div className=" w-1/2 text-center border-2 bg-yellow-500 font-extrabold " >
                                             {(formatNumberWithSpaces(totalMovement/rates[0].value))} USD
                                         </div>
-                                        <div className=" w-1/2 text-center border-2 border-emerald-500 " >
+                                        <div className=" w-1/2 text-center border-2 bg-yellow-500 font-extrabold " >
                                             {formatNumberWithSpaces(totalMovement)} CDF
                                         </div>
                                     </div>

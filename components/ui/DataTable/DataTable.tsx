@@ -64,7 +64,7 @@ export function DataTable<TData, TValue>({
 
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 5,
+    pageSize: 10,
   })
 
   const [columnVisibility, setColumnVisibility] =
@@ -167,7 +167,7 @@ export function DataTable<TData, TValue>({
                         table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
-                                  className=" bg-white hover:cursor-pointer font-bold uppercase  border-b-[1px] border-black text-black "
+                                  className=" bg-gray-200 hover:cursor-pointer font-bold uppercase  border-b-[1px] border-black text-black "
                                   key={row.id}
                                   data-state={row.getIsSelected() && "selected"}
                                   // onClick={() => redirectionPage(row.original)}
@@ -205,34 +205,9 @@ export function DataTable<TData, TValue>({
                       {table.getPageCount().toLocaleString()}
                     </strong>
                   </span>
-                  {/* <span className="flex items-center gap-1 text-[0.7em]">
-                    | "rere" :
-                    <input
-                      type="number"
-                      min="1"
-                      defaultValue={table.getState().pagination.pageIndex + 1}
-                      onChange={e => {
-                        const page = e.target.value ? Number(e.target.value) - 1 : 0
-                        table.setPageIndex(page)
-                      }}
-                      className="border px-2 py-1 rounded-[15px] w-16"
-                    />
-                  </span>
-                  <select
-                    value={table.getState().pagination.pageSize}
-                    onChange={e => {
-                      table.setPageSize(Number(e.target.value))
-                    }}
-                  >
-                    {[10, 20, 30, 40, 50].map(pageSize => (
-                      <option className="text-[0.7em]" key={pageSize} value={pageSize}>
-                        {pageSize} {"ere"}
-                      </option>
-                    ))}
-                  </select> */}
                 </div>
 
-                <div className="flex items-center gap-[0.5em]">
+                {/* <div className="flex items-center gap-[0.5em]">
                   <button
                     className=" flex items-center cursor-pointer justify-center border border-[#B5B5B5] rounded p-1 "
                     onClick={() => table.firstPage()}
@@ -259,7 +234,7 @@ export function DataTable<TData, TValue>({
                     <Icon icon="material-symbols-light:keyboard-arrow-right" width="16" height="16"  style={{color: '#666666'}} />
                   </button>
 
-                </div>
+                </div> */}
 
               </div>
             </div>

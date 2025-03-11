@@ -190,6 +190,7 @@ export function DataTableSupply<TData, TValue>({
         }
     
       <div className="  rounded-2xl ">
+        
         <div className="flex items-center justify-between " >
         {
             title == "Movements" ? (
@@ -338,7 +339,7 @@ export function DataTableSupply<TData, TValue>({
             </Table>
         </div> 
 
-        {
+        {/* {
           paginate && (
             <div>
               <div className="flex items-center justify-between  py-8">
@@ -384,12 +385,10 @@ export function DataTableSupply<TData, TValue>({
               </div>
             </div>
           )
-        }
+        } */}
 
       </div>
-      {/* <div className="grid grid-cols-1">
-        <h1>Total achat du {startDate } au {endDate} </h1>
-      </div> */}
+
     </>
     
   );
