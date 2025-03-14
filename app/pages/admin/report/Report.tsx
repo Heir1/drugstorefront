@@ -40,12 +40,14 @@ export default function Report() {
                     </div>
                     <div className=" flex justify-center mt-4 ">
                         <div>
-                            <div>
-                                <h1 className=" uppercase font-extrabold text-sm " >Taux de change</h1>
-                            </div>
-                            <div className=" flex justify-center " >
-                                <Icon icon="streamline:pie-chart-solid" width="32" height="32" />
-                            </div>
+                            <Link href={`/pages/admin/formrate`} >
+                                <div>
+                                    <h1 className=" uppercase font-extrabold text-sm " >Taux de change</h1>
+                                </div>
+                                <div className=" flex justify-center " >
+                                    <Icon icon="streamline:pie-chart-solid" width="32" height="32" />
+                                </div>
+                            </Link>
                         </div>
                     </div>
                     <div className=" flex justify-center mt-4 " >
