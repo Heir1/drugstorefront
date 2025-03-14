@@ -4,7 +4,7 @@ import React from "react";
 interface Product {
   barcode: string;
   description: string;
-  quantity: number;
+  quantity: number | null ;
   selling_price: number;
   prix_total: number;
 }

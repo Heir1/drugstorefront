@@ -83,7 +83,7 @@ export default function ArticleActivationForm({content, setActivationFormOpen}:A
             description ,
             quantity ,
             comment,
-            is_active: !content.is_active,
+            is_active: content.is_active == "1" ? false : true ,
             expiration_date: content.expiration_date,
             // category_id: Number(content.category.id),
             // packaging_id: Number(content.packaging.id),

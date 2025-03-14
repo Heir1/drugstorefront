@@ -32,9 +32,9 @@ interface IFormInputs {
     category: string ;
     supplier: string;
     expirationDate: string;
-    alert: number;
+    alert: number | null ;
     currency: number;
-    quantity: number;
+    quantity: number | null ;
     purchase_price: number;
     selling_price: number;
 }
@@ -46,17 +46,17 @@ export default function FormTest() {
     const { register, handleSubmit, control, reset, setValue, watch } = useForm<IFormInputs>(
         {defaultValues: {
             barcode : "",
-            location : "",
+            location : "l",
             description : "",
-            indication : "",
-            molecule : "",
-            packaging : "",
-            category : "",
-            supplier : "",
+            indication : "i",
+            molecule : "m",
+            packaging : "p",
+            category : "c",
+            supplier : "s",
             expirationDate : "",
-            alert : 0,
+            alert : null,
             currency : 1,
-            quantity : 0,
+            quantity : null,
             purchase_price : 0,
             selling_price : 0,
         }}
@@ -192,6 +192,7 @@ export default function FormTest() {
         // console.log("ARTICLE ", data);
 
         const { barcode, location, description, indication, molecule, packaging, category, supplier,alert, expirationDate, quantity, purchase_price, selling_price , currency  } = data
+
         
         const articleData:IArticle = {
 
@@ -200,7 +201,7 @@ export default function FormTest() {
             description,
             indications : !isNaN(Number(indication)) ? [Number(indication)] : indicationQuery,
             molecules : !isNaN(Number(molecule)) ? [Number(molecule)] : moleculeQuery,
-            quantity : quantity ,
+            quantity : quantity !== null  ? quantity : 0 ,
             expiration_date: expirationDate,
             category_id: !isNaN(Number(category)) ? Number(category) : categoryQuery,
             suppliers : !isNaN(Number(supplier)) ? [Number(supplier)] : supplierQuery,
@@ -396,6 +397,7 @@ export default function FormTest() {
                                                                 key={location.id}
                                                                 value={location.id}
                                                                 className="cursor-pointer p-2 hover:bg-gray-100"
+                                                                onMouseDown={() => setIsLocationDropdownOpen(false)}
                                                             >
                                                                 {location.name}
                                                             </Combobox.Option>
@@ -758,7 +760,7 @@ export default function FormTest() {
                         <Controller
                             name="alert"
                             control={control}
-                            render={({ field }) => <input  className="w-full font-bold text-[14px] h-10 pl-4 uppercase rounded-lg pr-4 border-[1px] border-black" {...field} type="number" />}
+                            render={({ field }) => <input {...field} value={field.value ?? ""}  className="w-full font-bold text-[14px] h-10 pl-4 uppercase rounded-lg pr-4 border-[1px] border-black" type="number" />}
                             rules={{ required: 'L alerte est requise' }}
                         />
                     </div>
@@ -815,7 +817,7 @@ export default function FormTest() {
                         <Controller
                             name="quantity"
                             control={control}
-                            render={({ field }) => <input  className="w-full text-[14px] h-10 pl-4 uppercase rounded-lg pr-4 font-bold border-[1px] border-black" {...field} type="number" />}
+                            render={({ field }) => <input {...field} value={field.value ?? ""}  className="w-full text-[14px] h-10 pl-4 uppercase rounded-lg pr-4 font-bold border-[1px] border-black"  type="number" />}
                             rules={{ required: 'La quantité est requise' }}
                         />
                     </div>

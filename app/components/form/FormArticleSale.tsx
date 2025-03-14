@@ -62,7 +62,7 @@ interface IFormInputs {
     currency: number;
     invoice: number;
     quantity: number;
-    quantity1: number;
+    quantity1: number | null ;
     quantityappro: number;
     purchase_price: number;
     selling_price: number;
@@ -75,7 +75,7 @@ type CartItem = IFormInputs & {
 
 interface CartItem1 {
     id: string;
-    quantity1: number;
+    quantity1: number | null ;
     prix_total: number;
 }
 
@@ -145,7 +145,7 @@ export default function FormArticleSale() {
             currency : 1,
             invoice : 1,
             quantity : 0,
-            quantity1: 1,
+            quantity1: null,
             quantityappro: 1,
             purchase_price : 0,
             selling_price : 0,
@@ -276,7 +276,9 @@ export default function FormArticleSale() {
 
         const id = article.value.id;
 
-        const quantity1 = parseInt(data.quantity1.toString(), 10); // Convertir en entier
+        // const quantity1 = parseInt(data.quantity1.toString(), 10); // Convertir en entier
+        const quantity1 = data.quantity1 !== null ? parseInt(data.quantity1.toString(), 10) : 0;
+
         const price_vente = parseFloat(data.purchase_price.toString()); // Convertir en flottant
         const prix_total = quantity1 * price_vente;
     
@@ -289,9 +291,11 @@ export default function FormArticleSale() {
             // Si l'article existe, mettre à jour la quantité et le prix total
             const updatedCart = [...cart];
             const updatedCart1 = [...cart1];
-            updatedCart[existingItemIndex].quantity1 += Number(quantity1);
+            // updatedCart[existingItemIndex].quantity1 += Number(quantity1);
+            updatedCart[existingItemIndex].quantity1 = (updatedCart[existingItemIndex].quantity1 || 0) + Number(quantity1);
             updatedCart[existingItemIndex].prix_total += Number(prix_total);
-            updatedCart1[existingItemIndex].quantity1 += Number(quantity1);
+            // updatedCart1[existingItemIndex].quantity1 += Number(quantity1);
+            updatedCart1[existingItemIndex].quantity1 = (updatedCart1[existingItemIndex].quantity1 || 0) + Number(quantity1);
             updatedCart1[existingItemIndex].prix_total += Number(prix_total);
             setCart(updatedCart);
             setCart1(updatedCart1);
@@ -627,8 +631,8 @@ export default function FormArticleSale() {
                                                     <Controller
                                                         name="quantity1"
                                                         control={control}
-                                                        defaultValue={1}
-                                                        render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="number"  max={article?.value?.quantity} />}
+                                                        // defaultValue={1}
+                                                        render={({ field }) => <input {...field} value={field.value ?? ""} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="number"  max={article?.value?.quantity} />}
                                                         rules={{ required: 'Le code barre est requis' }}
                                                     />
 
