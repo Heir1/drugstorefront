@@ -1,24 +1,12 @@
 "use client"
 import React, { useEffect, useState, useMemo, use } from 'react'
-import Tab from 'react-bootstrap/Tab';
-import Tabs from 'react-bootstrap/Tabs';
-import { DataTable } from '@/components/ui/DataTable/DataTable';
-import { ArticleColumns } from '@/components/ui/DataTable/articles/ArticleColumns';
 import { useArticleService } from '@/app/redux/slices/articles/useArticleService';
 import { useForm, Controller, SubmitHandler, FieldValues } from 'react-hook-form';
 import { usePackagingService } from '@/app/redux/slices/packaging/usePackagingService';
 import { useCategoryService } from '@/app/redux/slices/category/useCategoryService';
-import ICategory from '@/app/interfaces/category';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/app/redux/store/store';
-import IArticle from '@/app/interfaces/article';
-import { createArticle, updateArticle } from '@/app/redux/slices/articles/actions';
-import IPackaging from '@/app/interfaces/packaging';
-import { Icon } from '@iconify/react'; // Import Iconify's Icon component
 import { useCurrencyService } from '@/app/redux/slices/currencies/useCurrencyService';
-import Link from 'next/link';
-import MenuTab from '@/app/components/MenuTab';
-import { OptionsOrGroups, GroupBase, SingleValue } from "react-select";
 import { useSupplierService } from '@/app/redux/slices/suppliers/useSuppliseService';
 import { useMoleculeService } from '@/app/redux/slices/molecules/useMoleculeService';
 import { useIndicationService } from '@/app/redux/slices/indications/useIndicationService';
@@ -35,6 +23,8 @@ import { createInvoice } from '@/app/redux/slices/invoices/actions';
 import { usePaymentModeService } from '@/app/redux/slices/paymentmodes/usePaymentModeService';
 import Invoice from '../invoice/Invoice';
 import { useInvoiceNumberService } from '@/app/redux/slices/invoices/useInvoiceService';
+import { Combobox } from "@headlessui/react";
+import toast, { Toaster } from 'react-hot-toast';
 // Dynamically import React Select without SSR
 const Select = dynamic(() => import('react-select'), { ssr: false });
 
@@ -99,24 +89,18 @@ export default function FormArticleSale() {
     const {paymentModes, paymentModeStatus, paymentModeError} = usePaymentModeService();
     const [submittedData, setSubmittedData] = useState<any>(null);
     const { invoiceNumber } = useInvoiceNumberService();
-
-
-    console.log(paymentModes);
     
-    
-
-    
-    const [isNewArticle, setIsNewArticle] = useState(true);
-    const [isUpdateArticle, setIsUpdateArticle] = useState(false);
-    const [isStateArticle, setIsStateArticle] = useState(false);
-    const [isExportArticle, setIsExportArticle] = useState(false);
-    const [isReportArticle, setIsReportArticle] = useState(false);
     const [ isInvoice, setIsInvoice ] = useState(false);
     const [ clientName, setClientName ] = useState("NOT SET");
 
     const [cdfPaidAmount, setCdfPaidAmount] = useState<number | undefined>(); 
     const [ usdPaidAmount, setUsdPaidAmount ] = useState<number | undefined>();
     const [ currency, setCurrency ] = useState(false);
+
+    const [displayedDescription, setDisplayedDescription] = useState("");
+    const [descriptionQuery, setDescriptionQuery] = useState("");
+    const [isDescriptionDropdownOpen, setIsDescriptionDropdownOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const { rates } = useRateService()
 
@@ -218,6 +202,12 @@ export default function FormArticleSale() {
         [suppliers] // Dépend uniquement de `suppliers`
     );
 
+    const filteredArticles = useMemo(() => {
+        return articlesFormated.filter((article) =>
+            article.label.toLowerCase().includes(descriptionQuery.toLowerCase())
+        );
+    }, [articlesFormated, descriptionQuery]);
+
 
     useEffect(() => {
         if (paymentModeFormated.length > 0) {
@@ -231,7 +221,7 @@ export default function FormArticleSale() {
     // const onSubmit = async ( data: IFormInputs) => {
     
     const onSubmit = async(data: any) => {
-
+        setLoading(true);
         setIsInvoice(true);
         setSubmittedData(data)
     }
@@ -255,8 +245,40 @@ export default function FormArticleSale() {
             
                     // Si la création de la facture a réussi, exécutez onSubmitProf()
                     if (result.meta.requestStatus === 'fulfilled') {
+                        setCart([]);
+                        setLoading(false);
+                        toast.custom((t: any) => (
+                            <div
+                                className={`${
+                                t.visible ? "animate-enter" : "animate-leave"
+                                } flex items-center w-full max-w-xs p-4 text-white bg-green-600 border border-green-900 rounded-lg shadow-lg`}
+                            >
+                                {/* Icône verte avec fond rouge inversé */}
+                                <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">
+                                ✅
+                                </span>
+                                
+                                <div className="flex-1 text-center">
+                                    <p className="text-sm">La vente éffectuée avec succès</p>
+                                </div>
+                            </div>
+                        ));
                         onSubmitProf();
                     } else {
+                        setLoading(false);
+                        // toast.custom((t:any) => (
+                        //     <div
+                        //         className={`${
+                        //         t.visible ? "animate-enter" : "animate-leave"
+                        //         } flex items-center w-full max-w-xs p-4 text-white bg-red-600 border border-red-900 rounded-lg shadow-lg`}
+                        //     >
+                        //         <span className="mr-2 bg-white rounded-full text-[10px] p-[2px] ">❌</span>
+                        //         <div className="flex-1 text-center">
+                        //         {/* <p className="font-bold">Erreur</p> */}
+                        //         <p className="text-sm">{result.message}</p>
+                        //         </div>
+                        //     </div>
+                        // ));
                         console.error('Erreur lors de la création de la facture');
                     }
                 } catch (error) {
@@ -326,10 +348,86 @@ export default function FormArticleSale() {
     };
 
 
-    const handleChange = (selected: any) => {
+    // const handleChange = (selected: any) => {
         
-        setArticle(selected)
+    //     setArticle(selected)
 
+    //     setValue("barcode", selected.value.barcode, { shouldValidate: true });
+    //     setValue("description", selected.value.description, { shouldValidate: true });
+    //     setValue("alert", selected.value.alert, { shouldValidate: true });
+    //     setValue("expirationDate", selected.value.expiration_date, { shouldValidate: true });
+    //     setValue("quantity", selected.value.quantity, { shouldValidate: true });
+    //     setValue("purchase_price", selected.value.selling_price, { shouldValidate: true });
+    //     setValue("selling_price", Number((Number(selected.value.selling_price)/rate).toFixed(3)), { shouldValidate: true });
+    //     setValue('currency', selected.value.currency_id.toString(), { shouldValidate: true });
+    //     setValue('packaging1', selected.value.packaging.name, { shouldValidate: true });
+    //     setValue('category1', selected.value.category.name, { shouldValidate: true });
+    //     setValue('location1', selected.value.placements[0].name, { shouldValidate: true });
+    //     setValue('supplier1', selected.value.suppliers[0].name, { shouldValidate: true });
+    //     setValue('molecule1', selected.value.molecules[0].name, { shouldValidate: true });
+    //     setValue('indication1', selected.value.indications[0].name, { shouldValidate: true });
+        
+
+
+    //     // Assuming 'content.location' contains the value we need to set for the Select
+    //     const selectedLocation = placementsFormated.find(option => option.label === selected.value.placements[0].name); 
+
+    //     // Assuming 'content.indication' contains the value we need to set for the Select
+    //     const selectedIndication = indicationsFormated.find(option => option.label === selected.value.indications[0].name); 
+
+    //     // Assuming 'content.molecule' contains the value we need to set for the Select
+    //     const selectedMolecule = moleculeFormated.find(option => option.label === selected.value.molecules[0].name);  
+
+    //     // Assuming 'content.location' contains the value we need to set for the Select
+    //     const selectedPackaging = packagingsFormated.find(option => option.label === selected.value.packaging.name);  
+
+    //     // Assuming 'content.category' contains the value we need to set for the Select
+    //     const selectedCategory = categoriesFormated.find(option => option.label === selected.value.category.name); 
+
+    //     // Assuming 'content.supplier' contains the value we need to set for the Select
+    //     const selectedSupplier = suppliersFormated.find(option => option.label === selected.value.suppliers[0].name); 
+        
+        
+    //     console.log(selectedPackaging);
+        
+        
+
+    //     if (selectedLocation) {
+    //         // Setting the value for 'location' using react-hook-form's setValue
+    //         setValue("location", selectedLocation, { shouldValidate: true });
+    //     }
+
+    //     if (selectedIndication) {
+    //         // Setting the value for 'location' using react-hook-form's setValue
+    //         setValue("indication", selectedIndication, { shouldValidate: true });
+    //     }
+
+    //     if (selectedMolecule) {
+    //         // Setting the value for 'location' using react-hook-form's setValue
+    //         setValue("molecule", selectedMolecule, { shouldValidate: true });
+    //     }
+
+    //     if (selectedPackaging) {
+    //         // Setting the value for 'location' using react-hook-form's setValue
+    //         setValue("packaging", selectedPackaging, { shouldValidate: true });
+    //     }
+
+    //     if (selectedCategory) {
+    //         // Setting the value for 'location' using react-hook-form's setValue
+    //         setValue("category", selectedCategory, { shouldValidate: true });
+    //     }
+
+    //     if (selectedSupplier) {
+    //         // Setting the value for 'location' using react-hook-form's setValue
+    //         setValue("supplier", selectedSupplier, { shouldValidate: true });
+    //     }
+    // };
+
+    const handleChange = (selected: any) => {
+        if (!selected) return;
+    
+        setArticle(selected);
+    
         setValue("barcode", selected.value.barcode, { shouldValidate: true });
         setValue("description", selected.value.description, { shouldValidate: true });
         setValue("alert", selected.value.alert, { shouldValidate: true });
@@ -337,66 +435,61 @@ export default function FormArticleSale() {
         setValue("quantity", selected.value.quantity, { shouldValidate: true });
         setValue("purchase_price", selected.value.selling_price, { shouldValidate: true });
         setValue("selling_price", Number((Number(selected.value.selling_price)/rate).toFixed(3)), { shouldValidate: true });
+        // setValue("currency", selected.currency_id.toString(), { shouldValidate: true });
         setValue('currency', selected.value.currency_id.toString(), { shouldValidate: true });
+        // setValue("packaging1", selected.packaging.name, { shouldValidate: true });
         setValue('packaging1', selected.value.packaging.name, { shouldValidate: true });
+        // setValue("category1", selected.category.name, { shouldValidate: true });
         setValue('category1', selected.value.category.name, { shouldValidate: true });
-        setValue('location1', selected.value.placements[0].name, { shouldValidate: true });
-        setValue('supplier1', selected.value.suppliers[0].name, { shouldValidate: true });
-        setValue('molecule1', selected.value.molecules[0].name, { shouldValidate: true });
-        setValue('indication1', selected.value.indications[0].name, { shouldValidate: true });
-        
-
-
+        setValue("location1", selected.value.placements[0].name, { shouldValidate: true });
+        setValue("supplier1", selected.value.suppliers[0].name, { shouldValidate: true });
+        setValue("molecule1", selected.value.molecules[0].name, { shouldValidate: true });
+        setValue("indication1", selected.value.indications[0].name, { shouldValidate: true });
         // Assuming 'content.location' contains the value we need to set for the Select
-        const selectedLocation = placementsFormated.find(option => option.label === selected.value.placements[0].name); 
+        const selectedLocation = placementsFormated.find(
+            (option) => option.label === selected.value.placements[0].name
+        );
 
+        
+    
         // Assuming 'content.indication' contains the value we need to set for the Select
-        const selectedIndication = indicationsFormated.find(option => option.label === selected.value.indications[0].name); 
-
+        const selectedIndication = indicationsFormated.find(
+            (option) => option.label === selected.value.indications[0].name
+        );
+    
         // Assuming 'content.molecule' contains the value we need to set for the Select
-        const selectedMolecule = moleculeFormated.find(option => option.label === selected.value.molecules[0].name);  
-
+        const selectedMolecule = moleculeFormated.find(option => option.label === selected.value.molecules[0].name);
+        
         // Assuming 'content.location' contains the value we need to set for the Select
-        const selectedPackaging = packagingsFormated.find(option => option.label === selected.value.packaging.name);  
-
+        const selectedPackaging = packagingsFormated.find(option => option.label === selected.value.packaging.name);
+    
         // Assuming 'content.category' contains the value we need to set for the Select
-        const selectedCategory = categoriesFormated.find(option => option.label === selected.value.category.name); 
-
+        const selectedCategory = categoriesFormated.find(option => option.label === selected.value.category.name);
+    
         // Assuming 'content.supplier' contains the value we need to set for the Select
-        const selectedSupplier = suppliersFormated.find(option => option.label === selected.value.suppliers[0].name); 
-        
-        
-        console.log(selectedPackaging);
-        
-        
-
+        const selectedSupplier = suppliersFormated.find(option => option.label === selected.value.suppliers[0].name);
+    
         if (selectedLocation) {
-            // Setting the value for 'location' using react-hook-form's setValue
             setValue("location", selectedLocation, { shouldValidate: true });
         }
-
+    
         if (selectedIndication) {
-            // Setting the value for 'location' using react-hook-form's setValue
             setValue("indication", selectedIndication, { shouldValidate: true });
         }
-
+    
         if (selectedMolecule) {
-            // Setting the value for 'location' using react-hook-form's setValue
             setValue("molecule", selectedMolecule, { shouldValidate: true });
         }
-
+    
         if (selectedPackaging) {
-            // Setting the value for 'location' using react-hook-form's setValue
             setValue("packaging", selectedPackaging, { shouldValidate: true });
         }
-
+    
         if (selectedCategory) {
-            // Setting the value for 'location' using react-hook-form's setValue
             setValue("category", selectedCategory, { shouldValidate: true });
         }
-
+    
         if (selectedSupplier) {
-            // Setting the value for 'location' using react-hook-form's setValue
             setValue("supplier", selectedSupplier, { shouldValidate: true });
         }
     };
@@ -455,10 +548,13 @@ export default function FormArticleSale() {
                 </div>
 
                 <div className="block print:hidden" >
+                    {
+                       loading && <Loading/>
+                    }
                     <div className="mx-2"  >
 
                         <form onSubmit={handleSubmit(onSubmit1)}>
-        
+                            <Toaster />
                             <div className=" grid grid-cols-12 border-[1px] border-white mx-4 gap-3 p-2 " >
                                 <div className=" col-span-3 " >
                                     <div>
@@ -484,6 +580,56 @@ export default function FormArticleSale() {
                                             control={control}
                                             defaultValue=""
                                             render={({ field }) => (
+                                                <Combobox
+                                                    value={field.value ?? ""}
+                                                    onChange={(selected) => {
+                                                        const selectedArticle = articlesFormated.find(
+                                                            (article) => article.value === selected
+                                                        );
+                                                        setValue("description1", selected ?? ""); // Store the value
+                                                        setDisplayedDescription(selectedArticle?.label ?? ""); // Display the label
+                                                        handleChange(selectedArticle); // Trigger your existing handleChange logic
+                                                    }}
+                                                >
+                                                    <div className="relative">
+                                                        <input
+                                                            {...field}
+                                                            className="w-full uppercase border rounded-md p-2"
+                                                            placeholder="Sélectionnez un article"
+                                                            value={displayedDescription}
+                                                            onChange={(e) => {
+                                                                setDescriptionQuery(e.target.value);
+                                                                setDisplayedDescription(e.target.value); // Allow manual input
+                                                                setIsDescriptionDropdownOpen(true)
+                                                            }}
+                                                            onFocus={(e) =>  e.target.select()}
+                                                            onBlur={() =>
+                                                                setTimeout(() => setIsDescriptionDropdownOpen(false), 200)
+                                                            } // Close after 200ms to allow click
+                                                        />
+                                                        {isDescriptionDropdownOpen && filteredArticles.length > 0 && (
+                                                            <div className="uppercase absolute z-50 mt-1 w-full bg-white border rounded-md shadow-lg max-h-60 overflow-auto">
+                                                                {filteredArticles.map((article) => (
+                                                                    <Combobox.Option
+                                                                        key={article.value.id}
+                                                                        value={article.value}
+                                                                        className="cursor-pointer p-2 hover:bg-gray-100"
+                                                                        onMouseDown={() => setIsDescriptionDropdownOpen(false)}
+                                                                    >
+                                                                        {article.label}
+                                                                    </Combobox.Option>
+                                                                ))}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </Combobox>
+                                            )}
+                                        />
+                                        {/* <Controller
+                                            name="description1"
+                                            control={control}
+                                            defaultValue=""
+                                            render={({ field }) => (
                                                 <Select
                                                     {...field}
                                                     value={article}
@@ -493,7 +639,7 @@ export default function FormArticleSale() {
                                                     className="uppercase"
                                                 />
                                             )}
-                                        />
+                                        /> */}
                                     </div>
                                 </div>
                             </div>
@@ -745,22 +891,6 @@ export default function FormArticleSale() {
 
                                             ))}
                                         </tbody>
-
-                                        {/* <td className="px-4 py-2">{item.location?.label}</td>
-                                    <td className="px-4 py-2">{item.description}</td>
-                                    <td className="px-4 py-2">{item.quantity1}</td>
-                                    <td className="px-4 py-2">{item.selling_price.toFixed(2)}</td>
-                                    <td className="px-4 py-2">{item.prix_total.toFixed(2)}</td>
-                                    <td className="px-4 py-2">{item.packaging?.label}</td>
-                                    <td className="px-4 py-2">{item.molecule?.label}</td> */}
-                                        <tfoot>
-                                            {/* <tr className="bg-gray-900 font-bold text-white">
-                                            <td className="p-2 border border-gray-500" colSpan={2}>Total</td>
-                                            <td className="p-2 border border-gray-500">{totalAmount} $</td>
-                                            <td className="p-2 border border-gray-500">{totalAmount} $</td>
-                                            <td className="p-2 border border-gray-500" colSpan={4}></td>
-                                            </tr> */}
-                                        </tfoot>
                                     </table>
                                 </div>
 

@@ -7,6 +7,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../redux/store/store';
 import { logoutUser } from '../redux/slices/login/actions';
 import Loading from '@/app/components/loading';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuPortal,
+    DropdownMenuSeparator,
+    DropdownMenuShortcut,
+    DropdownMenuSub,
+    DropdownMenuSubContent,
+    DropdownMenuSubTrigger,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 export default function Header() {
 
@@ -69,11 +83,46 @@ export default function Header() {
                                         <h1>Fichier</h1>
                                     </div>
                                     <div className=" relative   col-span-2 " >
-                                        <div className="flex justify-center items-center hover:cursor-pointer" onClick={() => setDataDropdown(!dateDropdown) }>
-                                            <Icon icon="material-symbols:database" width="18" height="18" style={{color: '#000000'}} />
-                                            <h1 className=" ml-2 " >Données</h1>
+                                    {/* onClick={() => setDataDropdown(!dateDropdown) } */}
+                                    {/* style={{color: '#000000'}} */}
+                                        <div className="flex justify-center items-center hover:cursor-pointer" >
+                                            <Icon icon="material-symbols:database" width="18" height="18"  />
+                                            <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <h1 className=" ml-2 " >Données</h1>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent className="w-56 ">
+                                                <DropdownMenuGroup>
+                                                    <DropdownMenuItem>
+                                                        <Link href={`/pages/admin/articles`} onClick={() => setDataDropdown(!dateDropdown) } >
+                                                            <span className=" text-sm " > Aricles</span>
+                                                        </Link>
+                                                    </DropdownMenuItem>
+                                                <DropdownMenuSeparator />
+                                                    <DropdownMenuItem>
+                                                        <Link href={`/pages/admin/articles`} onClick={() => setDataDropdown(!dateDropdown) } >
+                                                            <span className=" text-sm " > Stock</span>
+                                                        </Link>
+                                                    </DropdownMenuItem>
+                                                <DropdownMenuSeparator />
+                                                    <DropdownMenuItem>
+                                                        <Link className="flex items-center space-x-2" href={`/pages/admin/sales`} onClick={() => setDataDropdown(!dateDropdown) }>
+                                                            <span className=" text-sm "> Ventes </span>
+                                                        </Link>
+                                                    </DropdownMenuItem>
+                                                <DropdownMenuSeparator />
+                                                <DropdownMenuItem>
+                                                    <Link className="flex items-center space-x-2" href={`/pages/admin/sales`} onClick={() => setDataDropdown(!dateDropdown) }>
+                                                        <span className=" text-sm "> Fournisseurs </span>
+                                                    </Link>
+                                                </DropdownMenuItem>
+                                                </DropdownMenuGroup>
+                                                <DropdownMenuSeparator />
+
+                                            </DropdownMenuContent>
+                                            </DropdownMenu>
                                         </div>
-                                        {
+                                        {/* {
                                             dateDropdown && (
                                                 <div className=" absolute top-6 left-10 z-40  w-[150px] bg-[#262B62] text-white " >
                                                     <div className=" pl-6 py-2  " >
@@ -107,11 +156,60 @@ export default function Header() {
                                                     </div>
                                                 </div>
                                             )
-                                        }
+                                        } */}
                                     </div>
                                     <div className=" flex justify-center items-center  hover:cursor-pointer col-span-2 space-x-2" >
                                         <Icon icon="material-symbols:settings-rounded" width="18" height="18" style={{color: '#000000'}} />
-                                        <h1>Paramètres</h1>
+                                        <div className="flex justify-center items-center hover:cursor-pointer" >
+                                            <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <h1>Paramètres</h1>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent className="w-56">
+                                                <DropdownMenuGroup>
+                                                </DropdownMenuGroup> 
+                                                <DropdownMenuSeparator />
+                                                <DropdownMenuGroup>
+                                                {/* <DropdownMenuItem>Team</DropdownMenuItem> */}
+                                                <DropdownMenuSub>
+                                                    <DropdownMenuSubTrigger>Compta</DropdownMenuSubTrigger>
+                                                    <DropdownMenuPortal>
+                                                        <DropdownMenuSubContent>
+                                                            <DropdownMenuItem>Regul Appro</DropdownMenuItem>
+                                                            <DropdownMenuItem>Regul Vente</DropdownMenuItem>
+                                                            <DropdownMenuItem>Regul Caisse Admin</DropdownMenuItem>
+                                                            <DropdownMenuSeparator />
+                                                            <DropdownMenuItem>Comptes clients</DropdownMenuItem>
+                                                            <DropdownMenuSeparator />
+                                                            <DropdownMenuItem>Caisse Admin</DropdownMenuItem>
+                                                            <DropdownMenuSeparator />
+                                                            <DropdownMenuItem>Import / Export</DropdownMenuItem>
+                                                        </DropdownMenuSubContent>
+                                                    </DropdownMenuPortal>
+                                                </DropdownMenuSub>
+                                                <DropdownMenuSeparator />
+                                                <DropdownMenuSub>
+                                                    <DropdownMenuSubTrigger>Système</DropdownMenuSubTrigger>
+                                                    <DropdownMenuPortal>
+
+                                                    </DropdownMenuPortal>
+                                                </DropdownMenuSub>
+
+                                                <DropdownMenuSeparator />
+                                                </DropdownMenuGroup>
+                                                <DropdownMenuItem>
+                                                    Mot de passe
+                                                </DropdownMenuItem>
+                                                <DropdownMenuSeparator />
+                                                <DropdownMenuSub>
+                                                    <DropdownMenuSubTrigger>Options</DropdownMenuSubTrigger>
+                                                    <DropdownMenuPortal>
+
+                                                    </DropdownMenuPortal>
+                                                </DropdownMenuSub>
+                                            </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        </div>
                                     </div>
                                     <div >
                                         <Link href={`/pages/admin/report`} className=" flex justify-center items-center hover:cursor-pointer  col-span-2 space-x-2">

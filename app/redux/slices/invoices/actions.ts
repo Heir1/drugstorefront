@@ -97,10 +97,6 @@ export const createInvoice = createAsyncThunk<Iinvoice, Iinvoice>(
           alert(response.error.message)
           return rejectWithValue(response.error);
         }
-        alert("Facture avec succès")
-
-        console.log(response);
-        
         
         return response.data as Iinvoice;
         
