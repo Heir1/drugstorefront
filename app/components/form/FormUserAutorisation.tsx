@@ -120,31 +120,36 @@ export default function FormUserAutorisation() {
 
                             <div className=" col-start-2  border-2 col-span-2 border-gray-400 p-2 " >
                                 <div className=" h-full  overflow-y-scroll bg-gray-100 " >
-                                    <table className="w-full uppercase border border-gray-300">
-                                        <thead>
-                                            <tr className="bg-white uppercase">
-                                                <th className=" border border-gray-500 text-left pl-1 ">NOM COMPLET</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {
-                                                userStatus == 'loading' ? (
-                                                    <TableLoading/>
-                                                )
-                                                :
-                                                (
-                                                    users
-                                                    .filter((user: IUser) => user.role === "user") // Filtre les utilisateurs avec le rôle "admin"
-                                                    .map((user: IUser) => (
-                                                        <tr key={user.id} className={` border ${ selectedUser?.id == user?.id ? 'bg-blue-700 text-white ' : 'bg-gray-100' }  border-gray-500 hover:cursor-pointer `} onClick={() => handleEdit(user)}>
-                                                            <td className="border border-gray-500 pl-1">{user.name}</td>
-                                                        </tr>
-                                                    ))
-                                                )
-                                            }
-                                        </tbody>
 
-                                    </table>
+                                    {
+                                        userStatus == "loading" ? (
+                                            <TableLoading/>
+                                        )
+                                        :
+                                        (
+                                            <table className="w-full uppercase border border-gray-300">
+                                                <thead>
+                                                    <tr className="bg-white uppercase">
+                                                        <th className=" border border-gray-500 text-left pl-1 ">NOM COMPLET</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {
+                                                        users
+                                                        .filter((user: IUser) => user.role === "user") // Filtre les utilisateurs avec le rôle "admin"
+                                                        .map((user: IUser) => (
+                                                            <tr key={user.id} className={` border ${ selectedUser?.id == user?.id ? 'bg-blue-700 text-white ' : 'bg-gray-100' }  border-gray-500 hover:cursor-pointer `} onClick={() => handleEdit(user)}>
+                                                                <td className="border border-gray-500 pl-1">{user.name}</td>
+                                                            </tr>
+                                                        ))
+                                                    }
+                                                </tbody>
+
+                                            </table>
+                                        )
+                                    } 
+
+
                                 </div>
                             </div>
 
@@ -188,31 +193,33 @@ export default function FormUserAutorisation() {
 
                             <div className=" col-span-2 border-2 border-gray-400 p-2 " >
                                 <div className=" h-full  overflow-y-scroll bg-gray-100 " >
-                                    <table className="w-full uppercase border border-gray-300">
-                                        <thead>
-                                            <tr className="bg-white uppercase">
-                                                <th className=" border border-gray-500 text-left pl-1 ">NOM COMPLET</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {
-                                                userStatus == 'loading' ? (
-                                                    <TableLoading/>
-                                                )
-                                                :
-                                                (
-                                                    users
-                                                    .filter((user: IUser) => user.role === "admin") // Filtre les utilisateurs avec le rôle "admin"
-                                                    .map((user: IUser) => (
-                                                        <tr key={user.id} className={` border ${ selectedUser?.id == user?.id ? 'bg-blue-700 text-white ' : 'bg-gray-100' }  border-gray-500 hover:cursor-pointer `} onClick={() => handleEdit(user)}>
-                                                            <td className="border border-gray-500 pl-1">{user.name}</td>
-                                                        </tr>
-                                                    ))
-                                                )
-                                            }
-                                        </tbody>
+                                    {
+                                        userStatus == "loading" ? (
+                                            <TableLoading/>
+                                        )
+                                        :
+                                        (
+                                            <table className="w-full uppercase border border-gray-300">
+                                                <thead>
+                                                    <tr className="bg-white uppercase">
+                                                        <th className=" border border-gray-500 text-left pl-1 ">NOM COMPLET</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {
+                                                        users
+                                                        .filter((user: IUser) => user.role === "admin") // Filtre les utilisateurs avec le rôle "admin"
+                                                        .map((user: IUser) => (
+                                                            <tr key={user.id} className={` border ${ selectedUser?.id == user?.id ? 'bg-blue-700 text-white ' : 'bg-gray-100' }  border-gray-500 hover:cursor-pointer `} onClick={() => handleEdit(user)}>
+                                                                <td className="border border-gray-500 pl-1">{user.name}</td>
+                                                            </tr>
+                                                        ))
+                                                    }
+                                                </tbody>
 
-                                    </table>
+                                            </table>
+                                        )
+                                    } 
                                 </div>
                             </div>
 

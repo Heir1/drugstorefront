@@ -289,40 +289,41 @@ export default function FormUserCreation() {
                 <div className="overflow-x-auto flex flex-col justify-between  h-[calc(100vh-28rem)] border-2 border-white bg-[#7288a5d0] ">
                     
                     <div className=" h-[calc(100vh-25rem)] border-2 border-green-700 overflow-y-scroll " >
-                        <table className="w-full uppercase border border-gray-300">
-                            <thead>
-                            {/* bg-gray-700 */}
-                                <tr className="bg-white uppercase">
-                                    <th className=" border border-gray-500 text-left pl-1 ">NOM COMPLET</th>
-                                    <th className=" border border-gray-500 text-left pl-1 ">IDENTIFIANT</th>
-                                    <th className=" border border-gray-500 text-left pl-1 ">ROLE</th>
-                                    <th className=" border border-gray-500 text-left pl-1 ">TELEPHONE</th>
-                                    <th className=" border border-gray-500 text-left pl-1 ">E-MAIL</th>
-                                    <th className=" border border-gray-500 text-left pl-1 ">ADRESSE PHYSIQUE</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    userStatus == 'loading' ? (
-                                        <TableLoading/>
-                                    )
-                                    :
-                                    (
-                                        users.map((user: IUser) => (
-                                            <tr key={user.id} className={` border ${ selectedUser?.id == user?.id ? 'bg-blue-700 text-white ' : 'bg-gray-100' }  border-gray-500 hover:cursor-pointer `} onClick={()=> handleEdit(user)} >
-                                                <td className="border border-gray-500 pl-1">{user.name}</td>
-                                                <td className="border border-gray-500 pl-1">{user.username}</td>
-                                                <td className="border border-gray-500 pl-1">{user.role}</td>
-                                                <td className="border border-gray-500 pl-1">{user.telephone}</td>
-                                                <td className="border border-gray-500 pl-1">{user.email}</td>
-                                                <td className="border border-gray-500 pl-1">{user.address}</td>
-                                            </tr>
-                                        ))
-                                    )
-                                }
-                            </tbody>
+                        {
+                            userStatus == "loading" ? (
+                                <TableLoading/>
+                            )
+                            :
+                            (
+                                <table className="w-full uppercase border border-gray-300">
+                                    <thead>
+                                        <tr className="bg-white uppercase">
+                                            <th className=" border border-gray-500 text-left pl-1 ">NOM COMPLET</th>
+                                            <th className=" border border-gray-500 text-left pl-1 ">IDENTIFIANT</th>
+                                            <th className=" border border-gray-500 text-left pl-1 ">ROLE</th>
+                                            <th className=" border border-gray-500 text-left pl-1 ">TELEPHONE</th>
+                                            <th className=" border border-gray-500 text-left pl-1 ">E-MAIL</th>
+                                            <th className=" border border-gray-500 text-left pl-1 ">ADRESSE PHYSIQUE</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            users.map((user: IUser) => (
+                                                <tr key={user.id} className={` border ${ selectedUser?.id == user?.id ? 'bg-blue-700 text-white ' : 'bg-gray-100' }  border-gray-500 hover:cursor-pointer `} onClick={()=> handleEdit(user)} >
+                                                    <td className="border border-gray-500 pl-1">{user.name}</td>
+                                                    <td className="border border-gray-500 pl-1">{user.username}</td>
+                                                    <td className="border border-gray-500 pl-1">{user.role}</td>
+                                                    <td className="border border-gray-500 pl-1">{user.telephone}</td>
+                                                    <td className="border border-gray-500 pl-1">{user.email}</td>
+                                                    <td className="border border-gray-500 pl-1">{user.address}</td>
+                                                </tr>
+                                            ))
+                                        } 
+                                    </tbody>
 
-                        </table>
+                                </table>
+                            )
+                        }
                     </div>
 
                     <div className="px-4 bg-[#7288a5d0] shadow-lg">
@@ -345,3 +346,5 @@ export default function FormUserCreation() {
     )
 
 }
+
+    // <TableLoading/>

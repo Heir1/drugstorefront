@@ -32,6 +32,7 @@ interface IFormInputs {
 }
 
 export default function FormUserUpdate() {
+
     const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
     const dispatch = useDispatch<AppDispatch>();
     const { users, userStatus } = useUserService();
@@ -99,30 +100,33 @@ export default function FormUserUpdate() {
                             <div></div>
                             <div className=" border-2 border-gray-400 p-2 " >
                                 <div className=" h-full  overflow-y-scroll bg-gray-100 " >
-                                    <table className="w-full uppercase border border-gray-300">
-                                        <thead>
-                                        {/* bg-gray-700 */}
-                                            <tr className="bg-white uppercase">
-                                                <th className=" border border-gray-500 text-left pl-1 ">NOM COMPLET</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {
-                                                userStatus == 'loading' ? (
-                                                    <TableLoading/>
-                                                )
-                                                :
-                                                (
-                                                    users.map((user: IUser) => (
-                                                        <tr key={user.id} className={` border ${ selectedUser?.id == user?.id ? 'bg-blue-700 text-white ' : 'bg-gray-100' }  border-gray-500 hover:cursor-pointer `} onClick={()=> handleEdit(user)} >
-                                                            <td className="border border-gray-500 pl-1">{user.name}</td>
-                                                        </tr>
-                                                    ))
-                                                )
-                                            }
-                                        </tbody>
+                                    {
+                                        userStatus == "loading" ? (
+                                            <TableLoading/>
+                                        )
+                                        :
+                                        (
+                                            <table className="w-full uppercase border border-gray-300">
+                                                <thead>
+                                                {/* bg-gray-700 */}
+                                                    <tr className="bg-white uppercase">
+                                                        <th className=" border border-gray-500 text-left pl-1 ">NOM COMPLET</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {
+                                                        users.map((user: IUser) => (
+                                                            <tr key={user.id} className={` border ${ selectedUser?.id == user?.id ? 'bg-blue-700 text-white ' : 'bg-gray-100' }  border-gray-500 hover:cursor-pointer `} onClick={()=> handleEdit(user)} >
+                                                                <td className="border border-gray-500 pl-1">{user.name}</td>
+                                                            </tr>
+                                                        ))
 
-                                    </table>
+                                                    }
+                                                </tbody>
+
+                                            </table>
+                                        )
+                                    }              
                                 </div>
                             </div>
                             <div className="border-2 border-gray-400">
