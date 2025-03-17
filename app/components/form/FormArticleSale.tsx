@@ -602,47 +602,7 @@ export default function FormArticleSale() {
         }
     };  
       
-    // Exemple d'utilisation
-    // printText('bonjour');
 
-
-    // const printAutomatically = (content: HTMLElement) => {
-
-    //     const iframe = document.createElement('iframe');
-    //     iframe.style.position = 'absolute';
-    //     iframe.style.width = '0';
-    //     iframe.style.height = '0';
-    //     iframe.style.border = 'none';
-    
-    //     document.body.appendChild(iframe);
-    
-    //     const contentClone = content.cloneNode(true) as HTMLElement;
-    
-    //     if (iframe.contentDocument) {
-    //         iframe.contentDocument.write(`
-    //             <html>
-    //                 <head>
-    //                     <title>Print</title>
-    //                     <style>
-    //                         body { font-family: Arial, sans-serif; }
-    //                         table { width: 100%; border-collapse: collapse; }
-    //                         th, td { border: 1px solid #000; padding: 8px; text-align: center; }
-    //                         .print-container { margin: 20px; }
-    //                     </style>
-    //                 </head>
-    //                 <body>
-    //                     ${contentClone.innerHTML}
-    //                 </body>
-    //             </html>
-    //         `);
-    //         iframe.contentDocument.close();
-    
-    //         iframe.contentWindow?.print();
-    //     }
-    
-    //     document.body.removeChild(iframe);
-    // };
-    
 
         return (
             <>
