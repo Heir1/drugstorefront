@@ -11,7 +11,7 @@ interface FetchInvoicesParams {
   secondrange: string;
 }
 
-
+// ({ paymentModeId: "1", firstrange: startDate, secondrange: endDate }))
 // Action pour récupérer tous les invoices
 export const fetchInvoices = createAsyncThunk<Iinvoice[], FetchInvoicesParams, { rejectValue: string }>(
     'invoices/fetchInvoices',

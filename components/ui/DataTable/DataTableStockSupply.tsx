@@ -102,7 +102,7 @@ export function DataTableStockSupply<TData, TValue>({
           dispatch(fetchMovements({ typeId: "1", firstrange: startDate, secondrange: endDate }))
         }
         else if(title=="Invoice"){
-          dispatch(fetchInvoices({ paymentModeId: "1", firstrange: startDate, secondrange: endDate }))
+          dispatch(fetchInvoices({ paymentModeId: "1", invoice : "1", firstrange: startDate, secondrange: endDate }))
         }
           
       }
