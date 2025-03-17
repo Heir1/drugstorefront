@@ -116,12 +116,12 @@ export default function Regulation() {
                 <div className="grid grid-cols-5 place-content-center">
                     <Link href={``}>
                         <div className={`flex justify-center items-center py-2 rounded-lg ${ isNewArticle && "bg-[#262B62] text-white" } `} onClick={ ()=> setActivation("new") } >
-                            <h1>Stock</h1>
+                            <h1>APPRO</h1>
                         </div>
                     </Link>
                     <Link href={``}>
                         <div className={`flex justify-center items-center py-2 rounded-lg ${ isUpdateArticle && "bg-[#262B62] text-white" } `} onClick={ ()=> setActivation("update") }>
-                            <h1>Vente</h1>
+                            <h1>VENTE</h1>
                         </div>
                     </Link>
                     <Link href={``}>

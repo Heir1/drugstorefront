@@ -28,6 +28,12 @@ import toast, { Toaster } from 'react-hot-toast';
 // Dynamically import React Select without SSR
 const Select = dynamic(() => import('react-select'), { ssr: false });
 
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+import { invoke } from '@tauri-apps/api/core';
+
+import ReactDOMServer from 'react-dom/server';
+
 
 interface IFormInputs {
     id: string;
@@ -528,30 +534,130 @@ export default function FormArticleSale() {
         }));
     };
 
+    // const onSubmitProf = async () => {
+
+    //     setIsInvoice(false);
+    
+    //     formatProducts(cart);
+    
+    //     const docDefinition = {
+            
+    //         content: 'This is an sample PDF printed with pdfMake'
+        
+    //     };
+    
+    //     const pdfDocGenerator = pdfMake.createPdf(docDefinition);
+    
+    //     pdfDocGenerator.getBuffer((buffer) => {
+    //         const blob = new Blob([buffer], { type: 'application/pdf' });
+    //         const url = URL.createObjectURL(blob);
+    
+    //         // Envoyer le PDF à l'imprimante via Tauri
+    //         invoke('print_pdf', { pdfUrl: url })
+    //             .then(() => {
+    //                 alert("Impression reçue")
+    //                 console.log('Impression réussie');
+    //             })
+    //             .catch((error) => {
+    //                 alert("Echeque")
+    //                 console.error('Erreur lors de l\'impression:', error);
+    //             });
+    //     });
+    // };
+
     const onSubmitProf = () => {
 
         setIsInvoice(false)
         
         const products = formatProducts(cart);
 
-        window.print();
-
+        window.print()
 
     }
 
 
+    const generateInvoiceHTML = () => {
+
+        // <Invoice products={formatProducts(cart)} client={clientName} invoicenumber={invoiceNumber.data} isInvoice={isInvoice}  />
+        const invoiceComponent = (
+            <Invoice products={formatProducts(cart)} client={clientName} invoicenumber={invoiceNumber.data} isInvoice={isInvoice} rate={rate} />
+        );
+        
+        return ReactDOMServer.renderToString(invoiceComponent);
+
+    };
+
+    const printInvoice = async () => {
+        try {
+            // Générer le HTML de la facture
+            const invoiceHTML = generateInvoiceHTML();
+
+            // Appeler la commande Tauri pour imprimer le HTML
+            await invoke('print_html', { html: invoiceHTML });
+            console.log('Invoice sent to printer');
+            alert("Invoice sent to printer");
+        } catch (error) {
+            alert("ERROR");
+            console.error('Failed to print invoice:', error);
+        }
+    };  
+      
+    // Exemple d'utilisation
+    // printText('bonjour');
+
+
+    // const printAutomatically = (content: HTMLElement) => {
+
+    //     const iframe = document.createElement('iframe');
+    //     iframe.style.position = 'absolute';
+    //     iframe.style.width = '0';
+    //     iframe.style.height = '0';
+    //     iframe.style.border = 'none';
+    
+    //     document.body.appendChild(iframe);
+    
+    //     const contentClone = content.cloneNode(true) as HTMLElement;
+    
+    //     if (iframe.contentDocument) {
+    //         iframe.contentDocument.write(`
+    //             <html>
+    //                 <head>
+    //                     <title>Print</title>
+    //                     <style>
+    //                         body { font-family: Arial, sans-serif; }
+    //                         table { width: 100%; border-collapse: collapse; }
+    //                         th, td { border: 1px solid #000; padding: 8px; text-align: center; }
+    //                         .print-container { margin: 20px; }
+    //                     </style>
+    //                 </head>
+    //                 <body>
+    //                     ${contentClone.innerHTML}
+    //                 </body>
+    //             </html>
+    //         `);
+    //         iframe.contentDocument.close();
+    
+    //         iframe.contentWindow?.print();
+    //     }
+    
+    //     document.body.removeChild(iframe);
+    // };
+    
+
         return (
             <>
 
-                <div className="hidden print:block" >
+                {/* <div className="print hidden print:block" >
                     <Invoice products={formatProducts(cart)} client={clientName} invoicenumber={invoiceNumber.data} isInvoice={isInvoice}  />
-                </div>
+                </div> */}
 
                 <div className="block print:hidden" >
                     {
                        loading && <Loading/>
                     }
                     <div className="mx-2"  >
+
+                        <button onClick={ () => printInvoice()} >SEND</button>
 
                         <form onSubmit={handleSubmit(onSubmit1)}>
                             <Toaster />

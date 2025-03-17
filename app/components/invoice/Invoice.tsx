@@ -1,4 +1,3 @@
-import { useRateService } from "@/app/redux/slices/rates/useRateService";
 import React from "react";
 
 interface Product {
@@ -14,19 +13,18 @@ interface ProFormaProps {
     products: Product[];
     invoicenumber: string;
     isInvoice: boolean;
+    rate: number;
 }
 
 
 
 
-const Invoice: React.FC<ProFormaProps> = ({ products, client, invoicenumber,  isInvoice}) => {
+const Invoice: React.FC<ProFormaProps> = ({ products, client, invoicenumber,  isInvoice, rate}) => {
 
     // Calcul du total général
     const grandTotal = products.reduce((total, product) => total + product.prix_total, 0);
 
-    const { rates } = useRateService()
-
-    const rate = rates[0]?.value
+    // const rate = rates[0]?.value
 
   // Fonction pour imprimer la pro forma
   const printProForma = () => {

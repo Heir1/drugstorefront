@@ -91,6 +91,8 @@ export function DataTableSupply<TData, TValue>({
   const [isStockRegulFormOpen, setisStockRegulFormOpen ] = React.useState(false);
   const [isSaleRegulFormOpen, setIsSaleRegulFormOpen ] = React.useState(false);
   const [article, setArticle] = React.useState<IArticle[]>([]);
+  const [date, setDate] = React.useState<string>('');
+  const [date1, setDate1] = React.useState<string>('');
 
   const today = new Date();
   const formattedDate:string = today.toISOString().split('T')[0];
@@ -104,6 +106,22 @@ export function DataTableSupply<TData, TValue>({
       }
 
   });
+
+  const getTodayDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // Les mois commencent à 0
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+// Définir la date d'aujourd'hui au chargement du composant
+
+    // Définir la date d'aujourd'hui au chargement du composant
+    React.useEffect(() => {
+      setStartDate(getTodayDate());
+      setEndDate(getTodayDate());
+    }, []);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -197,11 +215,11 @@ export function DataTableSupply<TData, TValue>({
               <div className="flex gap-5 " >
                 <div className="flex gap-4 items-center  " >
                   <h1 className=" font-semibold text-sm italic text-white " >Du</h1>
-                  <input onChange={(e) => setStartDate(e.target.value) }  className="uppercase italic font-semibold border-[1px] py-[5px] px-2 rounded-2xl border-black " type="date" name="" id="" />
+                  <input onChange={(e) => setStartDate(e.target.value) } value={startDate}  className="uppercase italic font-semibold border-[1px] py-[5px] px-2 rounded-2xl border-black " type="date" name="" id="" />
                 </div>
                 <div className="flex gap-4 items-center">
                   <h1 className=" font-semibold text-sm italic text-white ">Au</h1>
-                  <input onChange={(e) => setEndDate(e.target.value) }  className="uppercase italic font-semibold  border-[1px] py-[5px] px-2 rounded-2xl border-black" type="date" name="" id="" />
+                  <input onChange={(e) => setEndDate(e.target.value) } value={endDate} className="uppercase italic font-semibold  border-[1px] py-[5px] px-2 rounded-2xl border-black" type="date" name="" id="" />
                 </div>
                 <button onClick={handleSubmit(onSubmit)}  className=" px-4 text-sm rounded-lg text-white bg-slate-400 " >Filtrer</button>
               </div>
@@ -212,11 +230,11 @@ export function DataTableSupply<TData, TValue>({
                 <div className="flex gap-5 " >
                   <div className="flex gap-4 items-center  " >
                     <h1 className=" font-semibold text-sm italic text-white " >Du</h1>
-                    <input onChange={(e) => setStartDate(e.target.value) }  className="uppercase italic font-semibold border-[1px] py-[5px] px-2 rounded-2xl border-black " type="date" name="" id="" />
+                    <input onChange={(e) => setStartDate(e.target.value) } value={startDate}  className="uppercase italic font-semibold border-[1px] py-[5px] px-2 rounded-2xl border-black " type="date" name="" id="" />
                   </div>
                   <div className="flex gap-4 items-center">
                     <h1 className=" font-semibold text-sm italic text-white ">Au</h1>
-                    <input onChange={(e) => setEndDate(e.target.value) }  className="uppercase italic font-semibold  border-[1px] py-[5px] px-2 rounded-2xl border-black" type="date" name="" id="" />
+                    <input onChange={(e) => setEndDate(e.target.value) } value={endDate} className="uppercase italic font-semibold  border-[1px] py-[5px] px-2 rounded-2xl border-black" type="date" name="" id="" />
                   </div>
                   <div className=" w-full flex " >
                     <form onSubmit={handleSubmit(onSubmit)} >

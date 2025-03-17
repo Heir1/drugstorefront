@@ -93,26 +93,26 @@ export default function Header() {
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent className="w-56 ">
                                                 <DropdownMenuGroup>
-                                                    <DropdownMenuItem>
-                                                        <Link href={`/pages/admin/articles`} onClick={() => setDataDropdown(!dateDropdown) } >
-                                                            <span className=" text-sm " > Aricles</span>
+                                                        <Link href={`/pages/admin/articles`}>
+                                                            <DropdownMenuItem>
+                                                                <span className=" text-sm " > Aricles</span>
+                                                            </DropdownMenuItem>
                                                         </Link>
-                                                    </DropdownMenuItem>
+                                                        <DropdownMenuSeparator />
+                                                         <Link href={`/pages/admin/rapport/articles`}>
+                                                            <DropdownMenuItem>
+                                                                <span className=" text-sm " > Stock</span>
+                                                            </DropdownMenuItem>
+                                                        </Link>
                                                 <DropdownMenuSeparator />
-                                                    <DropdownMenuItem>
-                                                        <Link href={`/pages/admin/articles`} onClick={() => setDataDropdown(!dateDropdown) } >
-                                                            <span className=" text-sm " > Stock</span>
+                                                        <Link className="flex items-center space-x-2" href={`/pages/admin/sales`}>
+                                                            <DropdownMenuItem>
+                                                                <span className=" text-sm "> Ventes </span>
+                                                            </DropdownMenuItem>
                                                         </Link>
-                                                    </DropdownMenuItem>
-                                                <DropdownMenuSeparator />
-                                                    <DropdownMenuItem>
-                                                        <Link className="flex items-center space-x-2" href={`/pages/admin/sales`} onClick={() => setDataDropdown(!dateDropdown) }>
-                                                            <span className=" text-sm "> Ventes </span>
-                                                        </Link>
-                                                    </DropdownMenuItem>
                                                 <DropdownMenuSeparator />
                                                 <DropdownMenuItem>
-                                                    <Link className="flex items-center space-x-2" href={`/pages/admin/sales`} onClick={() => setDataDropdown(!dateDropdown) }>
+                                                    <Link className="flex items-center space-x-2" href={``}>
                                                         <span className=" text-sm "> Fournisseurs </span>
                                                     </Link>
                                                 </DropdownMenuItem>
@@ -175,8 +175,17 @@ export default function Header() {
                                                     <DropdownMenuSubTrigger>Compta</DropdownMenuSubTrigger>
                                                     <DropdownMenuPortal>
                                                         <DropdownMenuSubContent>
-                                                            <DropdownMenuItem>Regul Appro</DropdownMenuItem>
-                                                            <DropdownMenuItem>Regul Vente</DropdownMenuItem>
+                                                        {/* /pages/admin/regularisations */}
+                                                            <Link className="flex items-center space-x-2" href={`/pages/admin/regularisations`}>
+                                                                <DropdownMenuItem>
+                                                                    <span className=" text-sm "> Regul Appro </span>
+                                                                </DropdownMenuItem>
+                                                            </Link>
+                                                            <Link className="flex items-center space-x-2" href={`/pages/admin/regularisations`}>
+                                                                <DropdownMenuItem>
+                                                                    <span className=" text-sm ">Regul Vente</span>
+                                                                </DropdownMenuItem>
+                                                            </Link>
                                                             <DropdownMenuItem>Regul Caisse Admin</DropdownMenuItem>
                                                             <DropdownMenuSeparator />
                                                             <DropdownMenuItem>Comptes clients</DropdownMenuItem>
@@ -191,7 +200,17 @@ export default function Header() {
                                                 <DropdownMenuSub>
                                                     <DropdownMenuSubTrigger>Système</DropdownMenuSubTrigger>
                                                     <DropdownMenuPortal>
-
+                                                        <DropdownMenuSubContent>
+                                                            <DropdownMenuItem>Configuration générale</DropdownMenuItem>
+                                                            <DropdownMenuSeparator />
+                                                            <Link className="flex items-center space-x-2" href={`/pages/admin/formrate`}>
+                                                                <DropdownMenuItem>Taux de change</DropdownMenuItem>
+                                                            </Link>
+                                                            <DropdownMenuSeparator />
+                                                            <Link className="flex items-center space-x-2" href={`/pages/admin/users`}>
+                                                                <DropdownMenuItem>Utilisateurs</DropdownMenuItem>
+                                                            </Link>
+                                                        </DropdownMenuSubContent>
                                                     </DropdownMenuPortal>
                                                 </DropdownMenuSub>
 
