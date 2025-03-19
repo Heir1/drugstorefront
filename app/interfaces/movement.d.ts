@@ -7,6 +7,8 @@ export default interface IMovement {
     reference?: string,
     created_at?: string,
     updated_at?: string,
+    created_by?: string,
+    updated_by?: string,
     purchase_price?: number;
     selling_price?: number;
     expiration_date?: string;

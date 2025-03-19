@@ -10,6 +10,7 @@ import IMovement from '@/app/interfaces/movement';
 import { deleteMovement, updateMovement } from '@/app/redux/slices/movements/actions';
 import toast, { Toaster } from 'react-hot-toast'
 import { useRateService } from '@/app/redux/slices/rates/useRateService';
+import IUser from '@/app/interfaces/user';
 
 interface IFormInputs {
     description : string;
@@ -32,7 +33,7 @@ export default function StockRegulForm({content, setisStockRegulFormOpen}:Articl
 
     const {  rates } = useRateService();
     const rate = rates[0]?.value
-    
+    const [ user, setUser ] = useState<IUser | null>(null);    
 
     const { control,setValue, register, handleSubmit, formState: { errors } } = useForm<IFormInputs>({
         defaultValues: {
@@ -45,6 +46,14 @@ export default function StockRegulForm({content, setisStockRegulFormOpen}:Articl
             date: "",
         }
     });
+
+    useEffect(()=>{
+        const userJSON = localStorage.getItem('user');
+        if (userJSON) {
+            const user = JSON.parse(userJSON);
+            setUser(user);
+        }
+    },[])
 
     const dispatch = useDispatch<AppDispatch>();
 
@@ -62,7 +71,8 @@ export default function StockRegulForm({content, setisStockRegulFormOpen}:Articl
             article_id : content.article_id,
             quantity,
             movement_type_id : content.movement_type_id,
-            movement_date: formattedDate
+            movement_date: formattedDate,
+            updated_by: user?.name,
         }
 
         const updateMovementPromise = dispatch(updateMovement({ id: content.id, data: StockRegul }))

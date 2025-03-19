@@ -101,7 +101,7 @@ export default function FormTest() {
     const [ displayedPackaging, setDisplayedPackaging ] = useState("");
     const [ displayedCategory, setDisplayedCategory ] = useState("");
     const [ displayedSupply, setDisplayedSupply ] = useState("");
-    const [user, setUser] = useState<IUser | null>(null);
+    const [ user, setUser ] = useState<IUser | null>(null);
 
 
     const [number, setNumber] = useState<number | ''>(''); // Utiliser une chaîne vide au départ

@@ -31,6 +31,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { createMovement } from '@/app/redux/slices/movements/actions';
 import toast, { Toaster } from 'react-hot-toast'
 import { useRateService } from '@/app/redux/slices/rates/useRateService';
+import IUser from '@/app/interfaces/user';
 // Dynamically import React Select without SSR
 const Select = dynamic(() => import('react-select'), { ssr: false });
 
@@ -76,6 +77,7 @@ export default function FormArticleAppro() {
     const [number, setNumber] = useState<number | ''>(''); // Utiliser une chaîne vide au départ
     const [result, setResult] = useState<number | ''>(''); // Même chose pour le résultat
     const {  rates } = useRateService();
+    const [ user, setUser ] = useState<IUser | null>(null);
     const rate = rates[0]?.value
 
 
@@ -168,6 +170,14 @@ export default function FormArticleAppro() {
         [suppliers] // Dépend uniquement de `suppliers`
     );
 
+    useEffect(()=>{
+        const userJSON = localStorage.getItem('user');
+        if (userJSON) {
+            const user = JSON.parse(userJSON);
+            setUser(user);
+        }
+    },[])
+
 
     const dispatch = useDispatch<AppDispatch>();
 
@@ -176,7 +186,6 @@ export default function FormArticleAppro() {
 
         console.log("CART ",cart);
         
-
         setCart((prevCart) => {
             const existingItem = prevCart.find(item => item.description === data.description);
             if (existingItem) {
@@ -187,65 +196,7 @@ export default function FormArticleAppro() {
               );
             }
             return [...prevCart, data];
-          });
-
-        // const newUuid = uuidv4();
-
-        // console.log(data);
-
-        // const { quantityappro, purchase_price, selling_price, expirationDate } = data
-        
-        
-        // const movementData:IMovement = {
-        //     article_id: Number(article.value.id),
-        //     quantity : quantityappro,
-        //     movement_type_id: 1,
-        //     reference: `{REF-${newUuid}}`,
-        //     purchase_price : Number(number),
-        //     selling_price : Number(result),
-        //     expiration_date : expirationDate
-        // }
-
-        // const createMovementPromise = dispatch(createMovement(movementData))
-        // .unwrap()
-        // .then(() => ({
-        //     status: "fulfilled",
-        //     message: "Approvisionnement créé avec succès !",
-        // }))
-        // .catch((err) => {
-        //     const errorMessage = typeof err === "string" ? err : err?.message || "Erreur inconnue lors de la création.";
-        //     return {
-        //     status: "rejected",
-        //     message: errorMessage,
-        //     };
-        // })
-        // .then((result) => {
-        //     if (result.status === "fulfilled") {
-        //     toast.custom((t:any) => (
-        //         <div className={`${
-        //             t.visible ? "animate-enter" : "animate-leave"
-        //         } flex items-center w-full max-w-xs p-4 text-white bg-green-600 border border-green-900 rounded-lg shadow-lg`}
-        //         >
-        //         <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">✅</span>
-        //         <div className="flex-1 text-center">
-        //             <p className="text-sm">Mouvement effectué avec succès</p>
-        //         </div>
-        //         </div>
-        //     ), { duration: 2000 });
-        //     } else {
-        //     toast.custom((t:any) => (
-        //         <div className={`${
-        //             t.visible ? "animate-enter" : "animate-leave"
-        //         } flex items-center w-full max-w-xs p-4 text-white bg-red-600 border border-red-900 rounded-lg shadow-lg`}
-        //         >
-        //             <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">❌</span>
-        //             <div className="flex-1 text-center">
-        //                 <p className="text-sm">{result.message}</p>
-        //             </div>
-        //         </div>
-        //     ));
-        //     }
-        // });
+        });
     
     };
 
@@ -254,6 +205,7 @@ export default function FormArticleAppro() {
         const cartData: any = {
             movement_type_id: 1,
             articles: cart,
+            created_by: user?.name,
         };
 
         const createMovementPromise = dispatch(createMovement(cartData)).unwrap()

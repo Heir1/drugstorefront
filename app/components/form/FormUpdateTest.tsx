@@ -19,6 +19,7 @@ import { useCategoryService } from "@/app/redux/slices/category/useCategoryServi
 import ISupplier from "@/app/interfaces/supplier";
 import ICategory from "@/app/interfaces/category";
 import { AppDispatch } from "@/app/redux/store/store";
+import IUser from "@/app/interfaces/user";
 
 
 interface IFormInputs {
@@ -91,6 +92,7 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
     const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
     const [number, setNumber] = useState<number | ''>(''); // Utiliser une chaîne vide au départ
     const [result, setResult] = useState<number | ''>(''); // Même chose pour le résultat
+    const [user, setUser] = useState<IUser | null>(null);
 
     useEffect(() => {
         
@@ -140,6 +142,14 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
 
         fetchArticle();
     }, [content, placements, setValue]);
+
+    useEffect(()=>{
+        const userJSON = localStorage.getItem('user');
+        if (userJSON) {
+            const user = JSON.parse(userJSON);
+            setUser(user);
+        }
+    },[])
 
     const handleNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value;
@@ -264,6 +274,7 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
             packaging_id: !isNaN(Number(packaging)) ? `${displayedPackaging}§§${packaging}` : (displayedPackaging !== content.packaging.name) ? `${displayedPackaging}§§${content.packaging_id}` : "",
             purchase_price : Number(number),
             selling_price : Number(result),
+            updated_by: user?.name,
             alert : Number(alert),
             currency_id: Number(currency) 
         }
