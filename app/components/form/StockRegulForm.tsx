@@ -11,6 +11,7 @@ import { deleteMovement, updateMovement } from '@/app/redux/slices/movements/act
 import toast, { Toaster } from 'react-hot-toast'
 import { useRateService } from '@/app/redux/slices/rates/useRateService';
 import IUser from '@/app/interfaces/user';
+import FormAuth from './FormAuth';
 
 interface IFormInputs {
     description : string;
@@ -33,7 +34,8 @@ export default function StockRegulForm({content, setisStockRegulFormOpen}:Articl
 
     const {  rates } = useRateService();
     const rate = rates[0]?.value
-    const [ user, setUser ] = useState<IUser | null>(null);    
+    const [ user, setUser ] = useState<IUser | null>(null);
+    const [ isAuth, setIsAuth ] = useState(false);    
 
     const { control,setValue, register, handleSubmit, formState: { errors } } = useForm<IFormInputs>({
         defaultValues: {
@@ -124,7 +126,11 @@ export default function StockRegulForm({content, setisStockRegulFormOpen}:Articl
                     setisStockRegulFormOpen(false);
                 }
             });
-        };
+    };
+
+    const onSubmit1 = async () => {
+        setIsAuth(true);
+    };
 
     const onSubmitDelete =  async () => {
          
@@ -161,6 +167,8 @@ export default function StockRegulForm({content, setisStockRegulFormOpen}:Articl
             }, 2500); // Attendre 2,5 secondes avant de fermer le formulaire
       
           } else {
+            console.log("RESULTAT ",result);
+            
             toast.custom((t:any) => (
               <div className={`${
                   t.visible ? "animate-enter" : "animate-leave"
@@ -204,13 +212,16 @@ export default function StockRegulForm({content, setisStockRegulFormOpen}:Articl
 
 
     if (!content) return null; // Évite un rendu avec des valeurs non définies
+
+    
     
     return (
         <>
-            {/* <div className="fixed z-40 left-0 top-0  w-full h-screen bg-[#00000040]" onClick={()=> setisStockRegulFormOpen(false)}>
-            </div> */}
-
             <div className=" bg-[#7288a5fd] mx-8 border-2 border-white  "  >
+                <Toaster />
+                {
+                    isAuth && <FormAuth updateProductState={onSubmitDelete}  setIsAuth={setIsAuth} />
+                }  
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className=" grid grid-cols-12 mx-4 gap-3 py-2 mt-2 " >
 
@@ -222,7 +233,6 @@ export default function StockRegulForm({content, setisStockRegulFormOpen}:Articl
                                         <label className="text-[13px] font-extrabold "  htmlFor="">DESCRIPTION</label>
                                     </div>
                                     <div>
-                                        {/* <input readOnly className="w-full text-[14px] bg-[#4594ff] h-10 pl-4 uppercase rounded-lg " type="text" / */}
                                     <Controller
                                         name="description"
                                         control={control}
@@ -319,56 +329,17 @@ export default function StockRegulForm({content, setisStockRegulFormOpen}:Articl
                             </div>
                             <div className=" flex flex-col gap-2  w-[30%] " >
                                 <button className=" w-full  border-[1px] hover:bg-[#D32F2F] hover:text-white border-[#D32F2F] text-center  text-[14px] p-2 transition duration-300 text-[#D32F2F] rounded-lg "
-                                onClick={handleSubmit(onSubmitDelete)}
+                                // onClick={handleSubmit(onSubmitDelete)}
+                                onClick={() => onSubmitDelete()}
                                 >Annuler cet article</button>
                                 <button type="submit" className=" w-full text-center p-2 bg-[#4594ff]  text-white transition duration-300 hover:bg-[#3386e0]  rounded-lg  text-[14px]" >Modifier cet article</button>
                             </div>
 
-
-                            {/* <div className=" w-full " >
-                                <button disabled={true} type="submit" className=" w-full  border-[1px] bg-[#D32F2F] text-white border-[#FE6212] text-center  text-[14px] p-2 transition duration-300 rounded-lg ">Désactiver</button>
-                            </div>
-                            <div className="w-full" >
-                                <button disabled={true} type="submit" className=" w-full text-center p-2 bg-[#28A745]  text-white transition duration-300  rounded-lg  text-[14px]  " >Activer</button>
-                            </div> */}
                         </div>
 
                     </div>
                 </form>
-                {/* <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className=" w-[150%]   bg-gray-600 p-10  rounded-xl space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
-                        <div className="space-y-2" >
-                            <label className=" font-semibold text-sm" htmlFor="">Description</label>
-                            <Controller
-                                name="description"
-                                control={control}
-                                render={({ field }) => <input readOnly className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg " {...field} type="text" />}
-                                rules={{ required: 'La description est requise' }}
-                            />
-                        </div>
-                        <div className="space-y-2" >
-                            <label className=" font-semibold text-sm" htmlFor="">Stock</label>
-                            <Controller
-                                name="quantity"
-                                control={control}
-                                render={({ field }) => <input className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg " {...field} type="number" />}
-                                rules={{ required: 'La description est requise' }}
-                            />
-                        </div>
 
-                        <div className=" flex justify-between gap-4 pt-4 " >
-                            <div className=" w-full " >
-                                <button className=" w-full  border-[1px] hover:bg-[#D32F2F] hover:text-white border-[#D32F2F] text-center  text-[14px] p-2 transition duration-300 text-[#D32F2F] rounded-lg "
-                                onClick={handleSubmit(onSubmitDelete)}
-                                >Annuler cet article</button>
-                            </div>
-                            <div className="w-full" >
-                                <button type="submit" className=" w-full text-center p-2 bg-[#4594ff]  text-white transition duration-300 hover:bg-[#3386e0]  rounded-lg  text-[14px]" >Modifier cet article</button>
-                            </div>
-                        </div>
-                        
-                    </div>
-                </form> */}
             </div>
         </>
     )

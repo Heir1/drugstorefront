@@ -71,6 +71,13 @@ export const InvoiceColumns: ColumnDef<Iinvoice>[] = [
         cell: ({ row } : { row : any} ) => row.original?.invoices?.invoice_number || "N/A",
     },
 
+    {
+        accessorKey: "invoices.created_by",
+        header: "UTILISATEUR",
+        id: "invoices.created_by", // Explicitly set the ID
+        cell: ({ row } : { row : any} ) => row.original?.invoices?.created_by || "N/A",
+    },
+
 
     // {
     //     accessorKey: "article.description",

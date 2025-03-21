@@ -56,8 +56,7 @@ export default function ArticleActivationForm({content, setActivationFormOpen}:A
     useEffect(() => {
         
         if (content) {
-            // alert("")
-            
+
             setValue("description", content.description, { shouldValidate: true });
             setValue("quantity", content.quantity, { shouldValidate: true });
             setValue("comment", content.comment, { shouldValidate: true });

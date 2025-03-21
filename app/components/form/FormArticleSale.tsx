@@ -33,6 +33,10 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 import { invoke } from '@tauri-apps/api/core';
 
 import ReactDOMServer from 'react-dom/server';
+import IUser from '@/app/interfaces/user';
+import IPackaging from '@/app/interfaces/packaging';
+import ICategory from '@/app/interfaces/category';
+import ISupplier from '@/app/interfaces/supplier';
 
 
 interface IFormInputs {
@@ -107,6 +111,7 @@ export default function FormArticleSale() {
     const [descriptionQuery, setDescriptionQuery] = useState("");
     const [isDescriptionDropdownOpen, setIsDescriptionDropdownOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [ user, setUser ] = useState<IUser | null>(null); 
 
     const { rates } = useRateService()
 
@@ -185,7 +190,7 @@ export default function FormArticleSale() {
     );
 
     const packagingsFormated = useMemo(() => 
-        packagings.map((packaging) => ({ 
+        packagings.map((packaging:IPackaging) => ({ 
             value: packaging.id.toString(), // Convertir id en string
             label: packaging.name,
         })), 
@@ -193,7 +198,7 @@ export default function FormArticleSale() {
     );
 
     const categoriesFormated = useMemo(() => 
-        categories.map((category) => ({ 
+        categories.map((category:ICategory) => ({ 
             value: category.id.toString(), // Convertir id en string
             label: category.name,
         })), 
@@ -201,7 +206,7 @@ export default function FormArticleSale() {
     );
 
     const suppliersFormated = useMemo(() => 
-        suppliers.map((supplier) => ({ 
+        suppliers.map((supplier:ISupplier) => ({ 
             value: supplier.id.toString(), // Convertir id en string
             label: supplier.name,
         })), 
@@ -213,6 +218,14 @@ export default function FormArticleSale() {
             article.label.toLowerCase().includes(descriptionQuery.toLowerCase())
         );
     }, [articlesFormated, descriptionQuery]);
+
+    useEffect(()=>{
+        const userJSON = localStorage.getItem('user');
+        if (userJSON) {
+            const user = JSON.parse(userJSON);
+            setUser(user);
+        }
+    },[])
 
 
     useEffect(() => {
@@ -243,6 +256,7 @@ export default function FormArticleSale() {
                     invoice,
                     paymentmode: paymentmode.value,
                     articles: cart1,
+                    created_by: user?.name,
                 };
         
                 try {
@@ -288,6 +302,7 @@ export default function FormArticleSale() {
                         console.error('Erreur lors de la création de la facture');
                     }
                 } catch (error) {
+                    
                     console.error('Erreur dans la création de la facture', error);
                 }
             }

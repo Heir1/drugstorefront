@@ -113,7 +113,7 @@ export default function Regulation() {
     <div className="mx-2 p-5 " >
         <div className="grid grid-cols-11">
             <div className="col-span-5 shadow-[0px_4px_8px_0px_#00000026] bg-[#F6F7F9] rounded-xl py-1 px-2  ">
-                <div className="grid grid-cols-5 place-content-center">
+                <div className="grid grid-cols-4 place-content-center">
                     <Link href={``}>
                         <div className={`flex justify-center items-center py-2 rounded-lg ${ isNewArticle && "bg-[#262B62] text-white" } `} onClick={ ()=> setActivation("new") } >
                             <h1>APPRO</h1>
@@ -125,13 +125,14 @@ export default function Regulation() {
                         </div>
                     </Link>
                     <Link href={``}>
-                        <div className={`flex justify-center items-center py-2 rounded-lg ${ isStateArticle && "bg-[#262B62] text-white" } `} onClick={ ()=> setActivation("state") }>
-                            <h1>Liste Produits</h1>
+                        <div className={`flex justify-center items-center py-2 rounded-lg ${ isStateArticle && "bg-[#262B62] text-white" } `}>
+                        {/* onClick={ ()=> setActivation("state") } */}
+                            <h1>LISTE PRODUITS</h1>
                         </div>
                     </Link>
                     <Link href={``}>
                         <div className={`flex justify-center items-center py-2 rounded-lg ${ isReportArticle && "bg-[#262B62] text-white" } `}>
-                            <h1>Rapport</h1>
+                            <h1>RAPPORT</h1>
                         </div>
                     </Link>
                 </div>
@@ -149,46 +150,7 @@ export default function Regulation() {
         (
             isUpdateArticle ? (
                 <div>
-                        <DataTableSaleRegul columns={InvoiceColumns} data={invoices} needFilter={false} paginate={false} title="Invoice"/>
-                        
-                        {/* <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-gray-50 p-6 rounded-lg shadow-lg">
-                        
-                            <div className="col-span-3 text-center">
-                                <h1 className="text-lg font-bold text-gray-800">
-                                    VENTE DU 19/12/2024 AU 19/12/2024
-                                </h1>
-                            </div>
-
-                            <div className="col-span-1 flex flex-col items-center bg-white p-4 rounded-lg shadow-md">
-                                <h2 className="text-sm text-gray-500">VENTE</h2>
-                                <h1 className="text-lg font-bold text-green-600">{total} CDF</h1>
-                            </div>
-
-                            <div className="col-span-1 flex flex-col items-center bg-white p-4 rounded-lg shadow-md">
-                                <h2 className="text-sm text-gray-500">REMISE</h2>
-                                <h1 className="text-lg font-bold text-yellow-500">{0} CDF</h1>
-                            </div>
-
-                            <div className="col-span-1 flex flex-col items-center bg-white p-4 rounded-lg shadow-md">
-                                <h2 className="text-sm text-gray-500">SOLDE</h2>
-                                <h1 className="text-lg font-bold text-blue-600">{total} CDF</h1>
-                            </div>
-
-                            <div className="col-span-1 flex flex-col items-center bg-white p-4 rounded-lg shadow-md">
-                                <h2 className="text-sm text-gray-500">VENTE</h2>
-                                <h1 className="text-lg font-bold text-green-600">{(total/rate).toFixed(2)} USD</h1>
-                            </div>
-
-                            <div className="col-span-1 flex flex-col items-center bg-white p-4 rounded-lg shadow-md">
-                                <h2 className="text-sm text-gray-500">REMISE</h2>
-                                <h1 className="text-lg font-bold text-yellow-500">{0} USD</h1>
-                            </div>
-
-                            <div className="col-span-1 flex flex-col items-center bg-white p-4 rounded-lg shadow-md">
-                                <h2 className="text-sm text-gray-500">SOLDE</h2>
-                                <h1 className="text-lg font-bold text-blue-600">{(total/rate).toFixed(2)} USD</h1>
-                            </div>
-                        </div> */}
+                    <DataTableSaleRegul columns={InvoiceColumns} data={invoices} needFilter={false} paginate={false} title="Invoice"/>
                 </div>
             )
             :

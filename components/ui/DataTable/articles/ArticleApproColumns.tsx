@@ -89,6 +89,12 @@ export const ArticleApproColumns: ColumnDef<IMovement>[] = [
             const suppliers = row.original.article?.suppliers;
             return suppliers?.[0]?.name || "N/A";
         },
+    },
+
+    {
+        accessorKey: "created_by",
+        header: "UTILISATEUR",
+        cell: ({ row } : { row : any} ) => row.original.created_by,
     }
     
 

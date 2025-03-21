@@ -9,6 +9,8 @@ export default interface Iinvoice     {
     subtotal?: number,
     created_at?: string,
     updated_at?: string,
+    created_by?: string,
+    updated_by?: string,
     invoice_line?:{
         id?: number,
     },
@@ -19,6 +21,7 @@ export default interface Iinvoice     {
         total_excl_tax?: number,
         vat?: number,
         total_incl_tax?: number,
+        created_by?: string,
         created_at?: string,
         updated_at?: string
     },
