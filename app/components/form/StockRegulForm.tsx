@@ -77,9 +77,7 @@ export default function StockRegulForm({content, setisStockRegulFormOpen}:Articl
             updated_by: user?.name,
         }
 
-        const updateMovementPromise = dispatch(updateMovement({ id: content.id, data: StockRegul }))
-            .unwrap()
-            .then(() => ({
+        const updateMovementPromise = dispatch(updateMovement({ id: content.id, data: StockRegul })).unwrap().then(() => ({
                 status: "fulfilled",
                 message: "Mouvement de stock mis à jour avec succès !",
             }))
@@ -134,9 +132,7 @@ export default function StockRegulForm({content, setisStockRegulFormOpen}:Articl
 
     const onSubmitDelete =  async () => {
          
-        const deleteMovementPromise = dispatch(deleteMovement(content.id))
-        .unwrap()
-        .then(() => ({
+        const deleteMovementPromise = dispatch(deleteMovement(content.id)).unwrap().then(() => ({
           status: "fulfilled",
           message: "Appovisionnement supprimé avec succès !",
         }))

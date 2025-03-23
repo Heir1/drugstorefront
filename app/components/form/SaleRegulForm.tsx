@@ -63,10 +63,6 @@ export default function SaleRegulForm({content, setIsSaleRegulFormOpen}:ArticleF
 
     const onSubmit = async (data: IFormInputs) => {
 
-        
-        console.log('Article id ',content.id);
-        console.log('Invoice id ',content.invoice_id);
-
         const { quantity } = data;
 
         const invoiceLineData : Iinvoice = {
@@ -76,10 +72,10 @@ export default function SaleRegulForm({content, setIsSaleRegulFormOpen}:ArticleF
             updated_by: user?.name,
         }
 
+        console.log("CONTENT ",invoiceLineData);
+        
 
-        const updateInvoicePromise = dispatch(updateInvoice({ id: content.id, data: invoiceLineData }))
-        .unwrap()
-        .then(() => ({
+        const updateInvoicePromise = dispatch(updateInvoice({ id: content.id, data: invoiceLineData })).unwrap().then(() => ({
             status: "fulfilled",
             message: "Facture mise à jour avec succès !",
         }))
