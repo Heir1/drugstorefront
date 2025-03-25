@@ -261,7 +261,7 @@ export default function FormArticleSale() {
         
                 try {
                     // Attendre la fin de la création de la facture
-                    const result = await dispatch(createInvoice(cartDate));
+                    const result:any = await dispatch(createInvoice(cartDate));
             
                     // Si la création de la facture a réussi, exécutez onSubmitProf()
                     if (result.meta.requestStatus === 'fulfilled') {
@@ -285,25 +285,39 @@ export default function FormArticleSale() {
                         ));
                         onSubmitProf();
                     } else {
+                        setIsInvoice(false)
                         setLoading(false);
-                        // toast.custom((t:any) => (
-                        //     <div
-                        //         className={`${
-                        //         t.visible ? "animate-enter" : "animate-leave"
-                        //         } flex items-center w-full max-w-xs p-4 text-white bg-red-600 border border-red-900 rounded-lg shadow-lg`}
-                        //     >
-                        //         <span className="mr-2 bg-white rounded-full text-[10px] p-[2px] ">❌</span>
-                        //         <div className="flex-1 text-center">
-                        //         {/* <p className="font-bold">Erreur</p> */}
-                        //         <p className="text-sm">{result.message}</p>
-                        //         </div>
-                        //     </div>
-                        // ));
-                        console.error('Erreur lors de la création de la facture');
+                        toast.custom((t:any) => (
+                            <div
+                                className={`${
+                                t.visible ? "animate-enter" : "animate-leave"
+                                } flex items-center w-full max-w-xs p-4 text-white bg-red-600 border border-red-900 rounded-lg shadow-lg`}
+                            >
+                                <span className="mr-2 bg-white rounded-full text-[10px] p-[2px] ">❌</span>
+                                <div className="flex-1 text-center">
+                                {/* <p className="font-bold">Erreur</p> */}
+                                <p className="text-sm">{result?.payload?.message}</p>
+                                </div>
+                            </div>
+                        ));
+        
                     }
-                } catch (error) {
-                    
-                    console.error('Erreur dans la création de la facture', error);
+                } catch (error:any) {
+                    setIsInvoice(false)
+                    setLoading(false);
+                    toast.custom((t:any) => (
+                        <div
+                            className={`${
+                            t.visible ? "animate-enter" : "animate-leave"
+                            } flex items-center w-full max-w-xs p-4 text-white bg-red-600 border border-red-900 rounded-lg shadow-lg`}
+                        >
+                            <span className="mr-2 bg-white rounded-full text-[10px] p-[2px] ">❌</span>
+                            <div className="flex-1 text-center">
+                            {/* <p className="font-bold">Erreur</p> */}
+                            <p className="text-sm">{error}</p>
+                            </div>
+                        </div>
+                    ));
                 }
             }
         };
@@ -631,11 +645,11 @@ export default function FormArticleSale() {
                        loading && <Loading/>
                     }
                     <div className="mx-2"  >
+                        <Toaster />
 
                         <button onClick={ () => printInvoice()} >SEND</button>
 
                         <form onSubmit={handleSubmit(onSubmit1)}>
-                            <Toaster />
                             <div className=" grid grid-cols-12 border-[1px] border-white mx-4 gap-3 p-2 " >
                                 <div className=" col-span-3 " >
                                     <div>

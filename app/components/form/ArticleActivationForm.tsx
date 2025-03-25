@@ -8,6 +8,7 @@ import IArticle from '@/app/interfaces/article';
 import { createArticle, updateArticle } from '@/app/redux/slices/articles/actions';
 import toast, { Toaster } from 'react-hot-toast'
 import FormAuth from './FormAuth';
+import IUser from '@/app/interfaces/user';
 
 interface IFormInputs {
     description : string,
@@ -21,6 +22,7 @@ interface IFormInputs {
     quantity: number;
     purchase_price: number;
     selling_price: number;
+    updated_by: string;
   }
 
 interface ArticleFormActivationprops {
@@ -47,9 +49,11 @@ export default function ArticleActivationForm({content, setActivationFormOpen}:A
             currency : 1,
             purchase_price : 0,
             selling_price : 0,
+            updated_by: ""
         }
     });
 
+    const [ user, setUser ] = useState<IUser | null>(null);
     const dispatch = useDispatch<AppDispatch>();
 
 
@@ -62,12 +66,20 @@ export default function ArticleActivationForm({content, setActivationFormOpen}:A
             setValue("comment", content.comment, { shouldValidate: true });
 
         }
+
     }, [content,setValue]);
+
+    useEffect(()=>{
+        const userJSON = localStorage.getItem('user');
+        if (userJSON) {
+            const user = JSON.parse(userJSON);
+            setUser(user);
+        }
+    },[])
     
     const onSubmit = async (data: IFormInputs) => {
         setIsAuth(true);
         setSubmittedData(data);
-
     };
 
     const updateProductState = async () => {
@@ -89,7 +101,8 @@ export default function ArticleActivationForm({content, setActivationFormOpen}:A
             selling_price:  Number(content.selling_price),
             purchase_price: Number(content.purchase_price),
             alert : Number(content.alert),
-            currency_id: Number(currency) 
+            currency_id: Number(currency),
+            updated_by: user?.name
         }
 
         console.log("SEE ", articleData);
@@ -192,6 +205,7 @@ export default function ArticleActivationForm({content, setActivationFormOpen}:A
                     isAuth && <FormAuth updateProductState={updateProductState}  setIsAuth={setIsAuth} />
                 }  
                 <div className=" bg-[#7288a5fd] mx-5 border-2 border-white  ">
+                    <Toaster />
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className=" grid grid-cols-12 mx-4 gap-3 p-2 mt-2 " >
                             <div className=" col-span-4 " >

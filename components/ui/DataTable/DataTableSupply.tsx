@@ -199,14 +199,14 @@ export function DataTableSupply<TData, TValue>({
   return (
     <>
 
-        { 
+        {/* { 
           isStockRegulFormOpen &&  <StockRegulForm content={article} setisStockRegulFormOpen={setisStockRegulFormOpen}  />
         }
 
         {
           isSaleRegulFormOpen && <SaleRegulForm content={article} setIsSaleRegulFormOpen={setIsSaleRegulFormOpen}  />
         }
-    
+     */}
       <div className="  rounded-2xl ">
         
         <div className="flex items-center justify-between " >

@@ -35,7 +35,8 @@ export default function StockRegulForm({content, setisStockRegulFormOpen}:Articl
     const {  rates } = useRateService();
     const rate = rates[0]?.value
     const [ user, setUser ] = useState<IUser | null>(null);
-    const [ isAuth, setIsAuth ] = useState(false);    
+    const [ isAuth, setIsAuth ] = useState(false);
+    const [ submittedData, setSubmittedData ] = useState<IFormInputs | null>(null);     
 
     const { control,setValue, register, handleSubmit, formState: { errors } } = useForm<IFormInputs>({
         defaultValues: {
@@ -62,6 +63,12 @@ export default function StockRegulForm({content, setisStockRegulFormOpen}:Articl
     const onSubmit = async (data: IFormInputs) => {
 
         // console.log(data);
+        setIsAuth(true);
+        setSubmittedData(data);
+
+    };
+
+    const updateProductStock = async() => {
 
         const date = new Date();
         const formattedDate = date.toISOString().split('T')[0];
@@ -84,8 +91,8 @@ export default function StockRegulForm({content, setisStockRegulFormOpen}:Articl
             .catch((err) => {
                 const errorMessage = typeof err === "string" ? err : err?.message || "Erreur inconnue lors de la mise à jour.";
                 return {
-                status: "rejected",
-                message: errorMessage,
+                    status: "rejected",
+                    message: errorMessage,
                 };
             })
             .then((result) => {
@@ -124,7 +131,7 @@ export default function StockRegulForm({content, setisStockRegulFormOpen}:Articl
                     setisStockRegulFormOpen(false);
                 }
             });
-    };
+    }
 
     const onSubmit1 = async () => {
         setIsAuth(true);
@@ -216,8 +223,9 @@ export default function StockRegulForm({content, setisStockRegulFormOpen}:Articl
             <div className=" bg-[#7288a5fd] mx-8 border-2 border-white  "  >
                 <Toaster />
                 {
-                    isAuth && <FormAuth updateProductState={onSubmitDelete}  setIsAuth={setIsAuth} />
+                    isAuth && <FormAuth updateProductState={updateProductStock}  setIsAuth={setIsAuth} />
                 }  
+                {/* onSubmitDelete */}
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className=" grid grid-cols-12 mx-4 gap-3 py-2 mt-2 " >
 

@@ -94,7 +94,6 @@ export const createInvoice = createAsyncThunk<Iinvoice, Iinvoice>(
         
         if (response.error) {
           console.log(response.error)
-          alert(response.error.message)
           return rejectWithValue(response.error);
         }
         
