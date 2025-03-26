@@ -36,6 +36,7 @@ export default function StockRegulForm({content, setisStockRegulFormOpen}:Articl
     const rate = rates[0]?.value
     const [ user, setUser ] = useState<IUser | null>(null);
     const [ isAuth, setIsAuth ] = useState(false);
+    const [ isDelete, setIsDelete ] = useState(false);
     const [ submittedData, setSubmittedData ] = useState<IFormInputs | null>(null);     
 
     const { control,setValue, register, handleSubmit, formState: { errors } } = useForm<IFormInputs>({
@@ -62,7 +63,6 @@ export default function StockRegulForm({content, setisStockRegulFormOpen}:Articl
 
     const onSubmit = async (data: IFormInputs) => {
 
-        // console.log(data);
         setIsAuth(true);
         setSubmittedData(data);
 
@@ -72,9 +72,7 @@ export default function StockRegulForm({content, setisStockRegulFormOpen}:Articl
 
         const date = new Date();
         const formattedDate = date.toISOString().split('T')[0];
-
-
-        const { quantity } = data;
+        const quantity = submittedData?.quantity ? submittedData?.quantity : 0
 
         const StockRegul:IMovement = {
             article_id : content.article_id,
@@ -134,6 +132,7 @@ export default function StockRegulForm({content, setisStockRegulFormOpen}:Articl
     }
 
     const onSubmit1 = async () => {
+        setIsDelete(true);
         setIsAuth(true);
     };
 
@@ -223,7 +222,7 @@ export default function StockRegulForm({content, setisStockRegulFormOpen}:Articl
             <div className=" bg-[#7288a5fd] mx-8 border-2 border-white  "  >
                 <Toaster />
                 {
-                    isAuth && <FormAuth updateProductState={updateProductStock}  setIsAuth={setIsAuth} />
+                    isAuth && <FormAuth updateProductState={ isDelete ? onSubmitDelete : updateProductStock}  setIsAuth={setIsAuth} />
                 }  
                 {/* onSubmitDelete */}
                 <form onSubmit={handleSubmit(onSubmit)}>
@@ -234,7 +233,7 @@ export default function StockRegulForm({content, setisStockRegulFormOpen}:Articl
                             <div className=" flex w-full gap-2 " >
                                 <div className=" w-[80%] ">
                                     <div>
-                                        <label className="text-[13px] font-extrabold "  htmlFor="">DESCRIPTION</label>
+                                        <label className="text-[13px] font-extrabold "  htmlFor="">DESCRIPTIONN</label>
                                     </div>
                                     <div>
                                     <Controller
@@ -334,7 +333,7 @@ export default function StockRegulForm({content, setisStockRegulFormOpen}:Articl
                             <div className=" flex flex-col gap-2  w-[30%] " >
                                 <button className=" w-full  border-[1px] hover:bg-[#D32F2F] hover:text-white border-[#D32F2F] text-center  text-[14px] p-2 transition duration-300 text-[#D32F2F] rounded-lg "
                                 // onClick={handleSubmit(onSubmitDelete)}
-                                onClick={() => onSubmitDelete()}
+                                onClick={() => onSubmit1()}
                                 >Annuler cet article</button>
                                 <button type="submit" className=" w-full text-center p-2 bg-[#4594ff]  text-white transition duration-300 hover:bg-[#3386e0]  rounded-lg  text-[14px]" >Modifier cet article</button>
                             </div>

@@ -128,11 +128,11 @@ export const updateInvoice = createAsyncThunk<Iinvoice, { id: string; data: Iinv
 
 
 // Action pour supprimer une facture
-export const deleteInvoice = createAsyncThunk<string, string, { rejectValue: string }>(
+export const deleteInvoice = createAsyncThunk<string, { invoiceId: string, isInvoice: string}, { rejectValue: string }>(
     'invoices/deleteInvoice',
-    async (invoiceId: string, { rejectWithValue }) => {
+    async ({invoiceId, isInvoice}, { rejectWithValue }) => {
       try {
-        const response = await deleteRequest(`invoices/${invoiceId}`); // Remplacez avec votre endpoint
+        const response = await deleteRequest(`invoices/${invoiceId}/${isInvoice}`); // Remplacez avec votre endpoint
         if (response.error) {
 
             const errorMessage = (response.error as ApiErrorResponse).message || 'Unknown error';

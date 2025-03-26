@@ -13,6 +13,7 @@ import { deleteInvoice, updateInvoice } from '@/app/redux/slices/invoices/action
 import toast, { Toaster } from 'react-hot-toast'
 import { useRateService } from '@/app/redux/slices/rates/useRateService';
 import IUser from '@/app/interfaces/user';
+import FormAuth from './FormAuth';
 
 interface IFormInputs {
     description : string;
@@ -48,6 +49,10 @@ export default function SaleRegulForm({content, setIsSaleRegulFormOpen}:ArticleF
     const { rates } = useRateService()
     const rate = rates[0]?.value
     const [ user, setUser ] = useState<IUser | null>(null);
+    const [ isAuth, setIsAuth ] = useState(false);
+    const [ isDelete, setIsDelete ] = useState(false);
+    const [ submittedData, setSubmittedData ] = useState<IFormInputs | null>(null);
+    const [ isInvoice, setIsInvoice ] = useState("no");
 
     console.log('Article content ',content);
 
@@ -63,7 +68,21 @@ export default function SaleRegulForm({content, setIsSaleRegulFormOpen}:ArticleF
 
     const onSubmit = async (data: IFormInputs) => {
 
-        const { quantity } = data;
+        setIsAuth(true)
+        setSubmittedData(data)
+
+    };
+
+    const onSubmit1 = async (invoice:string) => {
+        setIsAuth(true)
+        setIsDelete(true)
+        setIsInvoice(invoice);
+    }
+
+
+    const updateProductStockSale = async() => {
+
+        const quantity = submittedData?.quantity ? submittedData?.quantity : 0
 
         const invoiceLineData : Iinvoice = {
             id : content.id, 
@@ -121,23 +140,11 @@ export default function SaleRegulForm({content, setIsSaleRegulFormOpen}:ArticleF
                 setIsSaleRegulFormOpen(false);
             }
         });
+    }
 
-        
-        // try {
-        //         await dispatch(updateInvoice({ id : content.id, data : invoiceLineData}));
-        //         setIsSaleRegulFormOpen(false);
-        // } catch (err) {
-        //     // Handle errors that happen outside the action (e.g., network failures)
-        //     setIsSaleRegulFormOpen(false);
-        //     console.error(err);
-        // }
+    const onSubmitDelete =  async ( ) => {
 
-
-    };
-
-    const onSubmitDelete =  async ( id:string ) => {
-
-        const deleteInvoicePromise = dispatch(deleteInvoice(id))
+        const deleteInvoicePromise = dispatch(deleteInvoice({ invoiceId : content?.id, isInvoice }))
         .unwrap()
         .then(() => ({
             status: "fulfilled",
@@ -225,6 +232,9 @@ export default function SaleRegulForm({content, setIsSaleRegulFormOpen}:ArticleF
             <div className=""  >
                 <div className=" bg-[#7288a5fd] mx-8 border-2 border-white  ">
                     <Toaster />
+                    {
+                        isAuth && <FormAuth updateProductState={ isDelete ? onSubmitDelete : updateProductStockSale}  setIsAuth={setIsAuth} />
+                    } 
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className=" grid grid-cols-12 mx-4 gap-3 py-2 mt-2 " >
 
@@ -361,7 +371,8 @@ export default function SaleRegulForm({content, setIsSaleRegulFormOpen}:ArticleF
                                     <textarea className="w-full text-[14px] bg-[#F2F7FC] h-16 p-4 rounded-lg " />
                                 </div>
                                 <div className=" flex flex-col gap-2  w-[30%] " >
-                                    <button onClick={handleSubmit(() => onSubmitDelete(content.id))}  type="submit" className=" w-full  border-[1px] bg-[#D32F2F] text-white border-[#FE6212] text-center  text-[14px] p-2 transition duration-300 rounded-lg ">Annuler cet article</button>
+                                    <button onClick={handleSubmit(() => onSubmit1("no"))}  type="submit" className=" w-full  border-[1px] bg-[#D32F2F] text-white border-[#FE6212] text-center  text-[14px] p-2 transition duration-300 rounded-lg ">Annuler cet article</button>
+                                    <button onClick={handleSubmit(() => onSubmit1("yes"))}  type="submit" className=" w-full  border-[1px] bg-[#D32F2F] text-white border-[#FE6212] text-center  text-[14px] p-2 transition duration-300 rounded-lg ">Annuler la facture</button>
                                     {/* <button type="submit" className=" w-full text-center p-2 bg-[#28A745]  text-white transition duration-300  rounded-lg  text-[14px]  " >Annuler la facture</button> */}
                                     {/* <button className=" w-full  border-[1px] hover:bg-[#D32F2F] hover:text-white border-[#FE6212] text-center  text-[14px] p-2 transition duration-300 text-[#D32F2F] rounded-lg " 
                                     // onClick={()=> setActivationFormOpen(false)}
