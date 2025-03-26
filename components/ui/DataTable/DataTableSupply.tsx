@@ -281,7 +281,15 @@ export function DataTableSupply<TData, TValue>({
           <div className="flex justify-end  ">
             {
               title == "Invoice" ? (
-                <input className=' w-[500px] px-6 py-2 my-3 border-[1px] border-black text-black rounded-3xl text-[14px] uppercase ' placeholder='Rechercher le produit pharmaceutique par sa description' type="text" value={(table.getColumn("invoices.invoice_number")?.getFilterValue() as string) ?? "" } onChange={(event) => table.getColumn("invoices.invoice_number")?.setFilterValue(event.target.value)}/>
+                <div className=" flex gap-2 " >
+
+                  <input className=' w-[200px] px-6 py-2 my-3 border-[1px] border-black text-black text-[14px] uppercase ' placeholder='Description' type="text" value={(table.getColumn("articles.description")?.getFilterValue() as string) ?? "" } onChange={(event) => table.getColumn("articles.description")?.setFilterValue(event.target.value)}/>
+
+                  <input className=' w-[200px] px-6 py-2 my-3 border-[1px] border-black text-black text-[14px] uppercase ' placeholder='Facture' type="text" value={(table.getColumn("invoices.invoice_number")?.getFilterValue() as string) ?? "" } onChange={(event) => table.getColumn("invoices.invoice_number")?.setFilterValue(event.target.value)}/>
+
+                  <input className=' w-[200px] px-6 py-2 my-3 border-[1px] border-black text-black text-[14px] uppercase ' placeholder='Utilisateur' type="text" value={(table.getColumn("invoices.created_by")?.getFilterValue() as string) ?? "" } onChange={(event) => table.getColumn("invoices.created_by")?.setFilterValue(event.target.value)}/>
+
+                </div>
               )
               :
               (

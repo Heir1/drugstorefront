@@ -3,6 +3,7 @@ import { loginUser } from '@/app/redux/slices/login/actions';
 import { AppDispatch, RootState } from '@/app/redux/store/store';
 import React, { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form';
+import toast, { Toaster } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 
 type FormData = {
@@ -52,17 +53,38 @@ export default function FormAuth({setIsAuth, updateProductState}:IsAuth) {
             const email = `${data.email}@gmail.com`; // Formater l'email
           
             // Dispatch de l'action Redux pour connecter l'utilisateur
-            dispatch(loginUser({ email, password: data.password })).then((result) => {
+            dispatch(loginUser({ email, password: data.password })).then((result:any) => {
+                console.log("RESULTAT ",result.payload.role);
+                
               if (loginUser.fulfilled.match(result)) {
-                // Si la connexion est réussie
-                updateProductState() // Appeler updateProductState (asynchrone)
-                  .then(() => {
+
+                if(result.payload.role == "admin"){
+                    // Si la connexion est réussie
+                    updateProductState() // Appeler updateProductState (asynchrone)
+                    .then(() => {
                     setIsAuth(false); // Mettre à jour l'état d'authentification après que updateProductState est terminé
-                  })
-                  .catch((error) => {
+                    })
+                    .catch((error) => {
                     console.error("Erreur lors de la mise à jour du produit :", error);
-                  });
+                    });
+                }
+                else{
+                  toast.custom((t:any) => (
+                      <div
+                          className={`${
+                          t.visible ? "animate-enter" : "animate-leave"
+                          } flex items-center w-full max-w-xs p-4 text-white bg-red-600 border border-red-900 rounded-lg shadow-lg`}
+                      >
+                          <span className="mr-2 bg-white rounded-full text-[10px] p-[2px] ">❌</span>
+                          <div className="flex-1 text-center">
+                          {/* <p className="font-bold">Erreur</p> */}
+                          <p className="text-sm">Vous n'avez lz droit d'éffectuer cette opération</p>
+                          </div>
+                      </div>
+                  ));
+                }
               }
+
             });
           };
 
@@ -74,6 +96,9 @@ export default function FormAuth({setIsAuth, updateProductState}:IsAuth) {
         </div>
 
         <div className=" w-full fixed top-[25%] left-[35%] " >
+
+            <Toaster />
+
             <div className=" bg-[#7288a5fd] w-[30%] py-10 " >
                 <form onSubmit={handleSubmit(onSubmit)} className="">
                     <div className="flex flex-col justify-center items-center">

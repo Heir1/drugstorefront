@@ -42,7 +42,7 @@ export const ArticleApproColumns: ColumnDef<IMovement>[] = [
     {
         accessorKey: "article.description",
         header: "PRODUIT",
-        // id: "article.description", // Explicitly set the ID
+        id: "article.description", // Explicitly set the ID
         cell: ({ row } : { row : any} ) => row.original.article?.description || "No Description",
     },
 
@@ -94,6 +94,7 @@ export const ArticleApproColumns: ColumnDef<IMovement>[] = [
     {
         accessorKey: "created_by",
         header: "UTILISATEUR",
+        id: "created_by", // Explicitly set the ID
         cell: ({ row } : { row : any} ) => row.original.created_by,
     }
     

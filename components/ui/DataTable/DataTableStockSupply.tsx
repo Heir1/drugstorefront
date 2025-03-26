@@ -243,16 +243,15 @@ export function DataTableStockSupply<TData, TValue>({
                         :
                         (
                         title == "Movements" ? (
-                          <input
-                            className='w-[700px] px-6 py-2 my-3 border-[1px] border-black text-black rounded-3xl text-[14px] uppercase'
-                            placeholder='Rechercher le produit pharmaceutique par sa description'
-                            type="text"
-                            value={(table.getState().globalFilter as string) ?? ""}
-                            onChange={(event) => {
-                              const value = event.target.value;
-                              table.setGlobalFilter(value);
-                            }}
-                          />
+
+                          <div className=" flex gap-2 " >
+
+                            <input className=' w-[200px] px-6 py-2 my-3 border-[1px] border-black text-black rounded-3xl text-[14px] uppercase ' placeholder='Description' type="text" value={(table.getColumn("article.description")?.getFilterValue() as string) ?? "" } onChange={(event) => table.getColumn("article.description")?.setFilterValue(event.target.value)} />
+
+                            <input className=' w-[200px] px-6 py-2 my-3 border-[1px] border-black text-black rounded-3xl text-[14px] uppercase ' placeholder='Utilisateur' type="text" value={(table.getColumn("created_by")?.getFilterValue() as string) ?? "" } onChange={(event) => table.getColumn("created_by")?.setFilterValue(event.target.value)} />
+
+                          </div>
+
                         )
                         :
                         (

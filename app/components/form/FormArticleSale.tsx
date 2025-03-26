@@ -28,8 +28,6 @@ import toast, { Toaster } from 'react-hot-toast';
 // Dynamically import React Select without SSR
 const Select = dynamic(() => import('react-select'), { ssr: false });
 
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
 import { invoke } from '@tauri-apps/api/core';
 
 import ReactDOMServer from 'react-dom/server';
@@ -283,7 +281,10 @@ export default function FormArticleSale() {
                                 </div>
                             </div>
                         ));
-                        onSubmitProf();
+
+                        // onSubmitProf();
+
+
                     } else {
                         setIsInvoice(false)
                         setLoading(false);
@@ -377,86 +378,7 @@ export default function FormArticleSale() {
 
         console.log("PANIER ",cart1);
         
-    
-        // Réinitialiser le formulaire après soumission
-        // reset();
     };
-
-
-    // const handleChange = (selected: any) => {
-        
-    //     setArticle(selected)
-
-    //     setValue("barcode", selected.value.barcode, { shouldValidate: true });
-    //     setValue("description", selected.value.description, { shouldValidate: true });
-    //     setValue("alert", selected.value.alert, { shouldValidate: true });
-    //     setValue("expirationDate", selected.value.expiration_date, { shouldValidate: true });
-    //     setValue("quantity", selected.value.quantity, { shouldValidate: true });
-    //     setValue("purchase_price", selected.value.selling_price, { shouldValidate: true });
-    //     setValue("selling_price", Number((Number(selected.value.selling_price)/rate).toFixed(3)), { shouldValidate: true });
-    //     setValue('currency', selected.value.currency_id.toString(), { shouldValidate: true });
-    //     setValue('packaging1', selected.value.packaging.name, { shouldValidate: true });
-    //     setValue('category1', selected.value.category.name, { shouldValidate: true });
-    //     setValue('location1', selected.value.placements[0].name, { shouldValidate: true });
-    //     setValue('supplier1', selected.value.suppliers[0].name, { shouldValidate: true });
-    //     setValue('molecule1', selected.value.molecules[0].name, { shouldValidate: true });
-    //     setValue('indication1', selected.value.indications[0].name, { shouldValidate: true });
-        
-
-
-    //     // Assuming 'content.location' contains the value we need to set for the Select
-    //     const selectedLocation = placementsFormated.find(option => option.label === selected.value.placements[0].name); 
-
-    //     // Assuming 'content.indication' contains the value we need to set for the Select
-    //     const selectedIndication = indicationsFormated.find(option => option.label === selected.value.indications[0].name); 
-
-    //     // Assuming 'content.molecule' contains the value we need to set for the Select
-    //     const selectedMolecule = moleculeFormated.find(option => option.label === selected.value.molecules[0].name);  
-
-    //     // Assuming 'content.location' contains the value we need to set for the Select
-    //     const selectedPackaging = packagingsFormated.find(option => option.label === selected.value.packaging.name);  
-
-    //     // Assuming 'content.category' contains the value we need to set for the Select
-    //     const selectedCategory = categoriesFormated.find(option => option.label === selected.value.category.name); 
-
-    //     // Assuming 'content.supplier' contains the value we need to set for the Select
-    //     const selectedSupplier = suppliersFormated.find(option => option.label === selected.value.suppliers[0].name); 
-        
-        
-    //     console.log(selectedPackaging);
-        
-        
-
-    //     if (selectedLocation) {
-    //         // Setting the value for 'location' using react-hook-form's setValue
-    //         setValue("location", selectedLocation, { shouldValidate: true });
-    //     }
-
-    //     if (selectedIndication) {
-    //         // Setting the value for 'location' using react-hook-form's setValue
-    //         setValue("indication", selectedIndication, { shouldValidate: true });
-    //     }
-
-    //     if (selectedMolecule) {
-    //         // Setting the value for 'location' using react-hook-form's setValue
-    //         setValue("molecule", selectedMolecule, { shouldValidate: true });
-    //     }
-
-    //     if (selectedPackaging) {
-    //         // Setting the value for 'location' using react-hook-form's setValue
-    //         setValue("packaging", selectedPackaging, { shouldValidate: true });
-    //     }
-
-    //     if (selectedCategory) {
-    //         // Setting the value for 'location' using react-hook-form's setValue
-    //         setValue("category", selectedCategory, { shouldValidate: true });
-    //     }
-
-    //     if (selectedSupplier) {
-    //         // Setting the value for 'location' using react-hook-form's setValue
-    //         setValue("supplier", selectedSupplier, { shouldValidate: true });
-    //     }
-    // };
 
     const handleChange = (selected: any) => {
         if (!selected) return;
@@ -563,37 +485,6 @@ export default function FormArticleSale() {
         }));
     };
 
-    // const onSubmitProf = async () => {
-
-    //     setIsInvoice(false);
-    
-    //     formatProducts(cart);
-    
-    //     const docDefinition = {
-            
-    //         content: 'This is an sample PDF printed with pdfMake'
-        
-    //     };
-    
-    //     const pdfDocGenerator = pdfMake.createPdf(docDefinition);
-    
-    //     pdfDocGenerator.getBuffer((buffer) => {
-    //         const blob = new Blob([buffer], { type: 'application/pdf' });
-    //         const url = URL.createObjectURL(blob);
-    
-    //         // Envoyer le PDF à l'imprimante via Tauri
-    //         invoke('print_pdf', { pdfUrl: url })
-    //             .then(() => {
-    //                 alert("Impression reçue")
-    //                 console.log('Impression réussie');
-    //             })
-    //             .catch((error) => {
-    //                 alert("Echeque")
-    //                 console.error('Erreur lors de l\'impression:', error);
-    //             });
-    //     });
-    // };
-
     const onSubmitProf = () => {
 
         setIsInvoice(false)
@@ -607,7 +498,6 @@ export default function FormArticleSale() {
 
     const generateInvoiceHTML = () => {
 
-        // <Invoice products={formatProducts(cart)} client={clientName} invoicenumber={invoiceNumber.data} isInvoice={isInvoice}  />
         const invoiceComponent = (
             <Invoice products={formatProducts(cart)} client={clientName} invoicenumber={invoiceNumber.data} isInvoice={isInvoice} rate={rate} />
         );
@@ -636,15 +526,12 @@ export default function FormArticleSale() {
         return (
             <>
 
-                {/* <div className="print hidden print:block" >
-                    <Invoice products={formatProducts(cart)} client={clientName} invoicenumber={invoiceNumber.data} isInvoice={isInvoice}  />
-                </div> */}
-
                 <div className="block print:hidden" >
                     {
                        loading && <Loading/>
                     }
                     <div className="mx-2"  >
+                        
                         <Toaster />
 
                         <button onClick={ () => printInvoice()} >SEND</button>
@@ -720,21 +607,7 @@ export default function FormArticleSale() {
                                                 </Combobox>
                                             )}
                                         />
-                                        {/* <Controller
-                                            name="description1"
-                                            control={control}
-                                            defaultValue=""
-                                            render={({ field }) => (
-                                                <Select
-                                                    {...field}
-                                                    value={article}
-                                                    options={articlesFormated}
-                                                    onChange={handleChange}
-                                                    placeholder="Sélectionnez un article"
-                                                    className="uppercase"
-                                                />
-                                            )}
-                                        /> */}
+
                                     </div>
                                 </div>
                             </div>
@@ -1080,7 +953,6 @@ export default function FormArticleSale() {
                                                 <div className="text-right mb-2 ">
                                                     <input
                                                         type="number"
-                                                        // value={usdPaidAmount}
                                                         onChange={(event) => changeDollarHandler(event) }
                                                         className="w-full h-8 p-1 bg-yellow-400  border border-gray-300 rounded text-center text-sm"
                                                     />
@@ -1094,7 +966,6 @@ export default function FormArticleSale() {
                                             </div>
                                         </div>
 
-                                        {/* Différence en USD et en CDF */}
                                         <div className="flex items-center gap-2 p-2">
                                             <div className="grid grid-cols-1 w-full text-sm">
                                                 <div className="bg-green-700 mb-2 p-1 ">
@@ -1139,16 +1010,12 @@ export default function FormArticleSale() {
                                     {/* Footer Section */}
                                     <div className="grid grid-cols-9 gap-2">
                                         <div className="col-span-3 flex items-center gap-2  p-2 rounded">
-                                        <h1 className="text-sm text-gray-600">Type Vente</h1>
-                                        {/* <input
-                                            type="text"
-                                            className="w-20 h-8 p-1 border border-gray-300 rounded text-sm"
-                                        /> */}
+
+                                            <h1 className="text-sm text-gray-600">Type Vente</h1>
 
                                             <Controller
                                                 name="paymentmode"
                                                 control={control}
-                                                // defaultValue={paymentModeFormated[0]}
                                                 render={({ field }) => (
                                                     <Select
                                                     {...field}
@@ -1160,9 +1027,6 @@ export default function FormArticleSale() {
 
                                                 rules={{ required: 'Le type de vente est requis' }}
                                             />
-
-
-                                        {/* <span className="text-sm font-medium text-gray-800">{paymentMode}</span> */}
                                         </div>
 
                                         <div className="col-start-6 col-span-4 ">
