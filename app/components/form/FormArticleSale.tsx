@@ -138,7 +138,7 @@ export default function FormArticleSale() {
             currency : 1,
             invoice : 1,
             quantity : 0,
-            quantity1: null,
+            quantity1: 1,
             quantityappro: 1,
             purchase_price : 0,
             selling_price : 0,
@@ -244,68 +244,91 @@ export default function FormArticleSale() {
     }
 
     useEffect(() => {
+
         const handleCreateInvoice = async () => {
-            if (isInvoice) {
-
-                const { paymentmode, invoice } = submittedData;
-            
-                const cartDate: any = {
-                    client_name : clientName.trim().length ? clientName : "NOT SET" ,
-                    invoice,
-                    paymentmode: paymentmode.value,
-                    articles: cart1,
-                    created_by: user?.name,
-                };
+            if(cdfPaidAmount){
+                if(cdfPaidAmount >= getTotalPrice() ){
+                    if (isInvoice) {
         
-                try {
-                    // Attendre la fin de la création de la facture
-                    const result:any = await dispatch(createInvoice(cartDate));
-            
-                    // Si la création de la facture a réussi, exécutez onSubmitProf()
-                    if (result.meta.requestStatus === 'fulfilled') {
-                        setCart([]);
-                        setLoading(false);
-                        toast.custom((t: any) => (
-                            <div
-                                className={`${
-                                t.visible ? "animate-enter" : "animate-leave"
-                                } flex items-center w-full max-w-xs p-4 text-white bg-green-600 border border-green-900 rounded-lg shadow-lg`}
-                            >
-                                {/* Icône verte avec fond rouge inversé */}
-                                <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">
-                                ✅
-                                </span>
-                                
-                                <div className="flex-1 text-center">
-                                    <p className="text-sm">La vente éffectuée avec succès</p>
-                                </div>
-                            </div>
-                        ));
-
-                        // onSubmitProf();
-
-
-                    } else {
-                        setIsInvoice(false)
-                        setLoading(false);
-                        toast.custom((t:any) => (
-                            <div
-                                className={`${
-                                t.visible ? "animate-enter" : "animate-leave"
-                                } flex items-center w-full max-w-xs p-4 text-white bg-red-600 border border-red-900 rounded-lg shadow-lg`}
-                            >
-                                <span className="mr-2 bg-white rounded-full text-[10px] p-[2px] ">❌</span>
-                                <div className="flex-1 text-center">
-                                {/* <p className="font-bold">Erreur</p> */}
-                                <p className="text-sm">{result?.payload?.message}</p>
-                                </div>
-                            </div>
-                        ));
+                        const { paymentmode, invoice } = submittedData;
+                    
+                        const cartDate: any = {
+                            client_name : clientName.trim().length ? clientName : "NOT SET" ,
+                            invoice,
+                            paymentmode: paymentmode.value,
+                            articles: cart1,
+                            created_by: user?.name,
+                        };
+                
+                        try {
+                            // Attendre la fin de la création de la facture
+                            const result:any = await dispatch(createInvoice(cartDate));
+                    
+                            // Si la création de la facture a réussi, exécutez onSubmitProf()
+                            if (result.meta.requestStatus === 'fulfilled') {
+                                setCart([]);
+                                setIsInvoice(false)
+                                setLoading(false);
+                                toast.custom((t: any) => (
+                                    <div
+                                        className={`${
+                                        t.visible ? "animate-enter" : "animate-leave"
+                                        } flex items-center w-full max-w-xs p-4 text-white bg-green-600 border border-green-900 rounded-lg shadow-lg`}
+                                    >
+                                        {/* Icône verte avec fond rouge inversé */}
+                                        <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">
+                                        ✅
+                                        </span>
+                                        
+                                        <div className="flex-1 text-center">
+                                            <p className="text-sm">La vente éffectuée avec succès</p>
+                                        </div>
+                                    </div>
+                                ));
         
+                                // onSubmitProf();
+        
+        
+                            } else {
+                                setIsInvoice(false)
+                                setLoading(false);
+                                toast.custom((t:any) => (
+                                    <div
+                                        className={`${
+                                        t.visible ? "animate-enter" : "animate-leave"
+                                        } flex items-center w-full max-w-xs p-4 text-white bg-red-600 border border-red-900 rounded-lg shadow-lg`}
+                                    >
+                                        <span className="mr-2 bg-white rounded-full text-[10px] p-[2px] ">❌</span>
+                                        <div className="flex-1 text-center">
+                                        {/* <p className="font-bold">Erreur</p> */}
+                                        <p className="text-sm">{result?.payload?.message}</p>
+                                        </div>
+                                    </div>
+                                ));
+                
+                            }
+                        } catch (error:any) {
+                            setIsInvoice(false)
+                            setLoading(false);
+                            toast.custom((t:any) => (
+                                <div
+                                    className={`${
+                                    t.visible ? "animate-enter" : "animate-leave"
+                                    } flex items-center w-full max-w-xs p-4 text-white bg-red-600 border border-red-900 rounded-lg shadow-lg`}
+                                >
+                                    <span className="mr-2 bg-white rounded-full text-[10px] p-[2px] ">❌</span>
+                                    <div className="flex-1 text-center">
+                                    {/* <p className="font-bold">Erreur</p> */}
+                                    <p className="text-sm">{error}</p>
+                                    </div>
+                                </div>
+                            ));
+                        }
                     }
-                } catch (error:any) {
+                }
+                else{
+                    setLoading(false)
                     setIsInvoice(false)
-                    setLoading(false);
                     toast.custom((t:any) => (
                         <div
                             className={`${
@@ -315,12 +338,131 @@ export default function FormArticleSale() {
                             <span className="mr-2 bg-white rounded-full text-[10px] p-[2px] ">❌</span>
                             <div className="flex-1 text-center">
                             {/* <p className="font-bold">Erreur</p> */}
-                            <p className="text-sm">{error}</p>
+                            <p className="text-sm">Le montant est insuffisant</p>
                             </div>
                         </div>
                     ));
                 }
             }
+            else if(usdPaidAmount) {
+                if(usdPaidAmount >= getTotalPrice()/rate ){
+                    if (isInvoice) {
+        
+                        const { paymentmode, invoice } = submittedData;
+                    
+                        const cartDate: any = {
+                            client_name : clientName.trim().length ? clientName : "NOT SET" ,
+                            invoice,
+                            paymentmode: paymentmode.value,
+                            articles: cart1,
+                            created_by: user?.name,
+                        };
+                
+                        try {
+                            // Attendre la fin de la création de la facture
+                            const result:any = await dispatch(createInvoice(cartDate));
+                    
+                            // Si la création de la facture a réussi, exécutez onSubmitProf()
+                            if (result.meta.requestStatus === 'fulfilled') {
+                                setCart([]);
+                                setIsInvoice(false)
+                                setLoading(false);
+                                toast.custom((t: any) => (
+                                    <div
+                                        className={`${
+                                        t.visible ? "animate-enter" : "animate-leave"
+                                        } flex items-center w-full max-w-xs p-4 text-white bg-green-600 border border-green-900 rounded-lg shadow-lg`}
+                                    >
+                                        {/* Icône verte avec fond rouge inversé */}
+                                        <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">
+                                        ✅
+                                        </span>
+                                        
+                                        <div className="flex-1 text-center">
+                                            <p className="text-sm">La vente éffectuée avec succès</p>
+                                        </div>
+                                    </div>
+                                ));
+        
+                                // onSubmitProf();
+        
+        
+                            } else {
+                                setIsInvoice(false)
+                                setLoading(false);
+                                toast.custom((t:any) => (
+                                    <div
+                                        className={`${
+                                        t.visible ? "animate-enter" : "animate-leave"
+                                        } flex items-center w-full max-w-xs p-4 text-white bg-red-600 border border-red-900 rounded-lg shadow-lg`}
+                                    >
+                                        <span className="mr-2 bg-white rounded-full text-[10px] p-[2px] ">❌</span>
+                                        <div className="flex-1 text-center">
+                                        {/* <p className="font-bold">Erreur</p> */}
+                                        <p className="text-sm">{result?.payload?.message}</p>
+                                        </div>
+                                    </div>
+                                ));
+                
+                            }
+                        } catch (error:any) {
+                            setIsInvoice(false)
+                            setLoading(false);
+                            toast.custom((t:any) => (
+                                <div
+                                    className={`${
+                                    t.visible ? "animate-enter" : "animate-leave"
+                                    } flex items-center w-full max-w-xs p-4 text-white bg-red-600 border border-red-900 rounded-lg shadow-lg`}
+                                >
+                                    <span className="mr-2 bg-white rounded-full text-[10px] p-[2px] ">❌</span>
+                                    <div className="flex-1 text-center">
+                                    {/* <p className="font-bold">Erreur</p> */}
+                                    <p className="text-sm">{error}</p>
+                                    </div>
+                                </div>
+                            ));
+                        }
+                    }
+                }
+                else{
+                    setLoading(false)
+                    setIsInvoice(false)
+                    toast.custom((t:any) => (
+                        <div
+                            className={`${
+                            t.visible ? "animate-enter" : "animate-leave"
+                            } flex items-center w-full max-w-xs p-4 text-white bg-red-600 border border-red-900 rounded-lg shadow-lg`}
+                        >
+                            <span className="mr-2 bg-white rounded-full text-[10px] p-[2px] ">❌</span>
+                            <div className="flex-1 text-center">
+                            {/* <p className="font-bold">Erreur</p> */}
+                            <p className="text-sm">Le montant est insuffisant</p>
+                            </div>
+                        </div>
+                    ));
+                }
+            }
+            else{
+                setLoading(false);
+                if(isInvoice){
+                    setIsInvoice(false)
+                    toast.custom((t:any) => (
+                        <div
+                            className={`${
+                            t.visible ? "animate-enter" : "animate-leave"
+                            } flex items-center w-full max-w-xs p-4 text-white bg-red-600 border border-red-900 rounded-lg shadow-lg`}
+                        >
+                            <span className="mr-2 bg-white rounded-full text-[10px] p-[2px] ">❌</span>
+                            <div className="flex-1 text-center">
+                            {/* <p className="font-bold">Erreur</p> */}
+                            <p className="text-sm">Veuillez confirmer le montant</p>
+                            </div>
+                        </div>
+                    ));
+                }
+            }
+
+
         };
         
         handleCreateInvoice();
@@ -726,7 +868,7 @@ export default function FormArticleSale() {
                                         </div>
                                         <div className=" col-span-2 " >
                                             <div className="flex items-center " >
-                                                <label className=" w-1/2 text-[13px] font-medium text-white "  htmlFor="">QTE STOCK</label>
+                                                <label className=" w-1/2 text-[13px] font-medium text-white "  htmlFor="">STOCK</label>
                                                 <Controller
                                                     name="quantity"
                                                     control={control}
@@ -745,7 +887,7 @@ export default function FormArticleSale() {
                                                     <Controller
                                                         name="quantity1"
                                                         control={control}
-                                                        // defaultValue={1}
+                                                        defaultValue={1}
                                                         render={({ field }) => <input {...field} value={field.value ?? ""} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="number"  max={article?.value?.quantity} />}
                                                         rules={{ required: 'Le code barre est requis' }}
                                                     />
@@ -930,19 +1072,21 @@ export default function FormArticleSale() {
                                                 <div className="text-right">
                                                     <input
                                                         type="number"
+                                                        placeholder="0"
                                                         // value={cdfPaidAmount}
-                                                        className="w-full text-red-800 font-bold bg-green-700 h-8 py-4 border border-gray-300 mb-2 rounded text-center text-sm"
+                                                        onFocus={(e) =>  e.target.select()}
+                                                        className="w-full text-red-500 font-bold bg-green-500 h-8 py-4 border border-gray-300 mb-2 rounded text-center text-sm"
                                                         onChange={(event) => changeCdfHandler(event) }
                                                     />
                                                 </div>
                                                 <div className=" ml-2 " >
                                                     <h1 className="font-extrabold ">Remise</h1>
                                                 </div>
-                                                <div className="text-center text-red-800 bg-green-700 mt-1 p-2 ">
+                                                <div className="text-center text-red-700 bg-green-500 mt-1 p-2 ">
                                                     <h1 className="font-extrabold">0</h1>
                                                 </div>
                                             </div>
-                                            <div className=" bg-green-700 flex items-center h-full p-1" >
+                                            <div className=" bg-green-500 flex items-center h-full p-1" >
                                                 <h1 className="text-sm font-extrabold">CDF</h1>
                                             </div>
                                         </div>
@@ -953,6 +1097,8 @@ export default function FormArticleSale() {
                                                 <div className="text-right mb-2 ">
                                                     <input
                                                         type="number"
+                                                        placeholder="0"
+                                                        onFocus={(e) =>  e.target.select()}
                                                         onChange={(event) => changeDollarHandler(event) }
                                                         className="w-full h-8 p-1 bg-yellow-400  border border-gray-300 rounded text-center text-sm"
                                                     />

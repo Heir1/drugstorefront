@@ -103,7 +103,7 @@ export default function Header() {
                                                             </DropdownMenuItem>
                                                         </Link>
                                                         <DropdownMenuSeparator />
-                                                            <Link href={`/pages/admin/rapport/articles`}>
+                                                            <Link href={`/pages/admin/Supplies`} >
                                                                 <DropdownMenuItem>
                                                                     <span className=" text-sm " > Stock</span>
                                                                 </DropdownMenuItem>
@@ -115,12 +115,6 @@ export default function Header() {
                                                                 </DropdownMenuItem>
                                                             </Link>
                                                         <DropdownMenuSeparator />
-
-                                                            <Link href={`/pages/admin/Supplies`} >
-                                                                <DropdownMenuItem>
-                                                                    <span className=" text-sm " > Approv</span>
-                                                                </DropdownMenuItem>
-                                                            </Link>
 
                                                             <DropdownMenuItem>
                                                                 <Link className="flex items-center space-x-2" href={``}>
@@ -167,11 +161,21 @@ export default function Header() {
                                                                     <span className=" text-sm ">Regul Vente</span>
                                                                 </DropdownMenuItem>
                                                             </Link>
-                                                            <DropdownMenuItem>Regul Caisse Admin</DropdownMenuItem>
+                                                            <Link className="flex items-center space-x-2" href={`/pages/admin/cash`}>
+                                                                <DropdownMenuItem>
+                                                                    <span className=" text-sm ">Regul Caisse Admin</span>
+                                                                </DropdownMenuItem>
+                                                            </Link>
                                                             <DropdownMenuSeparator />
                                                             <DropdownMenuItem>Comptes clients</DropdownMenuItem>
                                                             <DropdownMenuSeparator />
-                                                            <DropdownMenuItem>Caisse Admin</DropdownMenuItem>
+                                                            <DropdownMenuItem>
+                                                                <Link className="flex items-center space-x-2" href={`/pages/admin/cash`}>
+                                                                    <DropdownMenuItem>
+                                                                        <span className=" text-sm ">Caisse Admin</span>
+                                                                    </DropdownMenuItem>
+                                                                </Link>
+                                                            </DropdownMenuItem>
                                                             <DropdownMenuSeparator />
                                                             <DropdownMenuItem>Import / Export</DropdownMenuItem>
                                                         </DropdownMenuSubContent>
