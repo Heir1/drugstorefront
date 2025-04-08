@@ -14,6 +14,7 @@ export default interface ITransaction {
     id?: number;
     transaction_type?: string;
     transaction_date?: string;
+    ticket_counter?: string;
     amount?: number;
     description?: string;
     currency_id?: string;

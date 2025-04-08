@@ -11,12 +11,15 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import toast, { Toaster } from 'react-hot-toast';
 import IUser from '@/app/interfaces/user';
+import { useRateService } from '@/app/redux/slices/rates/useRateService';
+import { useUserService } from '@/app/redux/slices/users/useUserService';
 
 // Définir le schéma de validation avec Yup
 const schema = yup.object().shape({
     transaction_date: yup.string().required('La date de transaction est requise'),
     transaction_type: yup.string().required('Le type de transaction est requis'),
     description: yup.string().required('La description est requise'),
+    ticket_counter: yup.string().required('Le nom du guichetier est requis'),
     currency_id: yup.string().required('La devise est requise'),
     amount: yup
       .number()
@@ -37,10 +40,20 @@ export default function Cash() {
     const [isReportArticle, setIsReportArticle] = useState(false);
 
     const dispatch = useDispatch<AppDispatch>();
-    const [startDate, setStartDate] = useState<string>('');
-    const [endDate, setEndDate] = useState<string>('');
+    const [startDate, setStartDate] = useState<string>(today);
+    const [endDate, setEndDate] = useState<string>(today);
     const [selectedTransaction, setSelectedTransaction] = useState<ITransaction | null>(null);
     const [user, setUser] = useState<IUser | null>(null);
+    const [ isSearching, setIsSearching ] = useState(false);
+    const [ totalIncomeCDF, setTotalIncomeCDF ] = useState(0);
+    const [ totalExpenseCDF, setTotalExpenseCDF ] = useState(0);
+    const [ totalIncomeUSD, setTotalIncomeUSD ] = useState(0);
+    const [ totalExpenseUSD, setTotalExpenseUSD ] = useState(0);
+    const { users, userStatus, error } = useUserService();
+
+    const { rates } = useRateService()
+    const rate = rates[0]?.value
+
 
     const { transactions, transactionStatus , transactionError } = useSelector((state: RootState) => state.transaction )
 
@@ -57,6 +70,7 @@ export default function Cash() {
             transaction_type: '',
             description: '',
             currency_id: '',
+            ticket_counter: '',
             amount: 0,
         },
     });
@@ -87,7 +101,10 @@ export default function Cash() {
 
     const handleSubmitSearch = (e: React.FormEvent) => {
         e.preventDefault(); // Empêcher le rechargement de la page
-        dispatch(fetchTransactions({ startDate, endDate }));
+        dispatch(fetchTransactions({ startDate, endDate }))
+        .then(() => {
+          setIsSearching(!isSearching); // Runs after fetch completes
+        });
     };
 
     const onSubmit = (data:ITransaction) => {
@@ -103,12 +120,10 @@ export default function Cash() {
             amount: data.amount,
             description: data.description,
             created_by: user?.id,
+            ticket_counter : data.ticket_counter,
             currency_id,
             transaction_date : data.transaction_date
-        }
-
-        // console.log(transactionData);
-        
+        }        
 
         const createUserPromise = dispatch(createTransaction(transactionData)).unwrap()
         .then(() => ({
@@ -237,31 +252,69 @@ export default function Cash() {
         });
     }
 
+    const resetFormInfo = () => {
+        setSelectedTransaction(null);
+        reset();
+    }
+
+    function formatNumberWithSpaces(amount: number): string {
+        // Utilise toLocaleString pour formatter le nombre avec espace comme séparateur
+        return amount.toLocaleString("fr-FR", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        });
+    }
+
+    useEffect(() => {
+
+        let totalIncomeCDF = 0;
+        let totalExpenseCDF = 0;
+        let totalIncomeUSD = 0;
+        let totalExpenseUSD = 0;
+
+        transactions.forEach((transaction:any) => {
+            if (transaction.currency?.id === "1") { // CDF
+                if (transaction.transaction_type === "income") {
+                    totalIncomeCDF += transaction.amount;
+                } else {
+                    totalExpenseCDF += transaction.amount;
+                }
+            } else { // USD
+                if (transaction.transaction_type === "income") {
+                    totalIncomeUSD += transaction.amount;
+                } else {
+                    totalExpenseUSD += transaction.amount;
+                }
+            }
+        })
+
+        setTotalIncomeCDF( Number(totalIncomeCDF)  + Number(totalIncomeUSD*rate));
+        setTotalExpenseCDF( Number(totalExpenseCDF)  + Number(totalExpenseUSD*rate));
+        setTotalIncomeUSD( Number(totalIncomeUSD)  + Number(totalIncomeCDF/rate));
+        setTotalExpenseUSD( Number(totalExpenseUSD)  +  Number(totalExpenseCDF/rate))
+
+    }, [isSearching,transactions])
+
     return (
             <div>
                 <Toaster />
                 <div className=" block print:hidden mx-2 p-5 " >
                     <div className="grid grid-cols-11">
                         <div className="col-span-5 shadow-[0px_4px_8px_0px_#00000026] bg-[#F6F7F9] rounded-xl py-1 px-2  ">
-                            <div className="grid grid-cols-5 gap-1 place-content-center">
+                            <div className="grid grid-cols-4 gap-1 place-content-center">
                                 <Link href={``}>
                                     <div className={`flex justify-center items-center py-2 rounded-lg uppercase ${ isNewArticle && "bg-[#262B62] text-white" } `} onClick={ ()=> setActivation("new") } >
                                         <h1>Transactions</h1>
                                     </div>
                                 </Link>
                                 <Link href={``}>
-                                    <div className={`flex justify-center items-center py-2 rounded-lg uppercase ${ isUpdateArticle && "bg-[#262B62] text-white" } `} onClick={ ()=> setActivation("update") }>
+                                    <div className={`flex justify-center items-center py-2 rounded-lg uppercase ${ isUpdateArticle && "bg-[#2z62B62] text-white" } `} onClick={ ()=> setActivation("update") }>
                                         <h1>Import/Export</h1>
                                     </div>
                                 </Link>
                                 <Link href={``}>
                                     <div className={`flex justify-center items-center uppercase py-2 rounded-lg ${ isStateArticle && "bg-[#262B62] text-white px-2 " } `} onClick={ ()=> setActivation("state") }>
                                         <h1>Rapports</h1>
-                                    </div>
-                                </Link>
-                                <Link href={``}>
-                                    <div className={`flex justify-center items-center uppercase py-2 rounded-lg ${ isReportArticle && "bg-[#262B62] text-white" } `}>
-                                        <h1>Rapport</h1>
                                     </div>
                                 </Link>
                             </div>
@@ -506,20 +559,21 @@ export default function Cash() {
                                         <div className="gap-2">
                                             <h1 className="font-extrabold uppercase mb-2">Montant</h1>
                                             <Controller
-                                            name="amount"
-                                            control={control}
-                                            render={({ field }) => (
-                                                <input
-                                                {...field}
-                                                className="w-full"
-                                                type="number"
-                                                placeholder="Montant"
-                                                />
-                                            )}
+                                                name="amount"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <input
+                                                    {...field}
+                                                    className="w-full"
+                                                    type="number"
+                                                    placeholder="Montant"
+                                                    />
+                                                )}
                                             />
-                                            {errors.amount && (
-                                            <p className="text-red-500 text-sm">{errors.amount.message}</p>
-                                            )}
+                                            {
+                                                errors.amount && (<p className="text-red-500 text-sm">{errors.amount.message}</p>
+                                            )
+                                            }
                                         </div>
                                         </div>
                                     </div>
@@ -527,11 +581,22 @@ export default function Cash() {
                                     {/* Guichet */}
                                     <div className="mx-2 space-y-2">
                                         <label htmlFor="guichet" className="font-extrabold text-[13px]">
-                                        GUICHET
+                                            GUICHET
                                         </label>
-                                        <select className="w-full p-1">
-                                        <option value="">{user?.name}</option>
-                                        </select>
+                                        <Controller
+                                            name="ticket_counter" // ou "created_by" selon votre besoin
+                                            control={control}
+                                            render={({ field }) => (
+                                                <select {...field} className="w-full p-1">
+                                                <option value="">Sélectionnez un guichetier</option>
+                                                {users.map((user: IUser) => (
+                                                    <option key={user.id} value={user.id}>
+                                                    {user?.name}
+                                                    </option>
+                                                ))}
+                                                </select>
+                                            )}
+                                        />
                                     </div>
 
                                     {/* Boutons Enregistrer et Annuler */}
@@ -550,7 +615,7 @@ export default function Cash() {
                                         <button
                                             className="w-full bg-gray-400 uppercase font-bold"
                                             type="button"
-                                            onClick={() => setSelectedTransaction(null) }
+                                            onClick={() => resetFormInfo() }
                                         >
                                             Annuler
                                         </button>
@@ -560,26 +625,27 @@ export default function Cash() {
                             </div>
                             <div className=" col-span-8 border-2 border-gray-300 p-4 " >
                                 <div className=" border-2 border-black shadow-2xl h-[70%]  " >
-                                    <table className="w-full uppercase border border-gray-300">
-                                        <thead>
-                                        {/* bg-gray-700 */}
-                                            <tr className="bg-white uppercase">
-                                                <th className=" border border-gray-500 text-left pl-1 ">Transaction</th>
-                                                <th className=" border border-gray-500 text-left pl-1 ">Montant</th>
-                                                <th className=" border border-gray-500 text-left pl-1 ">Descrption</th>
-                                                <th className=" border border-gray-500 text-left pl-1 ">Monnaie</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {
-                                                transactionStatus == "loading" ? (
-                                                    <TableLoading/>
-                                                )
-                                                :
-                                                (
+                                {
+                                    transactionStatus == "loading" ? (
+                                        <TableLoading/>
+                                    )
+                                    :
+                                    (
+                                        <table className="w-full uppercase border border-gray-300">
+                                            <thead>
+                                            {/* bg-gray-700 */}
+                                                <tr className="bg-white uppercase">
+                                                    <th className=" border border-gray-500 text-left pl-1 ">Transaction</th>
+                                                    <th className=" border border-gray-500 text-left pl-1 ">Montant</th>
+                                                    <th className=" border border-gray-500 text-left pl-1 ">Descrption</th>
+                                                    <th className=" border border-gray-500 text-left pl-1 ">Monnaie</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {
                                                     transactions?.map((transacion: ITransaction) => (
                                                         <tr key={transacion.id} 
-
+    
                                                         className={` border ${ selectedTransaction?.id == transacion?.id ? 'bg-blue-700 text-white ' : 'bg-gray-100' }  border-gray-500 hover:cursor-pointer `} 
                                                         
                                                         onClick={()=> handleEdit(transacion)} 
@@ -594,36 +660,37 @@ export default function Cash() {
                                                             <td className="border border-gray-500 pl-1">{transacion.currency?.name}</td>
                                                         </tr>
                                                     ))
-                                                )
-                                            }
-                                        </tbody>
-            
-                                    </table>
+                                                }
+                                            </tbody>
+                
+                                        </table>
+                                    )
+                                }
                                 </div>
                                 <div className=" flex flex-col justify-center border-2 border-black h-[30%] mt-2   " >
                                     <div className=" grid grid-cols-5 gap-4 mb-2 " >
                                         <div className=" col-start-2 flex flex-col" >
                                             <label className=" uppercase text-[13px] font-extrabold " htmlFor="">RECETTES</label>
-                                            <input className=" bg-green-600 "  type="text" name="" id="" />
+                                            <input className=" bg-green-600 " readOnly  value={ isNaN(totalIncomeUSD) ? 0 : formatNumberWithSpaces(totalIncomeUSD) } type="text" name="" id="" />
                                         </div>
                                         <div className=" flex flex-col " >
                                             <label className=" uppercase text-[13px] font-extrabold " htmlFor="">Dépenses</label>
-                                            <input className=" bg-green-600 "  type="text" name="" id="" />
+                                            <input className=" bg-green-600 " readOnly  value={ isNaN(totalExpenseUSD) ? 0 : formatNumberWithSpaces(totalExpenseUSD) }  type="text" name="" id="" />
                                         </div>
                                         <div className="flex flex-col" >
                                             <label className=" uppercase text-[13px] font-extrabold " htmlFor="">SOLDE</label>
-                                            <input className=" bg-green-600 "  type="text" name="" id="" />
+                                            <input className=" bg-green-600 " readOnly  value={ isNaN(totalIncomeUSD -  totalExpenseUSD) ? 0 : formatNumberWithSpaces(totalIncomeUSD -  totalExpenseUSD) }  type="text" name="" id="" />
                                         </div>
                                     </div>
                                     <div className=" grid grid-cols-5 gap-4 " >
                                         <div className=" col-start-2" >
-                                            <input className="w-full bg-yellow-600 "  type="text" name="" id="" />
+                                            <input className="w-full bg-yellow-600 " readOnly  value={ isNaN(totalIncomeCDF) ? 0 : formatNumberWithSpaces(totalIncomeCDF)  }  type="text" name="" id="" />
                                         </div>
                                         <div>
-                                            <input className="w-full bg-yellow-600 "  type="text" name="" id="" />
+                                            <input className="w-full bg-yellow-600 " readOnly  value={ isNaN(totalExpenseCDF) ? 0 : formatNumberWithSpaces(totalExpenseCDF)  } type="text" name="" id="" />
                                         </div>
                                         <div>
-                                            <input className="w-full bg-yellow-600 "  type="text" name="" id="" />
+                                            <input className="w-full bg-yellow-600 " readOnly  value={ isNaN((totalIncomeCDF) - (totalExpenseCDF)) ? 0 : formatNumberWithSpaces((totalIncomeCDF) - (totalExpenseCDF)) }  type="text" name="" id="" />
                                         </div>
                                     </div>
                                 </div>

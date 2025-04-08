@@ -86,25 +86,20 @@ export default function User() {
             <div className=" block print:hidden mx-2 p-5 " >
                 <div className="grid grid-cols-11">
                     <div className="col-span-5 shadow-[0px_4px_8px_0px_#00000026] bg-[#F6F7F9] rounded-xl py-1 px-2  ">
-                        <div className="grid grid-cols-5 place-content-center">
+                        <div className="grid grid-cols-4 place-content-center">
                             <Link href={``}>
-                                <div className={`flex justify-center items-center py-2 rounded-lg ${ isNewArticle && "bg-[#262B62] text-white uppercase" } `} onClick={ ()=> setActivation("new") } >
+                                <div className={`flex justify-center items-center py-2 uppercase rounded-lg ${ isNewArticle && "bg-[#262B62] text-white" } `} onClick={ ()=> setActivation("new") } >
                                     <h1>Utilisateurs</h1>
                                 </div>
                             </Link>
                             <Link href={``}>
-                                <div className={`flex justify-center items-center py-2 rounded-lg ${ isUpdateArticle && "bg-[#262B62] text-white uppercase" } `} onClick={ ()=> setActivation("update") }>
+                                <div className={`flex justify-center items-center py-2 rounded-lg uppercase ${ isUpdateArticle && "bg-[#262B62] text-white " } `} onClick={ ()=> setActivation("update") }>
                                     <h1>Mot de passe</h1>
                                 </div>
                             </Link>
                             <Link href={``}>
-                                <div className={`flex justify-center items-center py-2 rounded-lg ${ isStateArticle && "bg-[#262B62] text-white uppercase" } `} onClick={ ()=> setActivation("state") }>
+                                <div className={`flex justify-center items-center py-2 rounded-lg uppercase ${ isStateArticle && "bg-[#262B62] text-white " } `} onClick={ ()=> setActivation("state") }>
                                     <h1>Autorisations</h1>
-                                </div>
-                            </Link>
-                            <Link href={``}>
-                                <div className={`flex justify-center items-center py-2 rounded-lg ${ isReportArticle && "bg-[#262B62] text-white uppercase" } `}>
-                                    <h1>Rapport</h1>
                                 </div>
                             </Link>
                         </div>
