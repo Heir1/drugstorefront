@@ -57,6 +57,9 @@ export default function Cash() {
 
     const { transactions, transactionStatus , transactionError } = useSelector((state: RootState) => state.transaction )
 
+    console.log(transactions);
+    
+
     const {
         control,
         handleSubmit,
@@ -171,14 +174,32 @@ export default function Cash() {
 
     useEffect(()=> {
         if(selectedTransaction){
+
+
+            console.log(selectedTransaction);
+            
             
             const transaction_type = selectedTransaction?.transaction_type == "income" ? "Recette" : "Dépense";
             const currency_id = selectedTransaction?.currency_id == "1" ? "CDF" : "USD";
 
+            // Handle ticket_counter value properly
+            let ticketCounterValue = "";
+            if (selectedTransaction?.ticket_counter) {
+            if (typeof selectedTransaction.ticket_counter === 'object') {
+                // If it's an IUser object
+                ticketCounterValue = selectedTransaction.ticket_counter.id?.toString() || "";
+            } else {
+                // If it's already an ID (string or number)
+                ticketCounterValue = selectedTransaction.ticket_counter.toString();
+            }
+            }
+
             setValue("transaction_type", transaction_type);
-            setValue("description", selectedTransaction?.description ? selectedTransaction?.description : "");
-            setValue("amount", selectedTransaction?.amount ? selectedTransaction?.amount : 0);
+            setValue("description", selectedTransaction?.description || "");
+            setValue("amount", selectedTransaction?.amount || 0);
             setValue("currency_id", currency_id);
+            setValue("ticket_counter", ticketCounterValue); // This should match the option value
+            
         }
     }, [selectedTransaction])
 
@@ -206,8 +227,12 @@ export default function Cash() {
             transaction_type,
             amount: data.amount,
             description: data.description,
+            ticket_counter : data.ticket_counter,
             currency_id
         }
+
+        console.log(transactionData);
+        
 
         const createUserPromise = dispatch(updateTransaction(transactionData)).unwrap()
         .then(() => ({
@@ -597,6 +622,10 @@ export default function Cash() {
                                                 </select>
                                             )}
                                         />
+                                        {
+                                            errors.ticket_counter && (<p className="text-red-500 text-sm">{errors.ticket_counter.message}</p>
+                                            )
+                                        }
                                     </div>
 
                                     {/* Boutons Enregistrer et Annuler */}

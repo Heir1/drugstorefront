@@ -27,5 +27,6 @@ interface Transaction {
 interface TransactionsByDate {
   date: string; // Date au format 'Y-m-d'
   name: string; // Nom de l'utilisateur
+  ticket_counter_name: string;
   transactions: Transaction[]; // Tableau de transactions
 }

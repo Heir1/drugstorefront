@@ -119,9 +119,9 @@ export default function Cash({transactiondetails, totalPurchase, totalSelling}:A
                                                         <h1>{((transaction1.created_at.split(".")[0]).split("T")[0]).split("-").reverse().join("-")} {(transaction1.created_at.split(".")[0]).split("T")[1] }</h1>
                                                     </div>
                                                     <div>
-                                                        <h1>{transaction.name}</h1>
+                                                        <h1>{transaction.ticket_counter_name}</h1>
                                                     </div>
-                                                    <div className="col-span-6 " >
+                                                    <div className="" >
                                                         <p className="uppercase" >{transaction1.description}</p>
                                                     </div>
                                                 </div>

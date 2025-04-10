@@ -1,3 +1,5 @@
+import IUser from "./user";
+
 interface Currency {
     id?: string;
     name?: string;
@@ -14,12 +16,12 @@ export default interface ITransaction {
     id?: number;
     transaction_type?: string;
     transaction_date?: string;
-    ticket_counter?: string;
+    ticket_counter?: IUser | string | number | null;
     amount?: number;
     description?: string;
     currency_id?: string;
-    created_by?: created_by | null;
-    updated_by?: created_by | null;
+    created_by?: IUser | string | number | null;
+    updated_by?: IUser | string | number | null;
     created_at?: string;
     updated_at?: string;
     currency?: Currency;
