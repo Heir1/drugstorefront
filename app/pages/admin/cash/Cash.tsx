@@ -1,7 +1,7 @@
 'use client'
 import TableLoading from '@/app/components/TableLoading';
 import ITransaction from '@/app/interfaces/transaction';
-import { createTransaction, fetchTransactions, updateTransaction } from '@/app/redux/slices/cash/actions';
+import { createTransaction, deleteTransaction, fetchTransactions, updateTransaction } from '@/app/redux/slices/cash/actions';
 import { AppDispatch, RootState } from '@/app/redux/store/store';
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
@@ -13,6 +13,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import IUser from '@/app/interfaces/user';
 import { useRateService } from '@/app/redux/slices/rates/useRateService';
 import { useUserService } from '@/app/redux/slices/users/useUserService';
+import FormAuth from '@/app/components/form/FormAuth';
 
 // Définir le schéma de validation avec Yup
 const schema = yup.object().shape({
@@ -50,6 +51,8 @@ export default function Cash() {
     const [ totalIncomeUSD, setTotalIncomeUSD ] = useState(0);
     const [ totalExpenseUSD, setTotalExpenseUSD ] = useState(0);
     const { users, userStatus, error } = useUserService();
+    const [ isAuth, setIsAuth ] = useState(false);
+    const [ id, setId ] = useState("");
 
     const { rates } = useRateService()
     const rate = rates[0]?.value
@@ -233,7 +236,6 @@ export default function Cash() {
 
         console.log(transactionData);
         
-
         const createUserPromise = dispatch(updateTransaction(transactionData)).unwrap()
         .then(() => ({
             status: "fulfilled",
@@ -275,6 +277,7 @@ export default function Cash() {
                 ));
             }
         });
+
     }
 
     const resetFormInfo = () => {
@@ -320,9 +323,63 @@ export default function Cash() {
 
     }, [isSearching,transactions])
 
+    const removeCashJournal = (id:any) => {
+        setIsAuth(true);
+        setId(id)
+    }
+    
+    const onSubmitDelete = async() => {
+        
+        dispatch(deleteTransaction(Number(id))).unwrap()
+        .then(() => ({
+            status: "fulfilled",
+            message: "Transaction a été supprimée avec succès !",
+        }))
+        .catch((err) => {
+            const errorMessage = typeof err === "string" ? err : err?.message || "Erreur inconnue lors de la suppression.";
+            return {
+            status: "rejected",
+            message: errorMessage,
+            };
+        })
+        .then((result) => {
+            if (result.status === "fulfilled") {
+                toast.custom((t:any) => (
+                    <div className={`${
+                        t.visible ? "animate-enter" : "animate-leave"
+                    } flex items-center w-full max-w-xs p-4 text-white bg-green-600 border border-green-900 rounded-lg shadow-lg`}
+                    >
+                        <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">✅</span>
+                        <div className="flex-1 text-center">
+                            <p className="text-sm">Transaction a été supprimée avec succès</p>
+                        </div>
+                    </div>
+                ), { duration: 2000 });
+                reset();
+                setSelectedTransaction(null)
+            } else {
+                toast.custom((t:any) => (
+                    <div className={`${
+                        t.visible ? "animate-enter" : "animate-leave"
+                    } flex items-center w-full max-w-xs p-4 text-white bg-red-600 border border-red-900 rounded-lg shadow-lg`}
+                    >
+                        <span className="mr-2 bg-white rounded-full text-[10px] p-[2px]">❌</span>
+                        <div className="flex-1 text-center">
+                            <p className="text-sm">{result.message}</p>
+                        </div>
+                    </div>
+                ));
+            }
+        });
+
+    }
+
     return (
             <div>
                 <Toaster />
+                {
+                    isAuth && <FormAuth updateProductState={onSubmitDelete}  setIsAuth={setIsAuth} />
+                }  
                 <div className=" block print:hidden mx-2 p-5 " >
                     <div className="grid grid-cols-11">
                         <div className="col-span-5 shadow-[0px_4px_8px_0px_#00000026] bg-[#F6F7F9] rounded-xl py-1 px-2  ">
@@ -668,6 +725,7 @@ export default function Cash() {
                                                     <th className=" border border-gray-500 text-left pl-1 ">Montant</th>
                                                     <th className=" border border-gray-500 text-left pl-1 ">Descrption</th>
                                                     <th className=" border border-gray-500 text-left pl-1 ">Monnaie</th>
+                                                    <th className=" border border-gray-500 text-left pl-1 ">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -687,6 +745,11 @@ export default function Cash() {
                                                             <td className="border border-gray-500 pl-1">{transacion.amount}</td>
                                                             <td className="border border-gray-500 pl-1">{transacion.description}</td>
                                                             <td className="border border-gray-500 pl-1">{transacion.currency?.name}</td>
+                                                            <td className=" border border-gray-500 pl-1 uppercase text-[13px] font-bold ">
+                                                                <button 
+                                                                onClick={() => removeCashJournal(transacion?.id)} 
+                                                                className="bg-red-600 text-white px-2 py-1 rounded-lg">Supprimer</button>
+                                                            </td>
                                                         </tr>
                                                     ))
                                                 }
