@@ -40,6 +40,13 @@ export default function Cash() {
     const [isExportArticle, setIsExportArticle] = useState(false);
     const [isReportArticle, setIsReportArticle] = useState(false);
 
+    const [searchFilters, setSearchFilters] = useState({
+        type: '',
+        description: '',
+        currency: '',
+        ticketCounter: ''
+    });
+
     const dispatch = useDispatch<AppDispatch>();
     const [startDate, setStartDate] = useState<string>(today);
     const [endDate, setEndDate] = useState<string>(today);
@@ -112,6 +119,29 @@ export default function Cash() {
           setIsSearching(!isSearching); // Runs after fetch completes
         });
     };
+
+    const filteredTransactions = transactions?.filter((transaction) => {
+        // Filtre par type
+        const typeMatch = searchFilters.type === '' || 
+          (transaction.transaction_type === 'expense' ? 'Dépense' : 'Recette').toLowerCase().includes(searchFilters.type.toLowerCase());
+        
+        // Filtre par description
+        const descriptionMatch = searchFilters.description === '' || 
+          (transaction.description || '').toLowerCase().includes(searchFilters.description.toLowerCase());
+        
+        // Filtre par devise
+        const currencyMatch = searchFilters.currency === '' || 
+          (transaction.currency?.name || '').toLowerCase().includes(searchFilters.currency.toLowerCase());
+        
+        // Filtre par guichet
+        const ticketCounterMatch = searchFilters.ticketCounter === '' || 
+        (typeof transaction.ticket_counter === 'object' && 
+         transaction.ticket_counter !== null &&
+         'name' in transaction.ticket_counter &&
+         transaction.ticket_counter.name?.toLowerCase().includes(searchFilters.ticketCounter.toLowerCase()));
+        
+        return typeMatch && descriptionMatch && currencyMatch && ticketCounterMatch;
+    });
 
     const onSubmit = (data:ITransaction) => {
         // console.log('Données du formulaire :', data);
@@ -491,10 +521,10 @@ export default function Cash() {
                                 <div className=" grid grid-cols-4 gap-2 px-2 mt-3 " >
                                     <div>
                                         <div>
-                                            <h1 className="uppercase text-[12px] font-extrabold mb-2 " >Type</h1>
+                                            <h1 className="uppercase text-[12px] font-extrabold mb-2">Type</h1>
                                         </div>
                                         <div>
-                                            <input className=" w-full  pl-2 " type="text" />
+                                            <input className="w-full pl-2" type="text" value={searchFilters.type} onChange={(e) => setSearchFilters({...searchFilters, type: e.target.value})} />
                                         </div>
                                     </div>
                                     <div>
@@ -502,7 +532,7 @@ export default function Cash() {
                                             <h1 className="uppercase text-[12px] font-extrabold mb-2 " >Description</h1>
                                         </div>
                                         <div>
-                                            <input className=" w-full  pl-2 " type="text" />
+                                            <input className="w-full pl-2" type="text" value={searchFilters.description} onChange={(e) => setSearchFilters({...searchFilters, description: e.target.value})}/>
                                         </div>
                                     </div>
                                     <div>
@@ -510,7 +540,7 @@ export default function Cash() {
                                             <h1 className="uppercase text-[12px] font-extrabold mb-2 " >Devise</h1>
                                         </div>
                                         <div>
-                                            <input className=" w-full  pl-2 " type="text" />
+                                            <input className="w-full pl-2" type="text" value={searchFilters.currency} onChange={(e) => setSearchFilters({...searchFilters, currency: e.target.value})}/>
                                         </div>
                                     </div>
                                     <div>
@@ -518,7 +548,12 @@ export default function Cash() {
                                             <h1 className="uppercase text-[12px] font-extrabold mb-2 " >Guichet</h1>
                                         </div>
                                         <div>
-                                            <input className=" w-full  pl-2 " type="text" />
+                                            <input 
+                                                className="w-full pl-2" 
+                                                type="text" 
+                                                value={searchFilters.ticketCounter}
+                                                onChange={(e) => setSearchFilters({...searchFilters, ticketCounter: e.target.value})}
+                                            />
                                         </div>
                                     </div>
                                 </div>
@@ -721,22 +756,27 @@ export default function Cash() {
                                             <thead>
                                             {/* bg-gray-700 */}
                                                 <tr className="bg-white uppercase">
-                                                    <th className=" border border-gray-500 text-left pl-1 ">Transaction</th>
+                                                    <th className=" border border-gray-500 text-left pl-1 ">DATE TRANS</th>
+                                                    <th className=" border border-gray-500 text-left pl-1 ">DATE OP</th>
+                                                    <th className=" border border-gray-500 text-left pl-1 ">Type</th>
                                                     <th className=" border border-gray-500 text-left pl-1 ">Montant</th>
                                                     <th className=" border border-gray-500 text-left pl-1 ">Descrption</th>
-                                                    <th className=" border border-gray-500 text-left pl-1 ">Monnaie</th>
+                                                    <th className=" border border-gray-500 text-left pl-1 ">Devise</th>
+                                                    <th className=" border border-gray-500 text-left pl-1 ">Guichet</th>
                                                     <th className=" border border-gray-500 text-left pl-1 ">Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {
-                                                    transactions?.map((transacion: ITransaction) => (
+                                                    filteredTransactions?.map((transacion: ITransaction) => (
                                                         <tr key={transacion.id} 
     
                                                         className={` border ${ selectedTransaction?.id == transacion?.id ? 'bg-blue-700 text-white ' : 'bg-gray-100' }  border-gray-500 hover:cursor-pointer `} 
                                                         
                                                         onClick={()=> handleEdit(transacion)} 
                                                         >
+                                                            <td className="border border-gray-500 pl-1">{String(transacion.created_at).split("T")[0].split("-").reverse().join("-")}</td>
+                                                            <td className="border border-gray-500 pl-1">{String(transacion.created_at).split("T")[0].split("-").reverse().join("-")}</td>
                                                             <td className="border border-gray-500 pl-1">
                                                                 {
                                                                     transacion.transaction_type == "expense" ? "Dépense" : "Recette"
@@ -745,6 +785,12 @@ export default function Cash() {
                                                             <td className="border border-gray-500 pl-1">{transacion.amount}</td>
                                                             <td className="border border-gray-500 pl-1">{transacion.description}</td>
                                                             <td className="border border-gray-500 pl-1">{transacion.currency?.name}</td>
+                                                            <td className="border border-gray-500 pl-1">
+                                                                {
+                                                                    typeof transacion.ticket_counter === 'object' && transacion.ticket_counter !== null 
+                                                                        && transacion.ticket_counter.name
+                                                                }
+                                                            </td>
                                                             <td className=" border border-gray-500 pl-1 uppercase text-[13px] font-bold ">
                                                                 <button 
                                                                 onClick={() => removeCashJournal(transacion?.id)} 
