@@ -66,8 +66,6 @@ export default function Cash() {
 
 
     const { transactions, transactionStatus , transactionError } = useSelector((state: RootState) => state.transaction )
-
-    console.log(transactions);
     
 
     const {
@@ -768,32 +766,32 @@ export default function Cash() {
                                             </thead>
                                             <tbody>
                                                 {
-                                                    filteredTransactions?.map((transacion: ITransaction) => (
-                                                        <tr key={transacion.id} 
+                                                    filteredTransactions?.map((transaction: ITransaction) => (
+                                                        <tr key={transaction.id} 
     
-                                                        className={` border ${ selectedTransaction?.id == transacion?.id ? 'bg-blue-700 text-white ' : 'bg-gray-100' }  border-gray-500 hover:cursor-pointer `} 
+                                                        className={` border ${ selectedTransaction?.id == transaction?.id ? 'bg-blue-700 text-white ' : 'bg-gray-100' }  border-gray-500 hover:cursor-pointer `} 
                                                         
-                                                        onClick={()=> handleEdit(transacion)} 
+                                                        onClick={()=> handleEdit(transaction)} 
                                                         >
-                                                            <td className="border border-gray-500 pl-1">{String(transacion.created_at).split("T")[0].split("-").reverse().join("-")}</td>
-                                                            <td className="border border-gray-500 pl-1">{String(transacion.created_at).split("T")[0].split("-").reverse().join("-")}</td>
+                                                            <td className="border border-gray-500 pl-1">{String(transaction.transaction_date).split("T")[0].split("-").reverse().join("-")}</td>
+                                                            <td className="border border-gray-500 pl-1">{String(transaction.created_at).split("T")[0].split("-").reverse().join("-")}</td>
                                                             <td className="border border-gray-500 pl-1">
                                                                 {
-                                                                    transacion.transaction_type == "expense" ? "Dépense" : "Recette"
+                                                                    transaction.transaction_type == "expense" ? "Dépense" : "Recette"
                                                                 }
                                                             </td>
-                                                            <td className="border border-gray-500 pl-1">{transacion.amount}</td>
-                                                            <td className="border border-gray-500 pl-1">{transacion.description}</td>
-                                                            <td className="border border-gray-500 pl-1">{transacion.currency?.name}</td>
+                                                            <td className="border border-gray-500 pl-1">{transaction.amount}</td>
+                                                            <td className="border border-gray-500 pl-1">{transaction.description}</td>
+                                                            <td className="border border-gray-500 pl-1">{transaction.currency?.name}</td>
                                                             <td className="border border-gray-500 pl-1">
                                                                 {
-                                                                    typeof transacion.ticket_counter === 'object' && transacion.ticket_counter !== null 
-                                                                        && transacion.ticket_counter.name
+                                                                    typeof transaction.ticket_counter === 'object' && transaction.ticket_counter !== null 
+                                                                        && transaction.ticket_counter.name
                                                                 }
                                                             </td>
                                                             <td className=" border border-gray-500 pl-1 uppercase text-[13px] font-bold ">
                                                                 <button 
-                                                                onClick={() => removeCashJournal(transacion?.id)} 
+                                                                onClick={() => removeCashJournal(transaction?.id)} 
                                                                 className="bg-red-600 text-white px-2 py-1 rounded-lg">Supprimer</button>
                                                             </td>
                                                         </tr>

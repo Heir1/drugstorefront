@@ -70,7 +70,7 @@ export default function Rapport() {
 
             <div className="hidden print:block" >
                 {
-                    detailedTransactions && <Cash transactiondetails={detailedTransactions} totalPurchase={100} totalSelling={100} />
+                    detailedTransactions && <Cash transactiondetails={detailedTransactions} totalPurchase={100} totalSelling={100} startDate={startDate} endDate={endDate}  />
                 }
             </div>
 
