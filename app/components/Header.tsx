@@ -161,7 +161,7 @@ export default function Header() {
                                                                     <span className=" text-sm ">Regul Vente</span>
                                                                 </DropdownMenuItem>
                                                             </Link>
-                                                            <Link className="flex items-center space-x-2" href={`/pages/admin/cash`}>
+                                                            <Link className="flex items-center space-x-2" href={`/pages/admin/cash/regul`}>
                                                                 <DropdownMenuItem>
                                                                     <span className=" text-sm ">Regul Caisse Admin</span>
                                                                 </DropdownMenuItem>

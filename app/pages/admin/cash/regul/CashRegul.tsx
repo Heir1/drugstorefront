@@ -18,6 +18,9 @@ import FormAuth from '@/app/components/form/FormAuth';
 // Définir le schéma de validation avec Yup
 const schema = yup.object().shape({
     transaction_date: yup.string().required('La date de transaction est requise'),
+    transaction_op: yup.string().required('La date de transaction est requise'),
+    transaction_id: yup.string().required('La date de transaction est requise'),
+    operator: yup.string().required('La date de transaction est requise'),
     transaction_type: yup.string().required('Le type de transaction est requis'),
     description: yup.string().required('La description est requise'),
     ticket_counter: yup.string().required('Le nom du guichetier est requis'),
@@ -29,7 +32,7 @@ const schema = yup.object().shape({
       .positive('Le montant doit être positif'),
   });
 
-export default function Cash() {
+export default function CashRegul() {
 
     const today = new Date().toISOString().split('T')[0];
 
@@ -78,10 +81,13 @@ export default function Cash() {
     resolver: yupResolver(schema),
         defaultValues: {
             transaction_date: today,
+            transaction_op: '',
             transaction_type: '',
             description: '',
             currency_id: '',
             ticket_counter: '',
+            operator: '',
+            transaction_id: '',
             amount: 0,
         },
     });
@@ -204,6 +210,7 @@ export default function Cash() {
     };
 
     useEffect(()=> {
+
         if(selectedTransaction){
 
 
@@ -215,17 +222,28 @@ export default function Cash() {
 
             // Handle ticket_counter value properly
             let ticketCounterValue = "";
-            if (selectedTransaction?.ticket_counter) {
-            if (typeof selectedTransaction.ticket_counter === 'object') {
+            let operator = ""
+
+            if (typeof selectedTransaction.created_by === 'object') {
                 // If it's an IUser object
-                ticketCounterValue = selectedTransaction.ticket_counter.id?.toString() || "";
-            } else {
-                // If it's already an ID (string or number)
-                ticketCounterValue = selectedTransaction.ticket_counter.toString();
-            }
+                operator = selectedTransaction?.created_by?.name?.toString() || "";
             }
 
+            if (selectedTransaction?.ticket_counter) {
+                if (typeof selectedTransaction.ticket_counter === 'object') {
+                    // If it's an IUser object
+                    ticketCounterValue = selectedTransaction.ticket_counter.name?.toString() || "";
+                } else {
+                    // If it's already an ID (string or number)
+                    ticketCounterValue = selectedTransaction.ticket_counter.toString();
+                }
+            }
+            // .split("T")[0].split("-").reverse().join("-")
             setValue("transaction_type", transaction_type);
+            setValue("transaction_date", selectedTransaction?.transaction_date  || "");
+            setValue("operator", operator);
+            setValue("transaction_op", String(selectedTransaction?.created_at).split("T")[0].split("-").reverse().join("-")  || "");
+            setId(String(selectedTransaction?.id))
             setValue("description", selectedTransaction?.description || "");
             setValue("amount", selectedTransaction?.amount || 0);
             setValue("currency_id", currency_id);
@@ -351,9 +369,8 @@ export default function Cash() {
 
     }, [isSearching,transactions])
 
-    const removeCashJournal = (id:any) => {
+    const removeCashJournal = () => {
         setIsAuth(true);
-        setId(id)
     }
     
     const onSubmitDelete = async() => {
@@ -436,7 +453,7 @@ export default function Cash() {
                     <div className=" mx-7 bg-[#7288a5d0] mt-4 " >
                         <div className=" grid grid-cols-11 gap-2  " >
 
-                            <div className="col-span-3 border-2 border-gray-400">
+                            {/* <div className="col-span-3 border-2 border-gray-400">
                                 <div className=" pl-2 ml-2 -mt-[13] bg-[#7288a5d0] w-[25%] " >
                                     <h1 className=" uppercase font-extrabold text-[14px]" >Date Op</h1>
                                 </div>
@@ -464,18 +481,18 @@ export default function Cash() {
                                         <h1 className=" uppercase font-extrabold text-[14px] " >Antidate</h1>
                                     </div>
                                 </div>
-                            </div>
-                            
-                            <div className="col-span-3 border-2 border-gray-400  ">
+                            </div> */}
+
+                            <div className="col-span-5 border-2 border-gray-400  ">
                                 <div className="pl-2 ml-2 -mt-[13] bg-[#7288a5d0] w-[80%] " >
                                     <h1 className=" uppercase font-extrabold text-[14px] " >Recherche par date transaction</h1>
                                 </div>
 
                                 <form onSubmit={handleSubmitSearch}>
-                                    <div className="flex">
-                                        <div className="space-y-4 ml-4 mt-2 w-[65%]">
-                                            <div className="flex justify-between gap-2">
-                                                <h1 className="uppercase font-extrabold text-[12px]">Date début</h1>
+                                    <div className="flex items-center ">
+                                        <div className="ml-4 mt-2 w-[70%] flex gap-4 ">
+                                            <div className="flex justify-between items-center gap-2 ">
+                                                <h1 className="uppercase font-extrabold text-[12px]">Du</h1>
                                                 <div>
                                                     <input
                                                         className="px-2"
@@ -486,9 +503,9 @@ export default function Cash() {
                                                     />
                                                 </div>
                                             </div>
-                                            <div className="flex justify-between gap-2">
+                                            <div className="flex justify-between items-center gap-2 ">
                                                 <div>
-                                                    <h1 className="uppercase font-extrabold text-[12px]">Date Fin</h1>
+                                                    <h1 className="uppercase font-extrabold text-[12px]">Au</h1>
                                                 </div>
                                                 <div>
                                                     <input
@@ -501,7 +518,7 @@ export default function Cash() {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="w-[35%] px-2 flex justify-center items-center">
+                                        <div className="w-[30%] px-2 flex justify-center items-center">
                                             <button
                                                 type="submit"
                                                 className="w-full font-extrabold border-2 border-gray-500 bg-slate-200 text-[14px] uppercase"
@@ -513,7 +530,8 @@ export default function Cash() {
                                 </form>
 
                             </div>
-                            <div className="col-span-5 border-2 border-gray-400">
+
+                            <div className="col-span-6 border-2 border-gray-400">
                                 <div className="pl-2 ml-2 -mt-[13] bg-[#7288a5d0] w-[80%] " >
                                     <h1 className=" uppercase font-extrabold text-[14px] " >Filtre recherche transaction</h1>
                                 </div>
@@ -557,194 +575,12 @@ export default function Cash() {
                                     </div>
                                 </div>
                             </div>
+
                         </div>
-                        <div className=" grid grid-cols-11 mt-2 gap-2 border-2 border-gray-300" >
-                            <div className=" col-span-3 " >
-                                <form onSubmit={handleSubmit( selectedTransaction ? onSubmitUpdate : onSubmit)}>
-                                    {/* Type de transaction */}
-                                    <div className="w-full p-2">
-                                        <div className="uppercase text-[12px] font-extrabold w-[50%] pl-4 bg-[#7288a5d0] mb-1">
-                                        <h1>Type transaction</h1>
-                                        </div>
-                                        <div className="grid grid-cols-3 gap-4 p-4 border-2 border-gray-300">
-                                        <Controller
-                                            name="transaction_type"
-                                            control={control}
-                                            render={({ field }) => (
-                                            <div>
-                                                <div className="flex gap-2">
-                                                <input
-                                                    {...field}
-                                                    type="radio"
-                                                    value="Recette"
-                                                    checked={field.value === 'Recette'}
-                                                />
-                                                <h1 className="uppercase font-extrabold">Recette</h1>
-                                                </div>
-                                            </div>
-                                            )}
-                                        />
-                                        <Controller
-                                            name="transaction_type"
-                                            control={control}
-                                            render={({ field }) => (
-                                            <div>
-                                                <div className="flex gap-2">
-                                                <input
-                                                    {...field}
-                                                    type="radio"
-                                                    value="Dépense"
-                                                    checked={field.value === 'Dépense'}
-                                                />
-                                                <h1 className="uppercase font-extrabold">Dépense</h1>
-                                                </div>
-                                            </div>
-                                            )}
-                                        />
-                                        </div>
-                                        {errors.transaction_type && (
-                                        <p className="text-red-500 text-sm">{errors.transaction_type.message}</p>
-                                        )}
-                                    </div>
 
-                                    {/* Description */}
-                                    <div className="w-full p-2">
-                                        <Controller
-                                        name="description"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <textarea
-                                            {...field}
-                                            className="p-2 w-full"
-                                            placeholder="Description"
-                                            />
-                                        )}
-                                        />
-                                        {errors.description && (
-                                        <p className="text-red-500 text-sm">{errors.description.message}</p>
-                                        )}
-                                    </div>
-
-                                    {/* Devise et Montant */}
-                                    <div className="w-full flex items-center pr-2 gap-4 mb-4">
-                                        <div className="w-1/2 pl-2">
-                                        <h1 className="uppercase font-extrabold mb-2">Devise</h1>
-                                        <div className="flex gap-4 border-2 border-gray-300 p-2">
-                                            <Controller
-                                            name="currency_id"
-                                            control={control}
-                                            render={({ field }) => (
-                                                <div>
-                                                <div className="flex gap-2">
-                                                    <input
-                                                    {...field}
-                                                    type="radio"
-                                                    value={"CDF"}
-                                                    checked={field.value === 'CDF'}
-                                                    />
-                                                    <h1 className="uppercase font-extrabold text-[12px]">CDF</h1>
-                                                </div>
-                                                </div>
-                                            )}
-                                            />
-                                            <Controller
-                                            name="currency_id"
-                                            control={control}
-                                            render={({ field }) => (
-                                                <div>
-                                                <div className="flex gap-2">
-                                                    <input
-                                                    {...field}
-                                                    type="radio"
-                                                    value="USD"
-                                                    checked={field.value === 'USD'}
-                                                    />
-                                                    <h1 className="uppercase font-extrabold text-[12px] text-yellow-500">
-                                                    USD
-                                                    </h1>
-                                                </div>
-                                                </div>
-                                            )}
-                                            />
-                                        </div>
-                                        {errors.currency_id && (
-                                            <p className="text-red-500 text-sm">{errors.currency_id.message}</p>
-                                        )}
-                                        </div>
-                                        <div className="w-1/2">
-                                        <div className="gap-2">
-                                            <h1 className="font-extrabold uppercase mb-2">Montant</h1>
-                                            <Controller
-                                                name="amount"
-                                                control={control}
-                                                render={({ field }) => (
-                                                    <input
-                                                    {...field}
-                                                    className="w-full"
-                                                    type="number"
-                                                    placeholder="Montant"
-                                                    />
-                                                )}
-                                            />
-                                            {
-                                                errors.amount && (<p className="text-red-500 text-sm">{errors.amount.message}</p>
-                                            )
-                                            }
-                                        </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Guichet */}
-                                    <div className="mx-2 space-y-2">
-                                        <label htmlFor="guichet" className="font-extrabold text-[13px]">
-                                            GUICHET
-                                        </label>
-                                        <Controller
-                                            name="ticket_counter" // ou "created_by" selon votre besoin
-                                            control={control}
-                                            render={({ field }) => (
-                                                <select {...field} className="w-full p-1">
-                                                <option value="">Sélectionnez un guichetier</option>
-                                                {users.map((user: IUser) => (
-                                                    <option key={user.id} value={user.id}>
-                                                    {user?.name}
-                                                    </option>
-                                                ))}
-                                                </select>
-                                            )}
-                                        />
-                                        {
-                                            errors.ticket_counter && (<p className="text-red-500 text-sm">{errors.ticket_counter.message}</p>
-                                            )
-                                        }
-                                    </div>
-
-                                    {/* Boutons Enregistrer et Annuler */}
-                                    <div className="mt-4 flex justify-center gap-4 border-2 mx-[7px] mb-2 p-4">
-                                        <div className="w-[40%] border-2">
-                                        <button
-                                            className="w-full bg-gray-400 uppercase font-bold"
-                                            type="submit"
-                                        >
-                                            {
-                                                selectedTransaction ? 'Modifier' : 'Enregistrer'
-                                            } 
-                                        </button>
-                                        </div>
-                                        <div className="w-[40%] border-2">
-                                        <button
-                                            className="w-full bg-gray-400 uppercase font-bold"
-                                            type="button"
-                                            onClick={() => resetFormInfo() }
-                                        >
-                                            Annuler
-                                        </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div className=" col-span-8 border-2 border-gray-300 p-4 " >
-                                <div className=" border-2 border-black shadow-2xl h-[70%]  " >
+                        <div className=" h-[65vh]  grid grid-cols-11 mt-2 gap-2 border-2 border-gray-300" >
+                            <div className=" col-span-11 border-2 border-gray-300 p-4 " >
+                                <div className=" border-2 border-black shadow-2xl h-[60%]  " >
                                 {
                                     transactionStatus == "loading" ? (
                                         <TableLoading/>
@@ -792,7 +628,7 @@ export default function Cash() {
                                                             </td>
                                                             <td className=" border border-gray-500 pl-1 uppercase text-[13px] font-bold ">
                                                                 <button 
-                                                                onClick={() => removeCashJournal(transaction?.id)} 
+                                                                onClick={() => removeCashJournal()} 
                                                                 className="bg-red-600 text-white px-2 py-1 rounded-lg">Supprimer</button>
                                                             </td>
                                                         </tr>
@@ -804,32 +640,170 @@ export default function Cash() {
                                     )
                                 }
                                 </div>
-                                <div className=" flex flex-col justify-center border-2 border-black h-[30%] mt-2   " >
-                                    <div className=" grid grid-cols-5 gap-4 mb-2 " >
-                                        <div className=" col-start-2 flex flex-col" >
-                                            <label className=" uppercase text-[13px] font-extrabold " htmlFor="">RECETTES</label>
-                                            <input className=" bg-green-600 " readOnly  value={ isNaN(totalIncomeUSD) ? 0 : formatNumberWithSpaces(totalIncomeUSD) } type="text" name="" id="" />
-                                        </div>
-                                        <div className=" flex flex-col " >
-                                            <label className=" uppercase text-[13px] font-extrabold " htmlFor="">Dépenses</label>
-                                            <input className=" bg-green-600 " readOnly  value={ isNaN(totalExpenseUSD) ? 0 : formatNumberWithSpaces(totalExpenseUSD) }  type="text" name="" id="" />
-                                        </div>
-                                        <div className="flex flex-col" >
-                                            <label className=" uppercase text-[13px] font-extrabold " htmlFor="">SOLDE</label>
-                                            <input className=" bg-green-600 " readOnly  value={ isNaN(totalIncomeUSD -  totalExpenseUSD) ? 0 : formatNumberWithSpaces(totalIncomeUSD -  totalExpenseUSD) }  type="text" name="" id="" />
+                                <div className="grid grid-cols-12 gap-2  border-2 border-black h-[40%] mt-2 p-2" >
+
+                                    <div className="col-span-3">
+                                        <Controller
+                                            name="description"
+                                            control={control}
+                                            render={({ field }) => (
+                                                <textarea
+                                                    {...field}
+                                                    disabled
+                                                    className="p-2 w-full bg-blue-700 h-32 "
+                                                    placeholder="Description"
+                                                />
+                                            )}
+                                        />
+                                    </div>
+
+                                    <div className="col-span-5 ">
+                                        <div className="grid grid-cols-5 gap-2 ">
+                                            <div>
+                                                <Controller
+                                                    name="transaction_date"
+                                                    control={control}
+                                                    render={({ field }) => (
+                                                        <input
+                                                            {...field}
+                                                            disabled
+                                                            className="w-full bg-blue-700"
+                                                            type="text"
+                                                            placeholder="Date"
+                                                        />
+                                                    )}
+                                                />
+                                            </div>
+                                            <div>
+                                                <Controller
+                                                    name="transaction_op"
+                                                    control={control}
+                                                    render={({ field }) => (
+                                                        <input
+                                                            {...field}
+                                                            disabled
+                                                            className="w-full bg-blue-700"
+                                                            type="text"
+                                                            placeholder="Date"
+                                                        />
+                                                    )}
+                                                />
+                                            </div>
+                                            <div>
+                                                <Controller
+                                                    name="transaction_type"
+                                                    control={control}
+                                                    render={({ field }) => (
+                                                        <input
+                                                            {...field}
+                                                            disabled
+                                                            className="w-full bg-blue-700"
+                                                            type="text"
+                                                            placeholder="Date"
+                                                        />
+                                                    )}
+                                                />
+                                            </div>
+                                            <div>
+                                                <Controller
+                                                    name="amount"
+                                                    control={control}
+                                                    render={({ field }) => (
+                                                        <input
+                                                            {...field}
+                                                            disabled
+                                                            className="w-full bg-blue-700"
+                                                            type="text"
+                                                            placeholder="Date"
+                                                        />
+                                                    )}
+                                                />
+                                            </div>
+                                            <div>
+                                                <Controller
+                                                    name="currency_id"
+                                                    control={control}
+                                                    render={({ field }) => (
+                                                        <input
+                                                            {...field}
+                                                            disabled
+                                                            className="w-full bg-blue-700"
+                                                            type="text"
+                                                            placeholder="Date"
+                                                        />
+                                                    )}
+                                                />
+                                            </div>
+                                            <div className="col-span-5">
+                                                <div>
+                                                    <h1>
+                                                        Guichetier
+                                                    </h1>
+                                                </div>
+                                                <div>
+                                                    <Controller
+                                                        name="ticket_counter"
+                                                        control={control}
+                                                        render={({ field }) => (
+                                                            <input
+                                                                {...field}
+                                                                disabled
+                                                                className="w-full bg-blue-700"
+                                                                type="text"
+                                                                placeholder="Guichetier"
+                                                            />
+                                                        )}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="col-span-5">
+                                                <div>
+                                                    <h1>Opérateur</h1>
+                                                </div>
+                                                <div>
+                                                    <Controller
+                                                        name="operator"
+                                                        control={control}
+                                                        render={({ field }) => (
+                                                            <input
+                                                                {...field}
+                                                                disabled
+                                                                className="w-full bg-blue-700"
+                                                                type="text"
+                                                                placeholder="Operateur"
+                                                            />
+                                                        )}
+                                                    />
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className=" grid grid-cols-5 gap-4 " >
-                                        <div className=" col-start-2" >
-                                            <input className="w-full bg-yellow-600 " readOnly  value={ isNaN(totalIncomeCDF) ? 0 : formatNumberWithSpaces(totalIncomeCDF)  }  type="text" name="" id="" />
+
+                                    <div className="col-span-4">
+                                        <div>
+                                            <textarea className=" w-full h-28 "  name="" id=""></textarea>
                                         </div>
                                         <div>
-                                            <input className="w-full bg-yellow-600 " readOnly  value={ isNaN(totalExpenseCDF) ? 0 : formatNumberWithSpaces(totalExpenseCDF)  } type="text" name="" id="" />
-                                        </div>
-                                        <div>
-                                            <input className="w-full bg-yellow-600 " readOnly  value={ isNaN((totalIncomeCDF) - (totalExpenseCDF)) ? 0 : formatNumberWithSpaces((totalIncomeCDF) - (totalExpenseCDF)) }  type="text" name="" id="" />
+                                            {
+                                                selectedTransaction && (
+                                                    <div className=" flex gap-2 " >
+                                                        <div className=' w-1/2 ' >
+                                                            <button
+                                                                onClick={() => removeCashJournal()} 
+                                                                className=" w-full bg-gray-200 px-2 py-1 rounded-lg">Authorisation
+                                                            </button>
+                                                        </div>
+                                                        <div className=' w-1/2 ' >
+                                                            <button 
+                                                                className=" w-full bg-gray-200 px-2 py-1 rounded-lg">Valider
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
