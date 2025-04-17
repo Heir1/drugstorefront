@@ -238,6 +238,7 @@ export default function FormTest() {
             
             // Affichage du toast
             if (result.status === "fulfilled") {
+                reset();
                 // toast.success("Article crée avec succès");
                 toast.custom((t: any) => (
                     <div
@@ -343,7 +344,8 @@ export default function FormTest() {
     return (
         <form onSubmit={handleSubmit(onSubmit)} >
         <Toaster />
-        <div className="grid grid-cols-12  gap-x-5 p-5 " >
+
+        <div className="grid grid-cols-12  gap-x-5 mx-6 p-2 border-2 border-red-600  " >
             <div className="col-span-6 bg-[#7288a5fd] border-2 border-white p-2  space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
                 <div className="grid grid-cols-2 gap-5">
                     <div className=" flex items-center " >
@@ -353,7 +355,7 @@ export default function FormTest() {
                             control={control}
                             // defaultValue=""
                             render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg border-2 border-black" type="text" />}
-                            rules={{ required: 'Le code barre est requis' }}
+                            // rules={{ required: 'Le code barre est requis' }}
                         />
                     </div>
                     <div className=" flex items-center justify-end gap-2 " >

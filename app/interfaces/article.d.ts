@@ -5,7 +5,7 @@ export default interface IArticle {
     id?: string,
     value?: string,
     label?: string,
-    barcode?: string,
+    barcode: string | null;
     description: string,
     alert?: Number,
     expiration_date: string,

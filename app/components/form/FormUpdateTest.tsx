@@ -23,7 +23,7 @@ import IUser from "@/app/interfaces/user";
 
 
 interface IFormInputs {
-    barcode: string;
+    barcode: string | null ;
     location: string;
     indication: string;
     molecule: string;
@@ -49,7 +49,7 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
     const dispatch = useDispatch<AppDispatch>();
     const { register, handleSubmit, control, setValue, watch } = useForm<IFormInputs>(
         {defaultValues: {
-            barcode : "",
+            barcode : null,
             location : "",
             description : "",
             indication : "",
@@ -260,7 +260,7 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
 
 
         const articleData:IArticle = {
-            barcode: barcode,
+            barcode: barcode === '' ? null : barcode, // Convert empty string to null
             placements : !isNaN(Number(location)) ? `${displayedLocation}§§${location}` : (displayedLocation !== content.placements[0].name) ? `${displayedLocation}§§${content.placements[0].id}` : "",
             description ,
             comment: content.comment ,
@@ -390,9 +390,23 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
                                 <Controller
                                     name="barcode"
                                     control={control}
-                                    // defaultValue=""
-                                    render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg border-2 border-black" type="text" />}
-                                    rules={{ required: 'Le code barre est requis' }}
+                                    defaultValue={null} // Initialize as null
+                                    render={({ field }) => (
+                                        <input
+                                        {...field}
+                                        value={field.value ?? ''} // Convert null to empty string for input
+                                        onChange={(e) => {
+                                            // Convert empty string back to null
+                                            field.onChange(e.target.value === '' ? null : e.target.value.toUpperCase())
+                                        }}
+                                        className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase rounded-lg border-2 border-black"
+                                        type="text"
+                                        />
+                                    )}
+                                    // rules={{
+                                    //     required: 'Le code barre est requis',
+                                    //     validate: (value) => value !== null || 'Le code barre ne peut pas être null'
+                                    // }}
                                 />
                             </div>
                             <div className=" flex items-center justify-end gap-2 " >
@@ -423,9 +437,13 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
                                             onBlur={() => setTimeout(() => setIsLocationDropdownOpen(false), 200)}
                                         />
 
+                                        {/* Modification ici : remplacement de top-full par bottom-full */}
                                         {isLocationDropdownOpen && filteredLocations.length > 0 && (
-                                            <div className="absolute z-50 bg-white border mt-1 w-full shadow-lg max-h-60 overflow-auto">
-                                                {filteredLocations.map((location:IPlacement) => (
+                                            <div className="absolute z-50 bg-white border bottom-full mb-1 w-full shadow-lg max-h-60 overflow-auto">
+                                                {/* ▲ Changement de 'top-full mt-1' à 'bottom-full mb-1' ▲ */}
+                                                {/* Cela force le menu à s'afficher vers le haut au lieu du bas */}
+                                                
+                                                {filteredLocations.map((location: IPlacement) => (
                                                     <Combobox.Option
                                                         key={location.id}
                                                         value={location.id}
@@ -437,6 +455,7 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
                                                 ))}
                                             </div>
                                         )}
+
                                     </div>
                                 </Combobox>
                                 
@@ -486,7 +505,7 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
                                             />
 
                                             {isIndicationDropdownOpen && filteredIndications.length > 0 && (
-                                                <div className=" absolute z-50 bg-white border mt-1 w-full shadow-lg max-h-60 overflow-auto">
+                                                <div className=" absolute z-50 bg-white border bottom-full mb-1 w-full shadow-lg max-h-60 overflow-auto">
                                                     {filteredIndications.map((indication) => (
                                                         <Combobox.Option
                                                             key={indication.id}
@@ -538,7 +557,7 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
                                                 />
 
                                                 {isMoleculeDropdownOpen && filteredMolecules.length > 0 && (
-                                                    <div className=" z-50 absolute bg-white border mt-1 w-full shadow-lg max-h-60 overflow-auto">
+                                                    <div className=" z-50 absolute bg-white border bottom-full mb-1 w-full shadow-lg max-h-60 overflow-auto">
                                                         {filteredMolecules.map((molecule:IMolecule) => (
                                                             <Combobox.Option
                                                                 key={molecule.id}
@@ -587,7 +606,7 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
                                                 />
 
                                                 {isPackagingDropdownOpen && filteredPackagings.length > 0 && (
-                                                    <div className="absolute z-50 bg-white border mt-1 w-full shadow-lg max-h-60 overflow-auto">
+                                                    <div className="absolute z-50 bg-white border bottom-full mb-1 w-full shadow-lg max-h-60 overflow-auto">
                                                         {filteredPackagings.map((packaging:IPackaging) => (
                                                             <Combobox.Option
                                                                 key={packaging.id}
@@ -633,7 +652,7 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
                                             />
 
                                             {isCategoryDropdownOpen && filteredCategories.length > 0 && (
-                                                <div className="absolute z-50 bg-white border mt-1 w-full shadow-lg max-h-60 overflow-auto">
+                                                <div className="absolute z-50 bg-white border bottom-full mb-1 w-full shadow-lg max-h-60 overflow-auto">
                                                     {filteredCategories.map((category:ICategory) => (
                                                         <Combobox.Option
                                                             key={category.id}
@@ -684,7 +703,7 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
                                                     />
 
                                                     {isSupplierDropdownOpen && filteredSuppliers.length > 0 && (
-                                                        <div className="absolute z-50 bg-white border mt-1 w-full shadow-lg max-h-60 overflow-auto">
+                                                        <div className="absolute z-50 bg-white border bottom-full mb-1 w-full shadow-lg max-h-60 overflow-auto">
                                                             {filteredSuppliers.map((supplier:ISupplier) => (
                                                                 <Combobox.Option
                                                                     key={supplier.id}

@@ -122,36 +122,42 @@ export default function Article() {
             {
                 (articleStatus == "loading" ||  packagingStatus == "loading" || categoryStatus == "loading" || supplierStatus == "loading" || moleculeStatus == "loading" || indicationStatus == "loading" || placementStatus == "loading" || currencyStatus == "loading" ) && <Loading/>
             }
-
-            <div className="mx-2 p-5 " >
-                <div className="grid grid-cols-11">
-                    <div className="col-span-5 shadow-[0px_4px_8px_0px_#00000026] bg-[#F6F7F9] rounded-xl py-1 px-2  ">
-                        <div className="grid grid-cols-5 place-content-center">
-                            <Link href={``}>
-                                <div className={`flex justify-center items-center py-2 rounded-lg ${ isNewArticle && "bg-[#262B62] text-white" } `} onClick={ ()=> setActivation("new") } >
-                                    <h1>Nouveau</h1>
-                                </div>
-                            </Link>
-                            <Link href={``}>
-                                <div className={`flex justify-center items-center py-2 rounded-lg ${ isUpdateArticle && "bg-[#262B62] text-white" } `} onClick={ ()=> setActivation("update") }>
-                                    <h1>Mise à jour</h1>
-                                </div>
-                            </Link>
-                            <Link href={``}>
-                                <div className={`flex justify-center items-center py-2 rounded-lg ${ isStateArticle && "bg-[#262B62] text-white" } `} onClick={ ()=> setActivation("state") }>
-                                    <h1>Etat produit</h1>
-                                </div>
-                            </Link>
-                            <Link href={``}>
-                                <div className={`flex justify-center items-center py-2 rounded-lg ${ isExportArticle && "bg-[#262B62] text-white" } `}>
-                                    <h1>Import / Export</h1>
-                                </div>
-                            </Link>
-                            <Link href={``}>
-                                <div className={`flex justify-center items-center py-2 rounded-lg ${ isReportArticle && "bg-[#262B62] text-white" } `}>
-                                    <h1>Rapport</h1>
-                                </div>
-                            </Link>
+            <div>
+                <div className="grid grid-cols-1 mt-11 ">
+                    <div className=" flex justify-center mx-6 font-bold items-center bg-blue-700 p-1 " >
+                        NOUVEL ARTICLE
+                    </div>
+                </div>
+                <div className="mx-6" >
+                    <div className="grid grid-cols-11">
+                        <div className="col-span-11 bg-white py-1 px-1  ">
+                            <div className="grid grid-cols-11 place-content-center">
+                                <Link href={``}>
+                                    <div className={`flex justify-center items-center py-1  ${ isNewArticle && "bg-[#262B62] text-white" } `} onClick={ ()=> setActivation("new") } >
+                                        <h1>Nouveau</h1>
+                                    </div>
+                                </Link>
+                                <Link href={``}>
+                                    <div className={`flex justify-center items-center py-1  ${ isUpdateArticle && "bg-[#262B62] text-white" } `} onClick={ ()=> setActivation("update") }>
+                                        <h1>Mise à jour</h1>
+                                    </div>
+                                </Link>
+                                <Link href={``}>
+                                    <div className={`flex justify-center items-center py-1  ${ isStateArticle && "bg-[#262B62] text-white" } `} onClick={ ()=> setActivation("state") }>
+                                        <h1>Etat produit</h1>
+                                    </div>
+                                </Link>
+                                <Link href={``}>
+                                    <div className={`flex justify-center items-center py-1  ${ isExportArticle && "bg-[#262B62] text-white" } `}>
+                                        <h1>Import / Export</h1>
+                                    </div>
+                                </Link>
+                                <Link href={``}>
+                                    <div className={`flex justify-center items-center py-1  ${ isReportArticle && "bg-[#262B62] text-white" } `}>
+                                        <h1>Rapport</h1>
+                                    </div>
+                                </Link>
+                            </div>
                         </div>
                     </div>
                 </div>
