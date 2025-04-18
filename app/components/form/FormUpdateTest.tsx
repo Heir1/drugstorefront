@@ -382,7 +382,7 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
         <div>
             <Toaster />
             <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="grid grid-cols-12  gap-x-5 p-5 " >
+                <div className="grid grid-cols-12  gap-x-2 py-5 px-3 " >
                     <div className="col-span-6 bg-[#7288a5fd] border-2 border-white p-2  space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
                         <div className="grid grid-cols-2 gap-5">
                             <div className=" flex items-center " >
@@ -819,125 +819,7 @@ export default function FormUpdateTest({content, setIsUpdateFormOpen}:ArticleFor
                 </div>  
             </form>
         </div>
-        // <form onSubmit={handleSubmit(onSubmit)} className="p-5 bg-gray-100">
-        //     <Toaster />
-        //     <div className="grid grid-cols-2 gap-5">
-        //         <div>
-        //             <label className="block">Code barre</label>
-        //             <input
-        //                 {...register("barcode")}
-        //                 className="w-full border p-2 rounded-md"
-        //                 type="text"
-        //                 placeholder="Code barre"
-        //             />
-        //         </div>
 
-        //         {/* Localisation avec modification possible */}
-        //         <div>
-        //             <label className="block">Localisation</label>
-        //             <Combobox
-        //                 value={watch("location")}
-        //                 onChange={(selectedId) => {
-        //                     const selectedLocation = placements.find((p) => p.id === selectedId);
-        //                     setValue("location", selectedId ?? "");
-        //                     setDisplayedLocation(selectedLocation?.name ?? "");
-        //                 }}
-        //             >
-        //                 <div className="relative">
-        //                     <input
-        //                         className="w-full border p-2 rounded-md"
-        //                         placeholder="Saisir ou sélectionner..."
-        //                         value={displayedLocation}
-        //                         onChange={(e) => {
-        //                             setDisplayedLocation(e.target.value);
-        //                             setFilteredLocations(
-        //                                 placements.filter((p) =>
-        //                                     p.name.toLowerCase().includes(e.target.value.toLowerCase())
-        //                                 )
-        //                             );
-        //                             setIsLocationDropdownOpen(true);
-        //                         }}
-        //                         onFocus={() => setIsLocationDropdownOpen(true)}
-        //                         onBlur={() => setTimeout(() => setIsLocationDropdownOpen(false), 200)}
-        //                     />
-
-        //                     {isLocationDropdownOpen && filteredLocations.length > 0 && (
-        //                         <div className="absolute bg-white border mt-1 w-full shadow-lg max-h-60 overflow-auto">
-        //                             {filteredLocations.map((location) => (
-        //                                 <Combobox.Option
-        //                                     key={location.id}
-        //                                     value={location.id}
-        //                                     className="cursor-pointer p-2 hover:bg-gray-100"
-        //                                     onMouseDown={() => setDisplayedLocation(location.name)}
-        //                                 >
-        //                                     {location.name}
-        //                                 </Combobox.Option>
-        //                             ))}
-        //                         </div>
-        //                     )}
-        //                 </div>
-        //             </Combobox>
-        //         </div>
-
-        //         <div>
-        //             <label className="block">Description</label>
-        //             <input
-        //                 {...register("description")}
-        //                 className="w-full border p-2 rounded-md"
-        //                 type="text"
-        //                 placeholder="Description"
-        //             />
-        //         </div>
-
-        //         <div>
-        //             <label className="block">Date d'expiration</label>
-        //             <input
-        //                 {...register("expirationDate")}
-        //                 className="w-full border p-2 rounded-md"
-        //                 type="date"
-        //             />
-        //         </div>
-
-        //         <div>
-        //             <label className="block">Quantité</label>
-        //             <input
-        //                 {...register("quantity")}
-        //                 className="w-full border p-2 rounded-md"
-        //                 type="number"
-        //                 placeholder="Quantité"
-        //             />
-        //         </div>
-
-        //         <div>
-        //             <label className="block">Prix d'achat</label>
-        //             <input
-        //                 {...register("purchase_price")}
-        //                 className="w-full border p-2 rounded-md"
-        //                 type="number"
-        //                 placeholder="Prix d'achat"
-        //             />
-        //         </div>
-
-        //         <div>
-        //             <label className="block">Prix de vente</label>
-        //             <input
-        //                 {...register("selling_price")}
-        //                 className="w-full border p-2 rounded-md"
-        //                 type="number"
-        //                 placeholder="Prix de vente"
-        //             />
-        //         </div>
-        //     </div>
-
-        //     <div className="mt-5 flex justify-end gap-3">
-        //         <button type="button" className="px-4 py-2 border rounded-md text-gray-700">
-        //             Annuler
-        //         </button>
-        //         <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md">
-        //             Enregistrer
-        //         </button>
-        //     </div>
-        // </form>
     );
 
 }

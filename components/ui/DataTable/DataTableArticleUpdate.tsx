@@ -132,13 +132,13 @@ export function DataTableArticleUpdate<TData, TValue>({
 
             <div className="flex items-center justify-between  " >
 
-              <div className="flex justify-end pl-5 ">
+              <div className="flex justify-end pl-2 ">
                   <input className=' w-[700px] px-6 py-2 my-3 border-[1px] border-black text-black rounded-3xl text-[14px] uppercase ' placeholder='Rechercher le produit pharmaceutique par sa description' type="text"value={(table.getColumn("description")?.getFilterValue() as string) ?? "" } onChange={(event) => table.getColumn("description")?.setFilterValue(event.target.value)} />
               </div>
 
             </div>
 
-            <div className="rounded-md h-[27vh] bg-white mx-5 border-2 border-black overflow-y-auto  ">
+            <div className="rounded-md h-[27vh] bg-white mx-2 border-2 border-black overflow-y-auto  ">
                 <Table>
                   <TableHeader>
                       {table.getHeaderGroups().map((headerGroup) => (

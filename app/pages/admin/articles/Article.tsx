@@ -124,7 +124,7 @@ export default function Article() {
             }
             <div>
                 <div className="grid grid-cols-1 mt-11 ">
-                    <div className=" flex justify-center mx-6 font-bold items-center bg-blue-700 p-1 " >
+                    <div className=" flex justify-center mx-6 font-bold items-center bg-blue-500 p-1 " >
                         NOUVEL ARTICLE
                     </div>
                 </div>
@@ -133,27 +133,27 @@ export default function Article() {
                         <div className="col-span-11 bg-white py-1 px-1  ">
                             <div className="grid grid-cols-11 place-content-center">
                                 <Link href={``}>
-                                    <div className={`flex justify-center items-center py-1  ${ isNewArticle && "bg-[#262B62] text-white" } `} onClick={ ()=> setActivation("new") } >
+                                    <div className={`flex justify-center font-bold items-center py-1 border-4 border-gray-400   ${ isNewArticle && "bg-gray-300 text-black " } `} onClick={ ()=> setActivation("new") } >
                                         <h1>Nouveau</h1>
                                     </div>
                                 </Link>
                                 <Link href={``}>
-                                    <div className={`flex justify-center items-center py-1  ${ isUpdateArticle && "bg-[#262B62] text-white" } `} onClick={ ()=> setActivation("update") }>
+                                    <div className={`flex justify-center font-bold items-center py-1 border-4 border-gray-400   ${ isUpdateArticle && "bg-gray-300 text-black" } `} onClick={ ()=> setActivation("update") }>
                                         <h1>Mise à jour</h1>
                                     </div>
                                 </Link>
                                 <Link href={``}>
-                                    <div className={`flex justify-center items-center py-1  ${ isStateArticle && "bg-[#262B62] text-white" } `} onClick={ ()=> setActivation("state") }>
+                                    <div className={`flex justify-center font-bold items-center py-1 border-4 border-gray-400  ${ isStateArticle && "bg-gray-300 text-black font-bold" } `} onClick={ ()=> setActivation("state") }>
                                         <h1>Etat produit</h1>
                                     </div>
                                 </Link>
                                 <Link href={``}>
-                                    <div className={`flex justify-center items-center py-1  ${ isExportArticle && "bg-[#262B62] text-white" } `}>
+                                    <div className={`flex justify-center font-bold items-center py-1 border-4 border-gray-400  ${ isExportArticle && "bg-gray-300 text-black font-bold" } `}>
                                         <h1>Import / Export</h1>
                                     </div>
                                 </Link>
                                 <Link href={``}>
-                                    <div className={`flex justify-center items-center py-1  ${ isReportArticle && "bg-[#262B62] text-white" } `}>
+                                    <div className={`flex justify-center font-bold items-center py-1 border-4 border-gray-400  ${ isReportArticle && "bg-gray-300 text-black font-bold" } `}>
                                         <h1>Rapport</h1>
                                     </div>
                                 </Link>
@@ -182,13 +182,7 @@ export default function Article() {
                         <div>
 
                             {
-                                <div className=" h-[80vh] flex flex-col justify-between " >
-                                    {/* <div className=" bg-white px-4 mx-5 h-[35vh] overflow-scroll " >
-                                        <DataTable columns={ArticleColumns} data={articles} needFilter={false} paginate={false} title=""/>
-                                    </div>
-                                    <div>
-                                        <FormArticleUpdate  content="" setIsUpdateFormOpen={setIsUpdateFormOpen} />
-                                    </div> */}
+                                <div className=" h-[80vh] flex flex-col justify-between border-4 mx-6  " >
                                     <DataTableArticleUpdate columns={ArticleColumns} data={articles} needFilter={false} paginate={false} title="" />
                                 </div>
 
@@ -201,10 +195,9 @@ export default function Article() {
                     (
                         isStateArticle ? (
                             <div>
-                                {/* <div className="mx-7 p-10 shadow-[0px_4px_8px_0px_#00000026] bg-white h-[500px] rounded-xl" > */}
-                                    {/* <DataTableState columns={ArticleColumns} data={articles} needFilter={false} paginate={true} title=""/> */}
+                                <div className=" border-4 mx-6 ">
                                     <DataTableArticleState columns={ArticleColumns} data={articles} needFilter={false} title="" paginate={false}/> 
-                                {/* </div> */}
+                                </div>
                             </div>
                         )
                         :

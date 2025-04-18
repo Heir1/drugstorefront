@@ -312,11 +312,11 @@ export default function FormArticleAppro() {
 
     return (
         <>
-            <div className="mx-2"  >
+            <div className=""  >
                 <Toaster />
                 <form onSubmit={handleSubmit(addToCart)}>
 
-                    <div className=" grid grid-cols-12 border-[1px] border-white mx-4 gap-3 p-2 " >
+                    <div className=" grid grid-cols-12 border-[1px] border-white gap-3 p-2 " >
                         <div className=" col-span-3 " >
                             <div>
                                 <label className=" text-[13px] font-medium text-white "  htmlFor="">CODE BARRE</label>
@@ -355,7 +355,7 @@ export default function FormArticleAppro() {
                         </div>
                     </div>
 
-                    <div className=" grid grid-cols-12 border-[1px] border-white mx-4 gap-3 p-2 mt-2 " >
+                    <div className=" grid grid-cols-12 border-[1px] border-white gap-3 p-2 mt-2 " >
                         <div className=" col-span-3 " >
                             <div>
                                 <label className="text-[13px] font-medium text-white "  htmlFor="">DESCRIPTION</label>
@@ -576,7 +576,7 @@ export default function FormArticleAppro() {
                     
                 </form>
 
-                <div className="p-4">
+                <div className="py-4">
                     <div className="overflow-x-auto flex flex-col justify-between  h-[calc(100vh-25rem)] border-2 border-white bg-[#7288a5d0] ">
                         <div className=" h-[calc(100vh-25rem)] border-2 border-green-700 overflow-y-scroll " >
                             <table className="w-full text-white border border-gray-300">

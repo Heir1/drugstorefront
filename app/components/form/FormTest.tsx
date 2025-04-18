@@ -54,7 +54,7 @@ export default function FormTest() {
             category : "c",
             supplier : "s",
             expirationDate : "",
-            alert : null,
+            alert : 3,
             currency : 1,
             quantity : null,
             purchase_price : 0,
@@ -345,7 +345,7 @@ export default function FormTest() {
         <form onSubmit={handleSubmit(onSubmit)} >
         <Toaster />
 
-        <div className="grid grid-cols-12  gap-x-5 mx-6 p-2 border-2 border-red-600  " >
+        <div className="grid grid-cols-12  gap-x-5 mx-6 p-2 border-4   " >
             <div className="col-span-6 bg-[#7288a5fd] border-2 border-white p-2  space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
                 <div className="grid grid-cols-2 gap-5">
                     <div className=" flex items-center " >
