@@ -244,7 +244,7 @@ export function DataTableSaleRegul<TData, TValue>({
 
             </div>
 
-            <div className="h-[40vh] bg-[#7288a5fd] mx-8 overflow-y-auto " >
+            <div className="h-[40vh] bg-[#7288a5fd] mx-8 overflow-y-auto border-2 border-black shadow-[0px_4px_8px_0px_#00000026]" >
               <div className="rounded-md bg-white ">
                   <Table>
                   

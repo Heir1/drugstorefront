@@ -110,35 +110,36 @@ export default function Regulation() {
     movementStatus == "loading" && <Loading/>
     }
 
-    <div className="mx-2 p-5 " >
-        <div className="grid grid-cols-11">
-            <div className="col-span-5 shadow-[0px_4px_8px_0px_#00000026] bg-[#F6F7F9] rounded-xl py-1 px-2  ">
-                <div className="grid grid-cols-4 place-content-center">
-                    <Link href={``}>
-                        <div className={`flex justify-center items-center py-2 rounded-lg ${ isNewArticle && "bg-[#262B62] text-white" } `} onClick={ ()=> setActivation("new") } >
-                            <h1>APPRO</h1>
+        <div>
+            <div className="grid grid-cols-1 mt-11 ">
+                <div className=" flex justify-center mx-6 font-bold items-center bg-blue-500 p-1 " >
+                    REGULARISATION D'APPROVISIONNEMENT
+                </div>
+            </div>
+            <div className="mx-6" >
+                <div className="grid grid-cols-11">
+                    <div className="col-span-11 bg-white py-1 px-1  ">
+                        <div className="grid grid-cols-8 place-content-center">
+                            <Link href={``}>
+                                <div className={`flex justify-center font-bold items-center py-1 border-4 border-gray-400   ${ isNewArticle && "bg-gray-300 text-black " } `} onClick={ ()=> setActivation("new") } >
+                                    <h1>APPRO</h1>
+                                </div>
+                            </Link>
+                            <Link href={``}>
+                                <div className={`flex justify-center font-bold items-center py-1 border-4 border-gray-400   ${ isUpdateArticle && "bg-gray-300 text-black" } `} onClick={ ()=> setActivation("update") }>
+                                    <h1>VENTE</h1>
+                                </div>
+                            </Link>
+                            <Link href={``}>
+                                <div className={`flex justify-center font-bold items-center py-1 border-4 border-gray-400 `}>
+                                    <h1>LISTE PRODUITS</h1>
+                                </div>
+                            </Link>
                         </div>
-                    </Link>
-                    <Link href={``}>
-                        <div className={`flex justify-center items-center py-2 rounded-lg ${ isUpdateArticle && "bg-[#262B62] text-white" } `} onClick={ ()=> setActivation("update") }>
-                            <h1>VENTE</h1>
-                        </div>
-                    </Link>
-                    <Link href={``}>
-                        <div className={`flex justify-center items-center py-2 rounded-lg ${ isStateArticle && "bg-[#262B62] text-white" } `}>
-                        {/* onClick={ ()=> setActivation("state") } */}
-                            <h1>LISTE PRODUITS</h1>
-                        </div>
-                    </Link>
-                    <Link href={``}>
-                        <div className={`flex justify-center items-center py-2 rounded-lg ${ isReportArticle && "bg-[#262B62] text-white" } `}>
-                            <h1>RAPPORT</h1>
-                        </div>
-                    </Link>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
     {
         isNewArticle ? (

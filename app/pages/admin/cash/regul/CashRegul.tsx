@@ -425,25 +425,32 @@ export default function CashRegul() {
                 {
                     isAuth && <FormAuth updateProductState={onSubmitDelete}  setIsAuth={setIsAuth} />
                 }  
-                <div className=" block print:hidden mx-2 p-5 " >
-                    <div className="grid grid-cols-11">
-                        <div className="col-span-5 shadow-[0px_4px_8px_0px_#00000026] bg-[#F6F7F9] rounded-xl py-1 px-2  ">
-                            <div className="grid grid-cols-4 gap-1 place-content-center">
-                                <Link href={``}>
-                                    <div className={`flex justify-center items-center py-2 rounded-lg uppercase ${ isNewArticle && "bg-[#262B62] text-white" } `} onClick={ ()=> setActivation("new") } >
-                                        <h1>Transactions</h1>
-                                    </div>
-                                </Link>
-                                <Link href={``}>
-                                    <div className={`flex justify-center items-center py-2 rounded-lg uppercase ${ isUpdateArticle && "bg-[#262B62] text-white" } `} onClick={ ()=> setActivation("update") }>
-                                        <h1>Import/Export</h1>
-                                    </div>
-                                </Link>
-                                <Link href={``}>
-                                    <div className={`flex justify-center items-center uppercase py-2 rounded-lg ${ isStateArticle && "bg-[#262B62] text-white px-2 " } `} onClick={ ()=> setActivation("state") }>
-                                        <h1>Rapports</h1>
-                                    </div>
-                                </Link>
+                <div>
+                    <div className="grid grid-cols-1 mt-11 ">
+                        <div className=" flex justify-center mx-6 font-bold items-center bg-blue-500 p-1 " >
+                            REGULE CAISSE ADMIN
+                        </div>
+                    </div>
+                    <div className="mx-6" >
+                        <div className="grid grid-cols-11">
+                            <div className="col-span-11 bg-white py-1 px-1  ">
+                                <div className="grid grid-cols-8 place-content-center">
+                                    <Link href={``}>
+                                        <div className={`flex justify-center font-bold items-center py-1 border-4 border-gray-400   ${ isNewArticle && "bg-gray-300 text-black" } `} onClick={ ()=> setActivation("update") }>
+                                            <h1>Transactions</h1>
+                                        </div>
+                                    </Link>
+                                    <Link href={``}>
+                                        <div className={`flex justify-center font-bold items-center py-1 border-4 border-gray-400   ${ isUpdateArticle && "bg-gray-300 text-black " } `} onClick={ ()=> setActivation("new") } >
+                                            <h1>Import/Export</h1>
+                                        </div>
+                                    </Link>
+                                    <Link href={``}>
+                                        <div className={`flex justify-center font-bold items-center py-1 border-4 border-gray-400 `}>
+                                            <h1>Rapports</h1>
+                                        </div>
+                                    </Link>
+                                </div>
                             </div>
                         </div>
                     </div>

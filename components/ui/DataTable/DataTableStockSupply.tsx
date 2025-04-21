@@ -192,7 +192,7 @@ export function DataTableStockSupply<TData, TValue>({
         <div className=" h-[80vh] flex flex-col justify-between bg-transparent   rounded-2xl ">
 
             <div>
-                <div className="flex items-center justify-between mx-8" >
+                <div className="flex items-center justify-between mx-8 " >
                 {/* <div className=""> */}
                     
                     {
@@ -264,7 +264,7 @@ export function DataTableStockSupply<TData, TValue>({
                 {/* </div> */}
                 </div>
 
-                <div className="h-[40vh] bg-[#7288a5fd] mx-8 overflow-y-auto " >
+                <div className="h-[40vh] bg-[#7288a5fd] mx-8 overflow-y-auto border-2 border-black shadow-[0px_4px_8px_0px_#00000026]" >
                   <div className="rounded-md bg-white ">
                       <Table>
                       
