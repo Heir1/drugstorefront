@@ -774,8 +774,8 @@ export default function Cash() {
                                     </div>
                                 </form>
                             </div>
-                            <div className=" col-span-8 border-2 border-gray-300 p-4 " >
-                                <div className=" border-2 border-black shadow-2xl h-[70%]  " >
+                            <div className="col-span-8 flex flex-col justify-between  border-2 border-gray-300 p-4 " >
+                                <div className=" border-2 border-black shadow-2xl h-[60%] overflow-y-auto  " >
                                 {
                                     transactionStatus == "loading" ? (
                                         <TableLoading/>
