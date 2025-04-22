@@ -151,17 +151,17 @@ export default function Header() {
                                                     <DropdownMenuPortal>
                                                         <DropdownMenuSubContent>
                                                         {/* /pages/admin/regularisations */}
-                                                            <Link className="flex items-center space-x-2" href={`/pages/admin/regularisations`}>
+                                                            <Link className="flex items-center space-x-2" href={`/pages/admin/regularisations/appro`}>
                                                                 <DropdownMenuItem>
                                                                     <span className=" text-sm "> Regul Appro </span>
                                                                 </DropdownMenuItem>
                                                             </Link>
-                                                            <Link className="flex items-center space-x-2" href={`/pages/admin/regularisations`}>
+                                                            <Link className="flex items-center space-x-2" href={`/pages/admin/regularisations/sale`}>
                                                                 <DropdownMenuItem>
                                                                     <span className=" text-sm ">Regul Vente</span>
                                                                 </DropdownMenuItem>
                                                             </Link>
-                                                            <Link className="flex items-center space-x-2" href={`/pages/admin/cash`}>
+                                                            <Link className="flex items-center space-x-2" href={`/pages/admin/cash/regul`}>
                                                                 <DropdownMenuItem>
                                                                     <span className=" text-sm ">Regul Caisse Admin</span>
                                                                 </DropdownMenuItem>
