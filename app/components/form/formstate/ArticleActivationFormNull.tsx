@@ -14,7 +14,7 @@ export default function ArticleActivationFormNull() {
 
     return (
         <>
-            <div className=" bg-[#7288a5fd] mx-5 border-2 border-white  ">
+            <div className=" bg-[#7288a5fd] mx-2 border-2 border-white  ">
                 <form >
                     <div className=" grid grid-cols-12 mx-4 gap-3 p-2 mt-2 " >
                         <div className=" col-span-4 " >

@@ -150,30 +150,42 @@ export default function Sale() {
                 (articleStatus == "loading" ||  packagingStatus == "loading" || categoryStatus == "loading" || supplierStatus == "loading" || moleculeStatus == "loading" || indicationStatus == "loading" || placementStatus == "loading" || currencyStatus == "loading" || movementStatus == "loading" || invoiceStatus == "loading" ) && <Loading/>
             }
 
-            <div className=" block print:hidden mx-2 p-5 " >
-                <div className="grid grid-cols-11">
-                    <div className="col-span-5 shadow-[0px_4px_8px_0px_#00000026] bg-[#F6F7F9] rounded-xl py-1 px-2  ">
-                        <div className="grid grid-cols-5 place-content-center">
-                            <Link href={``}>
-                                <div className={`flex justify-center items-center py-2 rounded-lg ${ isNewArticle && "bg-[#262B62] text-white" } `} onClick={ ()=> setActivation("new") } >
-                                    <h1>Vente</h1>
-                                </div>
-                            </Link>
-                            <Link href={``}>
-                                <div className={`flex justify-center items-center py-2 rounded-lg ${ isUpdateArticle && "bg-[#262B62] text-white" } `} onClick={ ()=> setActivation("update") }>
-                                    <h1>Liste Produits</h1>
-                                </div>
-                            </Link>
-                            <Link href={``}>
-                                <div className={`flex justify-center items-center py-2 rounded-lg ${ isStateArticle && "bg-[#262B62] text-white" } `} onClick={ ()=> setActivation("state") }>
-                                    <h1>Liste Factures</h1>
-                                </div>
-                            </Link>
-                            <Link href={``}>
-                                <div className={`flex justify-center items-center py-2 rounded-lg ${ isReportArticle && "bg-[#262B62] text-white" } `}>
-                                    <h1>Rapport</h1>
-                                </div>
-                            </Link>
+            <div>
+                <div className="grid grid-cols-1 mt-11 ">
+                    <div className=" flex justify-center mx-6 font-bold items-center bg-blue-500 p-1 " >
+                        VENTE
+                    </div>
+                </div>
+                <div className="mx-6" >
+                    <div className="grid grid-cols-11">
+                        <div className="col-span-11 bg-white py-1 px-1  ">
+                            <div className="grid grid-cols-11 place-content-center">
+                                <Link href={``}>
+                                    <div className={`flex justify-center font-bold items-center py-1 border-4 border-gray-400   ${ isNewArticle && "bg-gray-300 text-black " } `} onClick={ ()=> setActivation("new") } >
+                                        <h1>Vente</h1>
+                                    </div>
+                                </Link>
+                                <Link href={``}>
+                                    <div className={`flex justify-center font-bold items-center py-1 border-4 border-gray-400   ${ isUpdateArticle && "bg-gray-300 text-black" } `} onClick={ ()=> setActivation("update") }>
+                                        <h1>Liste Produits</h1>
+                                    </div>
+                                </Link>
+                                <Link href={``}>
+                                    <div className={`flex justify-center font-bold items-center py-1 border-4 border-gray-400  ${ isStateArticle && "bg-gray-300 text-black font-bold" } `} onClick={ ()=> setActivation("state") }>
+                                        <h1>Liste Factures</h1>
+                                    </div>
+                                </Link>
+                                <Link href={``}>
+                                    <div className={`flex justify-center font-bold items-center py-1 border-4 border-gray-400  ${ isExportArticle && "bg-gray-300 text-black font-bold" } `}>
+                                        <h1>Import / Export</h1>
+                                    </div>
+                                </Link>
+                                <Link href={``}>
+                                    <div className={`flex justify-center font-bold items-center py-1 border-4 border-gray-400  ${ isReportArticle && "bg-gray-300 text-black font-bold" } `}>
+                                        <h1>Rapport</h1>
+                                    </div>
+                                </Link>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -181,17 +193,17 @@ export default function Sale() {
 
             {
                 isNewArticle ? (
-                    <div>
+                    <div className=" border-4 mx-6 " >
                         <FormArticleSale/>
                     </div>
                 )
                 :
                 (
                     isUpdateArticle ? (
-                        <div>
+                        <div className=" border-4 mx-6 " >
 
                             {
-                                <div className="mx-7 h-[75vh] p-10 shadow-[0px_4px_8px_0px_#00000026] bg-[#7288a5fd] rounded-xl" >
+                                <div className="h-[75vh] shadow-[0px_4px_8px_0px_#00000026] bg-[#7288a5fd] rounded-xl" >
                                     <DataTable columns={ArticleColumns} data={articles} needFilter={false} paginate={true} title=""/>
                                 </div>
                             }
@@ -201,8 +213,8 @@ export default function Sale() {
                     :
                     (
                         isStateArticle ? (
-                            <div>
-                                <div className=" flex flex-col justify-between mx-7 h-[75vh] p-10 shadow-[0px_4px_8px_0px_#00000026] bg-[#7288a5fd] rounded-xl" >
+                            <div className=" border-4 mx-6 " >
+                                <div className=" flex flex-col justify-between h-[75vh]  shadow-[0px_4px_8px_0px_#00000026] bg-[#7288a5fd] rounded-xl" >
                                     <DataTableSupply columns={InvoiceColumns} data={invoices} needFilter={false} paginate={true} title="Invoice"/>
 
                                     <div className="grid grid-cols-3 gap-x-4 gap-y-1 ">

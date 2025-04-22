@@ -21,6 +21,8 @@ export const fetchTransactions = createAsyncThunk<ITransaction[], FetchTransacti
             if (response.error) {
                 return rejectWithValue(response.error);
             }
+            console.log("DATA ",response);
+            
             return response.data as ITransaction[];
 
         } catch (error: any) {

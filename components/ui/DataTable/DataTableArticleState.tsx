@@ -129,19 +129,19 @@ export function DataTableArticleState<TData, TValue>({
 
     return (
         <>
-            <div className=" h-[80vh] flex flex-col justify-between  " >
+            <div className=" h-[80vh] flex flex-col justify-between pb-10 " >
 
                 <div className="bg-transparent   rounded-2xl">
 
                     <div className="flex items-center justify-between  " >
 
-                    <div className="flex justify-end pl-5 ">
+                    <div className="flex justify-end pl-2 ">
                         <input className=' w-[700px] px-6 py-2 my-3 border-[1px] border-black text-black rounded-3xl text-[14px] uppercase ' placeholder='Rechercher le produit pharmaceutique par sa description' type="text"value={(table.getColumn("description")?.getFilterValue() as string) ?? "" } onChange={(event) => table.getColumn("description")?.setFilterValue(event.target.value)} />
                     </div>
 
                     </div>
 
-                    <div className="rounded-md h-[45vh] bg-[#7288a5fd] mx-5 border-2 border-black overflow-y-auto  ">
+                    <div className="rounded-md h-[40vh] bg-[#7288a5fd] mx-2 border-2 border-black overflow-y-auto  ">
                         <Table>
                         <TableHeader>
                             {table.getHeaderGroups().map((headerGroup) => (

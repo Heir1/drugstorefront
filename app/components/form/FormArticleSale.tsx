@@ -672,14 +672,14 @@ export default function FormArticleSale() {
                     {
                        loading && <Loading/>
                     }
-                    <div className="mx-2"  >
+                    <div className=""  >
                         
                         <Toaster />
 
                         <button onClick={ () => printInvoice()} >SEND</button>
 
                         <form onSubmit={handleSubmit(onSubmit1)}>
-                            <div className=" grid grid-cols-12 border-[1px] border-white mx-4 gap-3 p-2 " >
+                            <div className=" grid grid-cols-12 border-[1px] border-white gap-3 p-2 " >
                                 <div className=" col-span-3 " >
                                     <div>
                                         <label className=" text-[13px] font-medium text-white "  htmlFor="">CODE BARRE</label>
@@ -754,7 +754,7 @@ export default function FormArticleSale() {
                                 </div>
                             </div>
         
-                            <div className=" grid grid-cols-12 border-[1px] border-white mx-4 gap-3 p-2 mt-2 " >
+                            <div className=" grid grid-cols-12 border-[1px] border-white gap-3 p-2 mt-2 " >
 
                                 <div className="col-span-8  ">
                                     <div className="grid grid-cols-8 gap-2">
@@ -965,7 +965,7 @@ export default function FormArticleSale() {
                             
                         </form>
 
-                        <div className="p-4">
+                        <div className="">
                             <div className="overflow-x-auto flex flex-col justify-between  h-[calc(100vh-25rem)] border-2 border-white bg-[#7288a5d0] ">
                                 
                                 <div className=" h-[calc(100vh-25rem)] border-2 border-green-700 overflow-y-scroll " >

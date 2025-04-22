@@ -7,7 +7,7 @@ export default function FormArticleUpdateNull() {
   return (
     <div >
         <form >
-            <div className="grid grid-cols-12  gap-x-5 p-5 " >
+            <div className="grid grid-cols-12  gap-x-2 py-5 px-3 " >
                 <div className="col-span-6 bg-[#7288a5fd] border-2 border-white p-2  space-y-4 shadow-[0px_4px_8px_0px_#00000026] ">
                     <div className="grid grid-cols-2 gap-5">
                         <div className=" flex items-center " >
@@ -18,7 +18,7 @@ export default function FormArticleUpdateNull() {
                             <label className=" font-semibold text-sm text-white" htmlFor="">Localisation</label>
                             <Select
                                 id="location"
-                                placeholder="Sélectionnez la localisation"
+                                placeholder="Sélectionnez"
                                 isClearable
                                 className="border-2 border-black"
                             />

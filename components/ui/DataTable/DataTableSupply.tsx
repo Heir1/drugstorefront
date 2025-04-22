@@ -207,7 +207,7 @@ export function DataTableSupply<TData, TValue>({
           isSaleRegulFormOpen && <SaleRegulForm content={article} setIsSaleRegulFormOpen={setIsSaleRegulFormOpen}  />
         }
      */}
-      <div className="  rounded-2xl ">
+      <div className=" border-2 h-[50vh] p-1 ">
         
         <div className="flex items-center justify-between " >
         {
