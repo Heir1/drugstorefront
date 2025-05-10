@@ -25,6 +25,7 @@ import Invoice from '../invoice/Invoice';
 import { useInvoiceNumberService } from '@/app/redux/slices/invoices/useInvoiceService';
 import { Combobox } from "@headlessui/react";
 import toast, { Toaster } from 'react-hot-toast';
+import { useRef } from 'react';
 // Dynamically import React Select without SSR
 const Select = dynamic(() => import('react-select'), { ssr: false });
 
@@ -110,6 +111,8 @@ export default function FormArticleSale() {
     const [isDescriptionDropdownOpen, setIsDescriptionDropdownOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [ user, setUser ] = useState<IUser | null>(null); 
+    // Inside your component:
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const { rates } = useRateService()
 
@@ -246,6 +249,7 @@ export default function FormArticleSale() {
     useEffect(() => {
 
         const handleCreateInvoice = async () => {
+
             if(cdfPaidAmount){
                 if(cdfPaidAmount >= getTotalPrice() ){
                     if (isInvoice) {
@@ -285,6 +289,11 @@ export default function FormArticleSale() {
                                         </div>
                                     </div>
                                 ));
+
+                                // Select the input text after submission
+                                if (inputRef.current) {
+                                    inputRef.current.select();
+                                }
         
                                 // onSubmitProf();
         
@@ -364,6 +373,7 @@ export default function FormArticleSale() {
                     
                             // Si la création de la facture a réussi, exécutez onSubmitProf()
                             if (result.meta.requestStatus === 'fulfilled') {
+
                                 setCart([]);
                                 setIsInvoice(false)
                                 setLoading(false);
@@ -383,10 +393,12 @@ export default function FormArticleSale() {
                                         </div>
                                     </div>
                                 ));
-        
-                                // onSubmitProf();
-        
-        
+
+                                // Select the input text after submission
+                                if (inputRef.current) {
+                                    inputRef.current.select();
+                                }
+
                             } else {
                                 setIsInvoice(false)
                                 setLoading(false);
@@ -718,6 +730,7 @@ export default function FormArticleSale() {
                                                     <div className="relative">
                                                         <input
                                                             {...field}
+                                                            ref={inputRef}
                                                             className="w-full uppercase border rounded-md p-2"
                                                             placeholder="Sélectionnez un article"
                                                             value={displayedDescription}
@@ -842,7 +855,7 @@ export default function FormArticleSale() {
                                                 />
                                             </div>
                                         </div>
-                                        <div className=" col-span-1 " >
+                                        <div className=" col-span-2 " >
                                             <div className="flex items-center gap-1 " >
                                                 <label className="text-[13px] font-medium text-white "  htmlFor="">PV/USD</label>
                                                 <Controller
@@ -854,7 +867,7 @@ export default function FormArticleSale() {
                                                 />
                                             </div>
                                         </div>
-                                        <div className=" col-span-1 " >
+                                        <div className=" col-span-2 " >
                                             <div className="flex items-center gap-1 " >
                                                 <label className="text-[13px] font-medium text-white "  htmlFor="">PV/CDF</label>
                                                 <Controller
@@ -866,8 +879,8 @@ export default function FormArticleSale() {
                                                 />
                                             </div>
                                         </div>
-                                        <div className=" col-span-2 " >
-                                            <div className="flex items-center " >
+                                        <div className=" col-span-1 " >
+                                            <div className="flex items-center gap-1" >
                                                 <label className=" w-1/2 text-[13px] font-medium text-white "  htmlFor="">STOCK</label>
                                                 <Controller
                                                     name="quantity"
@@ -879,7 +892,28 @@ export default function FormArticleSale() {
                                             </div>
                                         </div>
 
-                                        <div className=" col-start-6 col-span-3 flex items-center gap-2 " >
+                                        <div className=" col-span-3 flex items-center gap-2" >
+
+                                            <div className=" w-1/2 flex gap-2 " >
+
+                                                <label className="text-[13px] font-medium text-white "  htmlFor="">VENTE</label>
+                                                <Controller
+                                                    name="quantity1"
+                                                    control={control}
+                                                    defaultValue={1}
+                                                    render={({ field }) => <input {...field} value={field.value ?? ""} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="number"  max={article?.value?.quantity} />}
+                                                    rules={{ required: 'Le code barre est requis' }}
+                                                />
+
+                                            </div>
+
+                                            <div className=" w-1/2 " >
+                                                <button type="submit" className=" w-full text-center p-2 bg-[#4594ff] text-white transition duration-300 hover:bg-[#3386e0]  rounded-lg  text-[14px]  " >Ajouter</button>
+                                            </div>
+
+                                        </div>
+
+                                        {/* <div className=" col-start-6 col-span-3 flex items-center gap-2 " >
 
                                             <div className=" w-1/2 flex gap-2 " >
 
@@ -898,7 +932,7 @@ export default function FormArticleSale() {
                                                 <button type="submit" className=" w-full text-center p-2 bg-[#4594ff] text-white transition duration-300 hover:bg-[#3386e0]  rounded-lg  text-[14px]  " >Ajouter</button>
                                             </div>
 
-                                        </div>
+                                        </div> */}
 
 
                                     </div>

@@ -327,7 +327,7 @@ export default function FormArticleAppro() {
                                     control={control}
                                     defaultValue=""
                                     render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] h-10 pl-4 uppercase " type="text" readOnly />}
-                                    rules={{ required: 'Le code barre est requis' }}
+                                    // rules={{ required: 'Le code barre est requis' }}
                                 />
                             </div>
                         </div>
@@ -380,7 +380,7 @@ export default function FormArticleAppro() {
                                     control={control}
                                     defaultValue=""
                                     render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="text" readOnly   />}
-                                    rules={{ required: 'Le code barre est requis' }}
+                                    // rules={{ required: 'Le code barre est requis' }}
                                 />
                             </div>
                         </div>
@@ -394,7 +394,7 @@ export default function FormArticleAppro() {
                                     control={control}
                                     defaultValue=""
                                     render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="text" readOnly   />}
-                                    rules={{ required: 'Le code barre est requis' }}
+                                    // rules={{ required: 'Le code barre est requis' }}
                                 />
                             </div>
                         </div>
@@ -408,7 +408,7 @@ export default function FormArticleAppro() {
                                     control={control}
                                     defaultValue=""
                                     render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="text" readOnly   />}
-                                    rules={{ required: 'Le code barre est requis' }}
+                                    // rules={{ required: 'Le code barre est requis' }}
                                 />
                             </div>
                         </div>
@@ -422,7 +422,7 @@ export default function FormArticleAppro() {
                                     control={control}
                                     defaultValue=""
                                     render={({ field }) => <input {...field} className="w-full text-[12px] bg-[#F2F7FC] pl-4 uppercase " type="text" readOnly   />}
-                                    rules={{ required: 'Le code barre est requis' }}
+                                    // rules={{ required: 'Le code barre est requis' }}
                                 />
                             </div>
                         </div>
@@ -436,7 +436,7 @@ export default function FormArticleAppro() {
                                     control={control}
                                     defaultValue=""
                                     render={({ field }) => <input {...field} className="w-full text-[14px] bg-[#F2F7FC] pl-4 uppercase " type="text" readOnly   />}
-                                    rules={{ required: 'Le code barre est requis' }}
+                                    // rules={{ required: 'Le code barre est requis' }}
                                 />
                             </div>
                         </div>
