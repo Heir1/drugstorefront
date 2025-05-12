@@ -32,6 +32,7 @@ import { createMovement } from '@/app/redux/slices/movements/actions';
 import toast, { Toaster } from 'react-hot-toast'
 import { useRateService } from '@/app/redux/slices/rates/useRateService';
 import IUser from '@/app/interfaces/user';
+import { useRef } from 'react';
 // Dynamically import React Select without SSR
 const Select = dynamic(() => import('react-select'), { ssr: false });
 
@@ -87,6 +88,7 @@ export default function FormArticleAppro() {
     const [isStateArticle, setIsStateArticle] = useState(false);
     const [isExportArticle, setIsExportArticle] = useState(false);
     const [isReportArticle, setIsReportArticle] = useState(false);
+    const inputRef = useRef<HTMLInputElement>(null);
       
     const { control, register, handleSubmit, formState: { errors }, setValue } = useForm<IFormInputs>({
         defaultValues: {
@@ -234,6 +236,10 @@ export default function FormArticleAppro() {
                 </div>
                 </div>
             ), { duration: 2000 });
+            // Select the input text after submission
+            if (inputRef.current) {
+                inputRef.current.select();
+            }
             } else {
             toast.custom((t:any) => (
                 <div className={`${

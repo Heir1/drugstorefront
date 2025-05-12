@@ -111,7 +111,6 @@ export default function FormArticleSale() {
     const [isDescriptionDropdownOpen, setIsDescriptionDropdownOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [ user, setUser ] = useState<IUser | null>(null); 
-    // Inside your component:
     const inputRef = useRef<HTMLInputElement>(null);
 
     const { rates } = useRateService()
