@@ -1,0 +1,371 @@
+
+"use client";
+
+import * as React from "react";
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  SortingState,
+  VisibilityState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+  PaginationState
+} from "@tanstack/react-table";
+import {
+  Search,
+  ArrowUpDown,
+  ChevronDown,
+  MoreHorizontal,
+  UserPlus,
+  ListFilterIcon,
+  List,
+  Grid3X3,
+  ChevronRight,
+  ChevronLeft
+} from "lucide-react";
+
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Icon } from '@iconify/react';
+import IArticle from "@/app/interfaces/article";
+import FormArticleUpdate from "@/app/components/form/FormArticleUpdate";
+import FormArticleAppro from "@/app/components/form/FormArticleAppro";
+import { useMovementService } from "@/app/redux/slices/movements/useMovementService";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/app/redux/store/store";
+import { fetchMovements } from "@/app/redux/slices/movements/actions";
+import StockRegulForm from "@/app/components/form/StockRegulForm";
+import SaleRegulForm from "@/app/components/form/SaleRegulForm";
+import { fetchInvoices } from "@/app/redux/slices/invoices/actions";
+import ArticleFormStockRegulNull from "@/app/components/form/formstock/ArticleFormStockRegulNull";
+import ArticleFormSaleRegulNull from "@/app/components/form/formsale/ArticleFormSaleRegulNull";
+
+
+
+interface DataTableSupplyProps<TData, TValue> {
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
+  needFilter: boolean;
+  title: string;
+  paginate: boolean;
+}
+
+export function DataTableSaleRegul<TData, TValue>({
+  columns,
+  data,
+  needFilter,
+  title,
+  paginate,
+}: DataTableSupplyProps<TData, TValue>) {
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
+
+  // const [openApproFormOpen, setIsApproFormOpen] = React.useState(false);
+
+  const [pagination, setPagination] = React.useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  })
+
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = React.useState({});
+  const [globalFilter, setGlobalFilter] = React.useState('');
+  const [selected, setSelected] = React.useState('plusRecent');
+  const [redirection, setRedirection] = React.useState(false);
+  const [isStockRegulFormOpen, setisStockRegulFormOpen ] = React.useState(false);
+  const [isSaleRegulFormOpen, setIsSaleRegulFormOpen ] = React.useState(false);
+  const [article, setArticle] = React.useState<IArticle[]>([]);
+
+
+  const today = new Date();
+  const formattedDate:string = today.toISOString().split('T')[0];
+
+  const [startDate, setStartDate ] = React.useState(formattedDate);
+  const [endDate, setEndDate ] = React.useState(formattedDate);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const getDate = () => {
+
+      if(startDate && endDate){
+
+        if(title=="Movements"){
+          dispatch(fetchMovements({ typeId: "1", firstrange: startDate, secondrange: endDate }))
+        }
+        else if(title=="Invoice"){
+          dispatch(fetchInvoices({ paymentModeId: "1", invoice : "1", firstrange: startDate, secondrange: endDate }))
+        }
+          
+      }
+  }
+
+  const getTodayDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // Les mois commencent à 0
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  React.useEffect(() => {
+    setStartDate(getTodayDate());
+    setEndDate(getTodayDate());
+  }, []);
+
+  const table = useReactTable({
+    data,
+    columns,
+    onPaginationChange: setPagination,
+    // manualPagination: true,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    onGlobalFilterChange: setGlobalFilter, 
+    state: {
+      pagination,
+      sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection,
+      globalFilter
+    },
+  });
+
+  // React.useEffect(() => {
+  //   setSorting([{ id: 'date', desc: true }]);
+  // }, []);
+
+
+  const redirectionPage = (row:any) => {
+    setRedirection(true);
+    console.log(row);
+    
+  }
+
+  const getArticleInfo = (articleInfo:any, title:string) => {
+    if(title == "Invoice"){
+      setIsSaleRegulFormOpen(true)
+      setArticle(articleInfo)
+    }
+    else if(title == "Movements"){
+      setisStockRegulFormOpen(true)
+      setArticle(articleInfo)
+    }
+
+    console.log(articleInfo);
+    console.log(title);
+
+  }
+
+
+  const numberOfPage = table.getPageCount().toLocaleString();
+  const numberOfPageTable = Array.from({ length: Number(numberOfPage) }, (_, index) => index + 1);
+  
+
+  return (
+    <>
+      <div className=" h-[80vh] flex flex-col justify-between bg-transparent   rounded-2xl ">
+
+        <div>
+            <div className="flex items-center justify-between mx-8" >
+                {
+                    title == "Movements" ? (
+                    <div className="flex gap-5 " >
+                        <div className="flex gap-4 items-center  " >
+                        <h1 className=" font-semibold text-sm italic text-white " >Du</h1>
+                        <input onChange={(e) => setStartDate(e.target.value) }  className="uppercase italic font-semibold border-[1px] py-[5px] px-2 rounded-2xl border-black " type="date" name="" id="" />
+                        </div>
+                        <div className="flex gap-4 items-center">
+                        <h1 className=" font-semibold text-sm italic text-white">Au</h1>
+                        <input onChange={(e) => setEndDate(e.target.value) }  className="uppercase italic font-semibold  border-[1px] py-[5px] px-2 rounded-2xl border-black" type="date" name="" id="" />
+                        </div>
+                        <button onClick={getDate}  className=" px-4 text-sm rounded-lg text-white bg-slate-400 " >Filtrer</button>
+                    </div>
+                    )
+                    :
+                    (
+                    title == "Invoice" && (
+                        <div className="flex gap-5 " >
+                            <div className="flex gap-4 items-center  " >
+                                <h1 className=" font-semibold text-sm italic text-white" >Du</h1>
+                                <input onChange={(e) => setStartDate(e.target.value) } value={startDate}  className="uppercase italic font-semibold border-[1px] py-[5px] px-2 rounded-2xl border-black " type="date" name="" id="" />
+                            </div>
+                            <div className="flex gap-4 items-center">
+                                <h1 className=" font-semibold text-sm italic text-white">Au</h1>
+                                <input onChange={(e) => setEndDate(e.target.value) } value={endDate}  className="uppercase italic font-semibold  border-[1px] py-[5px] px-2 rounded-2xl border-black" type="date" name="" id="" />
+                            </div>
+                            <button onClick={getDate}  className=" px-4 text-sm rounded-lg text-white bg-slate-400 " >Filtrer</button>
+                        </div>
+                    )
+                    )
+                }
+
+                {
+                    title == "Invoice" ? (
+                    <input
+                      className='w-[700px] px-6 py-2 my-3 border-[1px] border-black text-black rounded-3xl text-[14px] uppercase'
+                      placeholder='Rechercher par description ou numéro de facture'
+                      type="text"
+                      value={(table.getState().globalFilter as string) ?? ""}
+                      onChange={(event) => {
+                        const value = event.target.value;
+                        table.setGlobalFilter(value);
+                      }}
+                    />
+                    )
+                    :
+                    (
+                    title == "Movements" ? (
+                      <input className=' w-[700px] px-6 py-2 my-3 border-[1px] border-black text-black rounded-3xl text-[14px] uppercase ' placeholder='Rechercher le produit pharmaceutique par sa description' type="text" value={(table.getColumn("article.description")?.getFilterValue() as string) ?? "" } onChange={(event) => table.getColumn("article.description")?.setFilterValue(event.target.value)} />
+                    )
+                    :
+                    (
+                        <input className=' w-[700px] px-6 py-2 my-3 border-[1px] border-black text-black rounded-3xl text-[14px] uppercase ' placeholder='Rechercher le produit pharmaceutique par sa description' type="text" value={(table.getColumn("article.description")?.getFilterValue() as string) ?? "" } onChange={(event) => table.getColumn("article.description")?.setFilterValue(event.target.value)} />
+
+                    )
+                    )
+                }
+
+            </div>
+
+            <div className="h-[40vh] bg-[#7288a5fd] mx-8 overflow-y-auto border-2 border-black shadow-[0px_4px_8px_0px_#00000026]" >
+              <div className="rounded-md bg-white ">
+                  <Table>
+                  
+                      <TableHeader>
+
+                          {table.getHeaderGroups().map((headerGroup) => (
+                          <TableRow  key={headerGroup.id}>
+                              {headerGroup.headers.map((header, index) => {
+                              return (
+                                  
+                                  <TableHead className={` ${index == 0 ? 'rounded-tl-lg rounded-bl-lg' : ''  } ${index == (headerGroup.headers.length-1) ? 'rounded-tr-lg rounded-br-lg' : ''  }   px-10  bg-[#F2F7FC]  font-extrabold text-[12px] text-black`} key={header.id}>
+                                      {header.isPlaceholder
+                                      ? null
+                                      : flexRender(
+                                          header.column.columnDef.header,
+                                          header.getContext()
+                                          )}
+                                  </TableHead>
+                                  
+                              );
+                              })}
+                          </TableRow>
+                          ))}
+
+                      </TableHeader>
+
+                      <TableBody>
+                          {
+                              table.getRowModel().rows?.length ? (
+                                  table.getRowModel().rows.map((row) => (
+                                      <TableRow
+                                          className=" hover:cursor-pointer font-extrabold uppercase text-xs  border-b-[1px] border-black text-black "
+                                          key={row.id}
+                                          data-state={row.getIsSelected() && "selected"}
+                                          // onClick={() => redirectionPage(row.original)}
+                                          onClick={() => getArticleInfo(row.original, title)}
+                                      >
+                                          {row.getVisibleCells().map((cell) => (
+                                              <TableCell className="px-10 border-r-[1px] border-black "  key={cell.id}>
+                                              {flexRender(
+                                                  cell.column.columnDef.cell,
+                                                  cell.getContext()
+                                              )}
+                                              </TableCell>
+                                          ))}
+                                      </TableRow>
+                                  ))
+                              ) : (
+                              <TableRow>
+                                  <TableCell colSpan={columns.length}>No results.</TableCell>
+                              </TableRow>
+                              )
+                          }
+                      </TableBody>
+                  </Table>
+              </div> 
+            </div>
+
+            {
+            paginate && (
+                <div>
+                  <div className="flex items-center justify-between  py-8">
+                      <div className="flex items-center gap-[0.5em]">
+                      <span className="flex items-center gap-1 text-[0.7em]">
+                          <div>Page </div>
+                          <strong>
+                          {table.getState().pagination.pageIndex + 1} sur{' '}
+                          {table.getPageCount().toLocaleString()}
+                          </strong>
+                      </span>
+                      </div>
+
+                      <div className="flex items-center gap-[0.5em]">
+                      <button
+                          className=" flex items-center cursor-pointer justify-center border border-[#B5B5B5] rounded p-1 "
+                          onClick={() => table.firstPage()}
+                          disabled={!table.getCanPreviousPage()}
+                      >
+                          <Icon icon="material-symbols-light:keyboard-arrow-left" width="16" height="16"  style={{color: '#666666'}} />
+                      </button>
+
+                      {
+                          numberOfPageTable?.map((page:any, index:number) => (
+                          <button key={index} className={`${table.getState().pagination.pageIndex == index ? "bg-primary text-primary-foreground text-[12px] px-[10px] py-1 rounded-sm" : "bg-primary-foreground text-secondary-foreground text-[12px]  px-[8px] py-[3px] rounded-sm border border-secondary-foreground "} rounded-sm w-[2em] h-[2em] flex items-center justify-center font-bold text-[0.9em]`}
+                              onClick={()=> table.setPageIndex(index)}
+                          >
+                              {`${page}`}
+                          </button>
+                          ))
+                      }
+
+                      <button
+                          className="flex items-center cursor-pointer justify-center border border-[#B5B5B5] rounded p-1 "
+                          onClick={() => table.lastPage()}
+                          disabled={!table.getCanNextPage()}
+                      >
+                          <Icon icon="material-symbols-light:keyboard-arrow-right" width="16" height="16"  style={{color: '#666666'}} />
+                      </button>
+
+                      </div>
+
+                  </div>
+                </div>
+            )
+            }
+        </div>
+        
+        <div>
+          {
+            isSaleRegulFormOpen ? (
+              <SaleRegulForm content={article} setIsSaleRegulFormOpen={setIsSaleRegulFormOpen}  />
+            )
+            :
+            (
+              <ArticleFormSaleRegulNull/>
+            )
+          }
+        </div>
+
+      </div>
+    </>
+    
+  );
+}
